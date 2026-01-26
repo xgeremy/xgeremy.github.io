@@ -461,6 +461,201 @@
             line-height: 1.5;
         }
 
+        /* Reviews Section */
+        .reviews-toggle {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .reviews-button {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 980px;
+            transition: all 0.3s;
+        }
+
+        .reviews-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 245, 247, 0.25);
+        }
+
+        .reviews-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .reviews-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .reviews-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10001;
+        }
+
+        .reviews-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .reviews-container {
+            max-width: 500px;
+            width: 90%;
+            height: 80vh;
+            max-height: 900px;
+            position: relative;
+        }
+
+        .reviews-slider {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+        }
+
+        .review-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .review-slide.active {
+            opacity: 1;
+        }
+
+        .review-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .review-image-placeholder .number {
+            font-size: 72px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #424245;
+        }
+
+        .review-image-placeholder .text {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .reviews-nav {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            transition: all 0.3s;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--text-primary);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .reviews-arrows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .arrow-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            pointer-events: all;
+        }
+
+        .arrow-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .reviews-counter {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            z-index: 10;
+        }
+
         /* Contact mejorado */
         .contact {
             max-width: 980px;
@@ -791,21 +986,24 @@
     <section class="about fade-in" id="about">
         <div class="about-content">
             <h2>Sobre mí<sup>©</sup></h2>
-            <p>Especialista en blackwork con más de 5 años de experiencia creando piezas únicas y personalizadas.</p>
-            <p>Cada diseño es una colaboración entre el arte y la piel, combinando técnica, precisión y visión artística.</p>
+            <p>Tatuador radicado en Chile con más de 3 años de experiencia creando piezas únicas y personalizadas.</p>
+            <p>En cada tatuaje mi enfoque es combinar técnica, precisión y visión artística.</p>
             <div class="about-stats">
                 <div class="stat">
-                    <span class="stat-number">500+</span>
+                    <span class="stat-number">250+</span>
                     <span class="stat-label">Tatuajes</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">5+</span>
+                    <span class="stat-number">3+</span>
                     <span class="stat-label">Años</span>
                 </div>
                 <div class="stat">
                     <span class="stat-number">100%</span>
                     <span class="stat-label">Satisfacción</span>
                 </div>
+            </div>
+            <div class="reviews-toggle">
+                <button id="reviewsBtn" class="reviews-button">Ver Reseñas</button>
             </div>
         </div>
     </section>
@@ -900,6 +1098,81 @@
     </footer>
 
     <button class="scroll-top" id="scrollTop">↑</button>
+
+    <!-- Reviews Modal -->
+    <div class="reviews-modal" id="reviewsModal">
+        <button class="reviews-close" id="closeReviews">×</button>
+        <div class="reviews-container">
+            <div class="reviews-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+            </div>
+            <div class="reviews-slider" id="reviewsSlider">
+                <!-- Slide 1 -->
+                <div class="review-slide active">
+                    <div class="review-image-placeholder">
+                        <div class="number">01</div>
+                        <div class="text">
+                            Aquí va tu captura de pantalla de reseña<br>
+                            Tamaño: 1080x1920<br><br>
+                            Reemplaza con:<br>
+                            &lt;img src="images/review-1.jpg" style="width: 100%; height: 100%; object-fit: cover;"&gt;
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="review-slide">
+                    <div class="review-image-placeholder">
+                        <div class="number">02</div>
+                        <div class="text">
+                            Captura de pantalla 2<br>
+                            Tamaño: 1080x1920
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="review-slide">
+                    <div class="review-image-placeholder">
+                        <div class="number">03</div>
+                        <div class="text">
+                            Captura de pantalla 3<br>
+                            Tamaño: 1080x1920
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 4 -->
+                <div class="review-slide">
+                    <div class="review-image-placeholder">
+                        <div class="number">04</div>
+                        <div class="text">
+                            Captura de pantalla 4<br>
+                            Tamaño: 1080x1920
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 5 -->
+                <div class="review-slide">
+                    <div class="review-image-placeholder">
+                        <div class="number">05</div>
+                        <div class="text">
+                            Captura de pantalla 5<br>
+                            Tamaño: 1080x1920
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="reviews-arrows">
+                <button class="arrow-btn" id="prevSlide">‹</button>
+                <button class="arrow-btn" id="nextSlide">›</button>
+            </div>
+            <div class="reviews-nav" id="reviewsNav">
+                <button class="nav-dot active"></button>
+                <button class="nav-dot"></button>
+                <button class="nav-dot"></button>
+                <button class="nav-dot"></button>
+                <button class="nav-dot"></button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Header scroll effect
@@ -1010,6 +1283,97 @@
         }, { threshold: 0.5 });
 
         stats.forEach(stat => statsObserver.observe(stat));
+
+        // Reviews Modal
+        const reviewsBtn = document.getElementById('reviewsBtn');
+        const reviewsModal = document.getElementById('reviewsModal');
+        const closeReviews = document.getElementById('closeReviews');
+        const slides = document.querySelectorAll('.review-slide');
+        const dots = document.querySelectorAll('.nav-dot');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        const currentSlideSpan = document.getElementById('currentSlide');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+        totalSlidesSpan.textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                dots[i].classList.remove('active');
+            });
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlideSpan.textContent = index + 1;
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            const next = (currentIndex + 1) % totalSlides;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            const prev = (currentIndex - 1 + totalSlides) % totalSlides;
+            showSlide(prev);
+        }
+
+        reviewsBtn.addEventListener('click', () => {
+            reviewsModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeReviews.addEventListener('click', () => {
+            reviewsModal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        reviewsModal.addEventListener('click', (e) => {
+            if (e.target === reviewsModal) {
+                reviewsModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => showSlide(i));
+        });
+
+        // Swipe en móvil
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        reviewsModal.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        reviewsModal.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (reviewsModal.classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'Escape') {
+                    reviewsModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
     </script>
 </body>
 </html>
