@@ -133,6 +133,15 @@
             letter-spacing: -0.01em;
             color: var(--text-primary);
             transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 28px;
+            width: auto;
+            opacity: 0.9;
         }
 
         .logo:hover {
@@ -195,6 +204,32 @@
             overflow: hidden;
         }
 
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            opacity: 0.15;
+            filter: blur(2px);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 50%, #000000 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .hero::before {
             content: '';
             position: absolute;
@@ -205,6 +240,7 @@
             height: 500px;
             background: radial-gradient(circle, rgba(245, 245, 247, 0.03) 0%, transparent 70%);
             pointer-events: none;
+            z-index: 0;
         }
 
         .hero-content {
@@ -221,6 +257,15 @@
             margin-bottom: 20px;
             opacity: 0;
             animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero-logo {
+            width: clamp(80px, 15vw, 140px);
+            height: auto;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
         }
 
         .hero h1 sup {
@@ -372,7 +417,7 @@
         }
 
         .gallery-item {
-            aspect-ratio: 1;
+            aspect-ratio: 1080/1350;
             background: var(--bg-secondary);
             border-radius: 18px;
             overflow: hidden;
@@ -957,7 +1002,10 @@
 <body>
     <header id="header">
         <div class="header-content">
-            <div class="logo">XGEREMY<sup>™</sup></div>
+            <div class="logo">
+                <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo" class="logo-img">
+                XGEREMY<sup>™</sup>
+            </div>
             <nav>
                 <a href="#work">Work</a>
                 <a href="#about">About</a>
@@ -968,9 +1016,13 @@
     </header>
 
     <section class="hero">
+        <video class="hero-video" autoplay loop muted playsinline>
+            <source src="background.mp4" type="video/mp4">
+        </video>
         <div class="hero-content">
+            <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo" class="hero-logo">
             <h1>XGEREMY<sup>™</sup></h1>
-            <p class="hero-subtitle">Blackwork Tattoo Artist</p>
+            <p class="hero-subtitle">Blackwork · Dotwork · Fine Line</p>
             <p class="hero-location">Viña del Mar · Valparaíso · Chile</p>
             <div class="hero-cta">
                 <a href="#contact" class="button">Agenda tu sesión</a>
@@ -1010,26 +1062,25 @@
 
     <section class="gallery fade-in" id="work">
         <h2 class="section-headline">Selected Work<sup>®</sup></h2>
-        <p class="section-subheadline">Tatuajes blackwork elegantes en Viña del Mar y Valparaíso</p>
         
         <div class="gallery-grid">
             <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 1">
-                <div class="gallery-item-placeholder">01</div>
+                <img src="https://i.imgur.com/OlGXhSl.jpg" alt="Tatuaje 1" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 2">
-                <div class="gallery-item-placeholder">02</div>
+                <img src="https://i.imgur.com/dE8Sr9J.jpg" alt="Tatuaje 2" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 3">
-                <div class="gallery-item-placeholder">03</div>
+                <img src="https://i.imgur.com/Fe9oSoD.jpg" alt="Tatuaje 3" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 4">
-                <div class="gallery-item-placeholder">04</div>
+                <img src="https://i.imgur.com/fC7MkxI.jpg" alt="Tatuaje 4" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 5">
-                <div class="gallery-item-placeholder">05</div>
+                <img src="https://i.imgur.com/epGDrVn.jpg" alt="Tatuaje 5" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 6">
-                <div class="gallery-item-placeholder">06</div>
+                <img src="https://i.imgur.com/0fJ1uH4.jpg" alt="Tatuaje 6" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
         </div>
     </section>
@@ -1060,13 +1111,13 @@
     <section class="contact fade-in" id="contact">
         <h2>Let's Create<sup>©</sup></h2>
         <p class="contact-description">
-            Agenda tu sesión de tatuajes blackwork en Viña del Mar o Valparaíso. 
-            Atención personalizada y diseños únicos.
+            ¡Hagamos realidad eso que tienes en mente!<br>
+            Cotiza, aclara dudas, y mucho más
         </p>
         <div class="button-group">
-            <a href="https://instagram.com/xgeremy" target="_blank" rel="noopener" class="button">Instagram</a>
-            <a href="mailto:contact@xgeremy.com" class="button button-secondary">Email</a>
-            <a href="https://wa.me/56912345678" target="_blank" rel="noopener" class="button button-secondary">WhatsApp</a>
+            <a href="https://wa.me/56937669973" target="_blank" rel="noopener" class="button">WhatsApp</a>
+            <a href="https://instagram.com/xgeremy" target="_blank" rel="noopener" class="button button-secondary">Instagram</a>
+            <a href="mailto:geremymons@gmail.com" class="button button-secondary">Email (Colaboraciones)</a>
         </div>
     </section>
 
@@ -1075,7 +1126,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <h3>XGEREMY<sup>™</sup></h3>
-                    <p>Blackwork tattoo artist especializado en diseños elegantes y personalizados en Viña del Mar y Valparaíso, Chile.</p>
+                    <p>Blackwork · Dotwork · Fine Line</p>
                 </div>
                 <div class="footer-links">
                     <h4>Navegación</h4>
