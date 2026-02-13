@@ -846,10 +846,23 @@
                 doc.setFontSize(12);
                 doc.setFont(undefined, 'bold');
                 doc.text('FIRMA DEL CLIENTE', margin, yPos);
-                yPos += lineHeight;
+                yPos += lineHeight + 5;
 
-                const signatureData = canvas.toDataURL('image/png');
-                doc.addImage(signatureData, 'PNG', margin, yPos, 80, 30);
+                // Agregar firma (ajustar el canvas para capturar correctamente)
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                
+                // Fondo blanco para la firma
+                tempCtx.fillStyle = '#FFFFFF';
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                
+                // Dibujar la firma encima del fondo blanco
+                tempCtx.drawImage(canvas, 0, 0);
+                
+                const signatureImage = tempCanvas.toDataURL('image/jpeg', 1.0);
+                doc.addImage(signatureImage, 'JPEG', margin, yPos, 80, 30);
                 yPos += 35;
 
                 doc.setFontSize(9);
@@ -868,6 +881,16 @@
 
                 // Convertir PDF a base64
                 const pdfBase64 = doc.output('datauristring');
+                
+                // Capturar firma para enviar
+                const tempCanvas2 = document.createElement('canvas');
+                const tempCtx2 = tempCanvas2.getContext('2d');
+                tempCanvas2.width = canvas.width;
+                tempCanvas2.height = canvas.height;
+                tempCtx2.fillStyle = '#FFFFFF';
+                tempCtx2.fillRect(0, 0, tempCanvas2.width, tempCanvas2.height);
+                tempCtx2.drawImage(canvas, 0, 0);
+                const signatureData = tempCanvas2.toDataURL('image/jpeg', 1.0);
 
                 // Enviar a Google Apps Script
                 const response = await fetch('https://script.google.com/macros/s/AKfycbwbAaleU1DG2RirKGeZJdhaFS4IivGmpAhQtBPSgZ3iZ6ZJ-KGDjLU78mWdptSW2hqXBA/exec', {
