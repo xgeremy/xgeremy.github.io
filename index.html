@@ -217,7 +217,7 @@
             height: auto;
             transform: translate(-50%, -50%);
             z-index: 0;
-            opacity: 0.15;
+            opacity: 0.25;
             filter: blur(2px);
         }
 
@@ -351,7 +351,19 @@
             font-size: 48px;
             font-weight: 600;
             letter-spacing: -0.003em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-content h3 {
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: 0.01em;
             margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .about-content h2 sup {
@@ -391,6 +403,10 @@
             color: var(--text-primary);
             display: block;
             margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-label {
@@ -413,8 +429,11 @@
             font-weight: 600;
             letter-spacing: -0.003em;
             text-align: center;
-            color: var(--text-primary);
             margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .section-headline sup {
@@ -448,16 +467,23 @@
             position: relative;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
         }
 
         .gallery-item::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+            inset: -1px;
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.05) 50%,
+                transparent 100%);
             opacity: 0;
             transition: opacity 0.4s;
             z-index: 1;
+            border-radius: 18px;
+            pointer-events: none;
         }
 
         .gallery-item::after {
@@ -505,6 +531,13 @@
             padding: 100px 22px;
         }
 
+        .process h2 {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .process-steps {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -520,7 +553,9 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: var(--bg-secondary);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -743,6 +778,85 @@
             z-index: 10;
         }
 
+        /* FAQ Section */
+        .faq {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 22px;
+        }
+
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, 
+                rgba(255, 255, 255, 0.03) 0%, 
+                transparent 70%);
+            pointer-events: none;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 24px 60px 24px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 19px;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            font-family: inherit;
+        }
+
+        .faq-question:hover {
+            color: var(--text-primary);
+        }
+
+        .faq-question::after {
+            content: '+';
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            font-weight: 300;
+            transition: transform 0.3s;
+        }
+
+        .faq-question.active::after {
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-answer.active {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 24px 24px 24px;
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
         @media (max-width: 734px) {
             .reviews-container {
                 height: 85vh;
@@ -762,8 +876,11 @@
             line-height: 1.0834933333;
             font-weight: 600;
             letter-spacing: -0.003em;
-            color: var(--text-primary);
             margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .contact h2 sup {
@@ -792,7 +909,7 @@
         }
 
         .button {
-            background: var(--text-primary);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
             color: var(--bg-primary);
             font-size: 17px;
             line-height: 1.17648;
@@ -807,6 +924,8 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .button::before {
@@ -834,13 +953,14 @@
 
         .button-secondary {
             background: transparent;
-            border: 1px solid var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: var(--text-primary);
+            backdrop-filter: blur(10px) saturate(150%);
         }
 
         .button-secondary:hover {
-            background: var(--text-primary);
-            color: var(--bg-primary);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         /* Footer mejorado */
@@ -1089,11 +1209,12 @@
         </div>
         <div class="about-content">
             <h2>Sobre mí<sup>©</sup></h2>
+            <h3>Geremy Monsalve</h3>
             <p>Tatuador radicado en Chile con más de 3 años de experiencia creando piezas únicas y personalizadas.</p>
             <p>En cada tatuaje mi enfoque es combinar técnica, precisión y visión artística.</p>
             <div class="about-stats">
                 <div class="stat">
-                    <span class="stat-number">300+</span>
+                    <span class="stat-number">250+</span>
                     <span class="stat-label">Tatuajes</span>
                 </div>
                 <div class="stat">
@@ -1167,9 +1288,14 @@
         </p>
         <div class="button-group">
             <a href="https://wa.me/56937669973" target="_blank" rel="noopener" class="button">WhatsApp</a>
-            <a href="https://instagram.com/xgeremy" target="_blank" rel="noopener" class="button button-secondary">Instagram</a>
+            <a href="https://insta.openinapp.co/1mfd5" target="_blank" rel="noopener" class="button button-secondary">Instagram</a>
             <a href="mailto:geremymons@gmail.com" class="button button-secondary">Email (Colaboraciones)</a>
         </div>
+    </section>
+
+    <section class="contact fade-in" style="padding: 60px 22px; text-align: center;">
+        <h3 style="font-size: 28px; font-weight: 500; margin-bottom: 16px;">¿Aún tienes preguntas?</h3>
+        <a href="https://wa.me/56937669973" target="_blank" rel="noopener" class="button" style="display: inline-block;">Contáctame</a>
     </section>
 
     <footer>
@@ -1177,7 +1303,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <h3>XGEREMY<sup>™</sup></h3>
-                    <p>Blackwork · Dotwork · Fine Line</p>
+                    <p>Be Different.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Navegación</h4>
@@ -1371,24 +1497,8 @@
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const target = entry.target;
-                    const finalValue = target.textContent;
-                    const isNumber = !finalValue.includes('+') && !finalValue.includes('%');
-                    
-                    if (isNumber) {
-                        let current = 0;
-                        const increment = parseInt(finalValue) / 50;
-                        const timer = setInterval(() => {
-                            current += increment;
-                            if (current >= parseInt(finalValue)) {
-                                target.textContent = finalValue;
-                                clearInterval(timer);
-                            } else {
-                                target.textContent = Math.floor(current);
-                            }
-                        }, 30);
-                    }
-                    statsObserver.unobserve(target);
+                    entry.target.style.opacity = '1';
+                    statsObserver.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.5 });
