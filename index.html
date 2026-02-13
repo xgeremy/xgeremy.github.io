@@ -33,6 +33,9 @@
     <meta name="geo.position" content="-33.0472;-71.6127">
     <meta name="ICBM" content="-33.0472, -71.6127">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
+    
     <!-- Schema.org structured data -->
     <script type="application/ld+json">
     {
@@ -323,6 +326,27 @@
             align-items: center;
         }
 
+        .about-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-secondary);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 18px;
+            z-index: -1;
+        }
+
         .about-content h2 {
             font-size: 48px;
             font-weight: 600;
@@ -436,7 +460,25 @@
             z-index: 1;
         }
 
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 0%, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 2;
+            pointer-events: none;
+        }
+
         .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item:hover::after {
             opacity: 1;
         }
 
@@ -1042,13 +1084,16 @@
     </section>
 
     <section class="about fade-in" id="about">
+        <div class="about-image">
+            <img src="https://i.imgur.com/GWu0skP.jpg" alt="XGEREMY" style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;">
+        </div>
         <div class="about-content">
             <h2>Sobre mí<sup>©</sup></h2>
             <p>Tatuador radicado en Chile con más de 3 años de experiencia creando piezas únicas y personalizadas.</p>
             <p>En cada tatuaje mi enfoque es combinar técnica, precisión y visión artística.</p>
             <div class="about-stats">
                 <div class="stat">
-                    <span class="stat-number">250+</span>
+                    <span class="stat-number">300+</span>
                     <span class="stat-label">Tatuajes</span>
                 </div>
                 <div class="stat">
