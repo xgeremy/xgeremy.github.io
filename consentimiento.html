@@ -226,7 +226,7 @@
         .signature-pad {
             width: 100%;
             height: 200px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.95);
             border: 2px dashed var(--border);
             border-radius: 12px;
             cursor: crosshair;
@@ -606,8 +606,8 @@
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext('2d').scale(ratio, ratio);
-            ctx.strokeStyle = '#f5f5f7';
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000000'; // Negro para que se vea en el PDF
+            ctx.lineWidth = 3;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
         }
