@@ -863,6 +863,105 @@
             }
         }
 
+        /* Rewards Section */
+        .rewards {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 100px 22px;
+        }
+
+        .rewards h2 {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+
+        .reward-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .reward-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .reward-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .reward-card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .reward-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .reward-detail {
+            display: block;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+
+        .rewards-cta {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 18px;
+            margin-top: 40px;
+        }
+
+        .rewards-cta .button {
+            display: inline-block;
+        }
+
+        .rewards-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+        }
+
+        @media (max-width: 734px) {
+            .rewards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .reward-card {
+                padding: 30px 20px;
+            }
+
+            .rewards-cta {
+                padding: 30px 20px;
+            }
+        }
+
         /* Contact mejorado */
         .contact {
             max-width: 980px;
@@ -1178,6 +1277,7 @@
                 <a href="#work">Work</a>
                 <a href="#about">About</a>
                 <a href="#process">Process</a>
+                <a href="#rewards">Puntos</a>
                 <a href="#contact">Contact</a>
             </nav>
         </div>
@@ -1277,6 +1377,37 @@
                 <h3>Ejecución</h3>
                 <p>Sesión profesional en ambiente cómodo con máxima higiene y precisión.</p>
             </div>
+        </div>
+    </section>
+
+    <section class="rewards fade-in" id="rewards">
+        <h2 class="section-headline">Gana Puntos<sup>®</sup></h2>
+        <p class="section-subheadline">Por cada tatuaje que te hagas, gana puntos y canjea premios</p>
+        
+        <div class="rewards-grid">
+            <div class="reward-card">
+                <div class="reward-icon">💰</div>
+                <h3>10% Cashback</h3>
+                <p>Gana 1 punto por cada 10.000 CLP gastados</p>
+                <span class="reward-detail">150 puntos = 150.000 CLP en crédito</span>
+            </div>
+            <div class="reward-card">
+                <div class="reward-icon">🎁</div>
+                <h3>Canjea Premios</h3>
+                <p>Acumula puntos y accede a sesiones especiales</p>
+                <span class="reward-detail">Meta: Día completo valuado en 180k</span>
+            </div>
+            <div class="reward-card">
+                <div class="reward-icon">⭐</div>
+                <h3>Bonificaciones</h3>
+                <p>Gana extra por seguirnos y tatuarte frecuente</p>
+                <span class="reward-detail">Consulta los bonus en el dashboard</span>
+            </div>
+        </div>
+
+        <div class="rewards-cta">
+            <a href="/puntos/" class="button">Ver mis puntos</a>
+            <p class="rewards-info">Ingresa con tu email para ver tu progreso</p>
         </div>
     </section>
 
