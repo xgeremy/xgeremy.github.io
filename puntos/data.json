@@ -10,25 +10,25 @@
   {
     "nombre": "Luis Morales",
     "email": "luis.morales@example.com",
-    "puntos": 30,
-    "tier": "Bronze",
+    "puntos": 145,
+    "tier": "Gold",
     "ultimoTatuaje": "12/02/2026",
-    "montoCLP": 120000
+    "montoCLP": 250000
   },
   {
     "nombre": "Camila Silva",
     "email": "camila.silva@example.com",
-    "puntos": 24,
-    "tier": "Bronze",
+    "puntos": 98,
+    "tier": "Silver",
     "ultimoTatuaje": "10/02/2026",
-    "montoCLP": 75000
+    "montoCLP": 180000
   },
   {
     "nombre": "Luis Pérez",
     "email": "luis.perez@example.com",
-    "puntos": 20,
-    "tier": "Bronze",
+    "puntos": 62,
+    "tier": "Silver",
     "ultimoTatuaje": "08/02/2026",
-    "montoCLP": 60000
+    "montoCLP": 120000
   }
 ]
