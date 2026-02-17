@@ -1,8 +1,5 @@
 // Configuración
-const GOOGLE_SHEETS_API_URL = 'https://sheets.googleapis.com/v4/spreadsheets';
-const SHEET_ID = 'YOUR_SHEET_ID'; // Reemplazar con ID de tu Google Sheet
-const API_KEY = 'YOUR_API_KEY'; // Reemplazar con tu API Key de Google
-const SHEET_RANGE = 'Cliente!A2:F1000';
+const DATA_URL = 'data.json';
 
 // Datos en caché
 let clientsData = [];
@@ -10,8 +7,7 @@ let currentUser = null;
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', () => {
-    checkLogin();
-    loadDataFromSheet();
+    loadDataFromJSON();
 });
 
 // Login
@@ -49,25 +45,6 @@ function loginUser() {
     showDashboard();
 }
 
-// Check si hay sesión
-function checkLogin() {
-    const savedEmail = localStorage.getItem('xgeremy_user_email');
-    if (savedEmail && clientsData.length > 0) {
-        document.getElementById('emailInput').value = savedEmail;
-        loginUser();
-    }
-}
-
-// Logout
-function logout() {
-    localStorage.removeItem('xgeremy_user_email');
-    currentUser = null;
-    document.getElementById('loginSection').style.display = 'grid';
-    document.getElementById('dashboard').classList.remove('active');
-    document.getElementById('emailInput').value = '';
-    document.getElementById('errorMessage').textContent = '';
-}
-
 // Mostrar dashboard
 function showDashboard() {
     document.getElementById('loginSection').style.display = 'none';
@@ -94,12 +71,12 @@ function updateDashboard() {
     updateTierBadge(tier);
 
     // Progress Bar
-    const progressPercent = Math.min((totalPoints % 150) / 150 * 100, 100);
+    const pointsInTier = totalPoints % 150;
+    const progressPercent = Math.min((pointsInTier / 150) * 100, 100);
     document.getElementById('progressBar').style.width = progressPercent + '%';
     document.getElementById('progressMeta').textContent = Math.round(progressPercent) + '%';
 
     // Progress Info
-    const pointsInTier = totalPoints % 150;
     document.getElementById('currentTierProgress').textContent = `${pointsInTier} / 150 puntos`;
 
     // CLP Needed
@@ -159,102 +136,59 @@ function updateLeaderboard() {
     }).join('');
 }
 
-// Cargar datos de Google Sheets
-async function loadDataFromSheet() {
+// Cargar datos desde JSON
+async function loadDataFromJSON() {
     try {
-        // Si no hay configuradas credenciales, usar datos de demo
-        if (SHEET_ID === 'YOUR_SHEET_ID' || API_KEY === 'YOUR_API_KEY') {
-            console.log('⚠️ Google Sheets no configurado. Usando datos de ejemplo.');
-            loadDemoData();
-            return;
-        }
-
-        const url = `${GOOGLE_SHEETS_API_URL}/${SHEET_ID}/values/${SHEET_RANGE}?key=${API_KEY}`;
-        const response = await fetch(url);
+        const response = await fetch(DATA_URL);
         const data = await response.json();
 
-        if (data.values && data.values.length > 0) {
-            clientsData = data.values.map(row => ({
-                nombre: row[0] || '—',
-                email: (row[1] || '').toLowerCase(),
-                puntos: parseInt(row[2]) || 0,
-                tier: row[3] || 'Bronze',
-                ultimoTatuaje: row[4] || '—',
-                montoCLP: parseInt(row[5]) || 0
-            })).filter(user => user.email); // Filtrar usuarios sin email
+        if (Array.isArray(data) && data.length > 0) {
+            clientsData = data.map(row => ({
+                nombre: row.nombre || '—',
+                email: (row.email || '').toLowerCase(),
+                puntos: parseInt(row.puntos) || 0,
+                tier: row.tier || 'Bronze',
+                ultimoTatuaje: row.ultimoTatuaje || '—',
+                montoCLP: parseInt(row.montoCLP) || 0
+            })).filter(user => user.email);
 
-            console.log(`✅ ${clientsData.length} clientes cargados desde Google Sheets`);
+            console.log(`✅ ${clientsData.length} clientes cargados desde data.json`);
         } else {
-            console.log('⚠️ No hay datos en Google Sheets. Usando datos de demo.');
-            loadDemoData();
+            console.log('⚠️ No hay datos en data.json');
+            clientsData = [];
         }
     } catch (error) {
-        console.error('Error cargando Google Sheets:', error);
-        console.log('Usando datos de demo como fallback');
-        loadDemoData();
+        console.error('Error cargando data.json:', error);
+        clientsData = [];
     }
 
     // Verificar login después de cargar datos
     checkLogin();
 }
 
-// Datos de demo (para desarrollo)
-function loadDemoData() {
-    clientsData = [
-        {
-            nombre: 'Geremy Mora',
-            email: 'geremy.mora@example.com',
-            puntos: 145,
-            tier: 'Gold',
-            ultimoTatuaje: '15/02/2026',
-            montoCLP: 250000
-        },
-        {
-            nombre: 'Carlos Rodriguez',
-            email: 'carlos.r@example.com',
-            puntos: 98,
-            tier: 'Silver',
-            ultimoTatuaje: '10/02/2026',
-            montoCLP: 180000
-        },
-        {
-            nombre: 'Ana Martínez',
-            email: 'ana.martinez@example.com',
-            puntos: 62,
-            tier: 'Silver',
-            ultimoTatuaje: '08/02/2026',
-            montoCLP: 120000
-        },
-        {
-            nombre: 'Jorge Silva',
-            email: 'jorge.silva@example.com',
-            puntos: 35,
-            tier: 'Bronze',
-            ultimoTatuaje: '05/02/2026',
-            montoCLP: 65000
-        }
-    ];
-    console.log('📋 Datos de demo cargados');
+// Check si hay sesión
+function checkLogin() {
+    const savedEmail = localStorage.getItem('xgeremy_user_email');
+    if (savedEmail && clientsData.length > 0) {
+        document.getElementById('emailInput').value = savedEmail;
+        loginUser();
+    }
+}
+
+// Logout
+function logout() {
+    localStorage.removeItem('xgeremy_user_email');
+    currentUser = null;
+    document.getElementById('loginSection').style.display = 'grid';
+    document.getElementById('dashboard').classList.remove('active');
+    document.getElementById('emailInput').value = '';
+    document.getElementById('errorMessage').textContent = '';
 }
 
 // Validar email
 function isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
-}
-
-// Función para sincronizar cambios manuales (puedes usar esta para actualizar puntos)
-async function syncWithSheet() {
-    console.log('Sincronizando con Google Sheets...');
-    await loadDataFromSheet();
-    if (currentUser) {
-        const updated = clientsData.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
-        if (updated) {
-            currentUser = updated;
-            updateDashboard();
-            showSuccessMessage('Datos actualizados correctamente');
-        }
-    }
 }
 
 function showSuccessMessage(msg) {
@@ -265,6 +199,3 @@ function showSuccessMessage(msg) {
         msgEl.style.display = 'none';
     }, 3000);
 }
-
-// Auto-sincronizar cada 30 segundos
-setInterval(syncWithSheet, 30000);

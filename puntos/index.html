@@ -99,6 +99,43 @@
             padding: 80px 22px 40px;
         }
 
+        /* Loading State */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: 100%;
+            max-width: 300px;
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 20px 0 40px;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #f5f5f7);
+            animation: loading 2s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 100%; }
+        }
+
+        .loading-state p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
         .login-section {
             display: grid;
             grid-template-columns: 1fr;
@@ -115,7 +152,7 @@
         }
 
         .login-card h2 {
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 16px;
             font-weight: 600;
         }
@@ -197,8 +234,8 @@
         }
 
         .user-header {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 12px;
             padding: 32px;
             display: flex;
@@ -242,11 +279,17 @@
         }
 
         .stat-card {
-            background: var(--bg-secondary);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 24px;
+            padding: 28px;
             text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
         }
 
         .stat-label {
@@ -258,7 +301,7 @@
         }
 
         .stat-value {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 600;
             margin-bottom: 8px;
         }
@@ -270,7 +313,7 @@
 
         .tier-badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 16px;
             font-size: 11px;
             font-weight: 600;
@@ -357,11 +400,11 @@
         .clp-needed strong {
             display: block;
             font-size: 20px;
-            color: var(--text-primary);
+            color: #d4af37;
             margin-top: 8px;
         }
 
-        .bonus-section {
+        .missions-section {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -369,44 +412,57 @@
             margin-bottom: 40px;
         }
 
-        .bonus-section h3 {
+        .missions-section h3 {
             font-size: 16px;
             font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .missions-section-desc {
+            color: var(--text-secondary);
+            font-size: 12px;
             margin-bottom: 20px;
         }
 
-        .bonus-grid {
+        .missions-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
 
-        .bonus-item {
+        .mission-item {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 16px;
-            text-align: center;
             transition: all 0.3s;
         }
 
-        .bonus-item:hover {
-            border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+        .mission-item:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
         }
 
-        .bonus-icon {
-            font-size: 24px;
+        .mission-icon {
+            font-size: 28px;
             margin-bottom: 8px;
+            display: block;
         }
 
-        .bonus-title {
+        .mission-title {
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 4px;
+            color: var(--text-primary);
         }
 
-        .bonus-points {
+        .mission-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+
+        .mission-reward {
             color: #d4af37;
             font-size: 12px;
             font-weight: 600;
@@ -444,13 +500,15 @@
         }
 
         .leaderboard-item:hover {
-            border-color: var(--accent);
+            border-color: rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
         }
 
         .leaderboard-rank {
             font-weight: 600;
             color: var(--text-secondary);
             width: 30px;
+            text-align: center;
         }
 
         .leaderboard-rank.rank1 {
@@ -472,6 +530,7 @@
             flex: 1;
             font-size: 14px;
             font-weight: 500;
+            margin-left: 16px;
         }
 
         .leaderboard-points {
@@ -510,7 +569,7 @@
                 gap: 16px;
             }
 
-            .bonus-grid {
+            .missions-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -549,8 +608,17 @@
     </header>
 
     <div class="container">
+        <!-- LOADING STATE -->
+        <div class="loading-state" id="loadingState">
+            <h2>Cargando tu perfil</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p>Sincronizando datos...</p>
+        </div>
+
         <!-- LOGIN SECTION -->
-        <div class="login-section" id="loginSection">
+        <div class="login-section" id="loginSection" style="display: none;">
             <div class="login-card">
                 <h2>Sistema de Puntos</h2>
                 <p>Ingresa tu email para ver tus puntos y premios</p>
@@ -600,39 +668,60 @@
                 </div>
                 <div class="progress-info">
                     <span id="currentTierProgress">0 / 150 puntos</span>
-                    <span id="nextMilestone">150 puntos = Sesión Full Day</span>
+                    <span id="nextMilestone">150 puntos = Premiación especial</span>
                 </div>
                 <div class="clp-needed">
                     Te faltan <strong id="clpRemaining">$0</strong> para ganar puntos
                 </div>
             </div>
 
-            <!-- Bonus Section -->
-            <div class="bonus-section">
-                <h3>Cómo ganar BONUS PUNTOS</h3>
-                <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 20px;">Verifica manualmente con Geremy - contacta por TikTok o Instagram</p>
-                <div class="bonus-grid">
-                    <div class="bonus-item">
-                        <div class="bonus-icon">📱</div>
-                        <div class="bonus-title">Seguir TikTok</div>
-                        <div class="bonus-points">+1 punto</div>
+            <!-- Missions Section -->
+            <div class="missions-section">
+                <h3>Misiones Secundarias - Gana Puntos Extra</h3>
+                <p class="missions-section-desc">Completa estas misiones para ganar puntos adicionales. Verifica manualmente con Geremy por TikTok o Instagram.</p>
+                <div class="missions-grid">
+                    <div class="mission-item">
+                        <span class="mission-icon">👥</span>
+                        <div class="mission-title">Refiere un amigo</div>
+                        <div class="mission-desc">Ambos ganan cuando se tatúe</div>
+                        <span class="mission-reward">+3 puntos</span>
                     </div>
-                    <div class="bonus-item">
-                        <div class="bonus-icon">📷</div>
-                        <div class="bonus-title">Seguir Instagram</div>
-                        <div class="bonus-points">+1 punto</div>
+                    <div class="mission-item">
+                        <span class="mission-icon">📱</span>
+                        <div class="mission-title">Sígueme en TikTok</div>
+                        <div class="mission-desc">Verifica que lo hayas hecho</div>
+                        <span class="mission-reward">+1 punto</span>
                     </div>
-                    <div class="bonus-item">
-                        <div class="bonus-icon">✨</div>
-                        <div class="bonus-title">2 tatuajes en 1 mes</div>
-                        <div class="bonus-points">+5 puntos</div>
+                    <div class="mission-item">
+                        <span class="mission-icon">📷</span>
+                        <div class="mission-title">Sígueme en Instagram</div>
+                        <div class="mission-desc">Verifica que lo hayas hecho</div>
+                        <span class="mission-reward">+1 punto</span>
+                    </div>
+                    <div class="mission-item">
+                        <span class="mission-icon">🖤</span>
+                        <div class="mission-title">2 tatuajes en 1 mes</div>
+                        <div class="mission-desc">Mínimo 50.000 CLP cada uno</div>
+                        <span class="mission-reward">+5 puntos</span>
+                    </div>
+                    <div class="mission-item">
+                        <span class="mission-icon">📸</span>
+                        <div class="mission-title">Comparte tu tatuaje</div>
+                        <div class="mission-desc">Etiquétame en historias o posts</div>
+                        <span class="mission-reward">+2 puntos</span>
+                    </div>
+                    <div class="mission-item">
+                        <span class="mission-icon">⭐</span>
+                        <div class="mission-title">Deja una reseña</div>
+                        <div class="mission-desc">En redes sociales o Google Maps</div>
+                        <span class="mission-reward">+2 puntos</span>
                     </div>
                 </div>
             </div>
 
             <!-- Leaderboard -->
             <div class="leaderboard-section">
-                <h3>Top 3 Clientes</h3>
+                <h3>🏆 Top 3 Clientes</h3>
                 <div class="leaderboard-list" id="leaderboard">
                     <div class="empty-state">
                         <p>Cargando leaderboard...</p>
@@ -642,6 +731,13 @@
         </div>
     </div>
 
+    <script>
+        // Simular tiempo de carga
+        setTimeout(() => {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'grid';
+        }, 1200);
+    </script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,34 @@
+[
+  {
+    "nombre": "Geremy Monsalve",
+    "email": "geremymons@gmail.com",
+    "puntos": 54,
+    "tier": "Silver",
+    "ultimoTatuaje": "14/02/2026",
+    "montoCLP": 85000
+  },
+  {
+    "nombre": "Luis Morales",
+    "email": "luis.morales@example.com",
+    "puntos": 30,
+    "tier": "Bronze",
+    "ultimoTatuaje": "12/02/2026",
+    "montoCLP": 120000
+  },
+  {
+    "nombre": "Camila Silva",
+    "email": "camila.silva@example.com",
+    "puntos": 24,
+    "tier": "Bronze",
+    "ultimoTatuaje": "10/02/2026",
+    "montoCLP": 75000
+  },
+  {
+    "nombre": "Luis Pérez",
+    "email": "luis.perez@example.com",
+    "puntos": 20,
+    "tier": "Bronze",
+    "ultimoTatuaje": "08/02/2026",
+    "montoCLP": 60000
+  }
+]
