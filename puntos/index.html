@@ -811,20 +811,25 @@
     <link rel="stylesheet" href="../glass/glass.css">
 </head>
 <body>
-    <!-- Glass SVG Refraction Filters -->
-    <svg style="display: none; width: 0; height: 0;" xmlns="http://www.w3.org/2000/svg">
+    <!-- Glass SVG Refraction Filters - Z1Code/glass-refraction -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position: absolute; overflow: hidden;" aria-hidden="true">
       <defs>
-        <filter id="glass-refract">
-          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" result="noise" seed="42" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+        <!-- Subtle refraction filter -->
+        <filter id="glass-refract" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.3" result="preblur"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" seed="42" result="noise"/>
+          <feGaussianBlur in="noise" stdDeviation="3" result="smooth"/>
+          <feDisplacementMap in="preblur" in2="smooth" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+          <feColorMatrix in="displaced" type="saturate" values="1.3"/>
         </filter>
-        <filter id="glass-refract-strong">
-          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" result="noise" seed="42" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-        <filter id="glass-chromatic">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
-          <feColorMatrix in="blurred" type="saturate" values="1.5" result="saturated" />
+
+        <!-- Strong refraction for hover/special elements -->
+        <filter id="glass-refract-strong" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.4" result="preblur"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.010" numOctaves="3" seed="42" result="noise"/>
+          <feGaussianBlur in="noise" stdDeviation="4" result="smooth"/>
+          <feDisplacementMap in="preblur" in2="smooth" scale="16" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+          <feColorMatrix in="displaced" type="saturate" values="1.5"/>
         </filter>
       </defs>
     </svg>
