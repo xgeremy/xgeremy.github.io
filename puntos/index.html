@@ -806,8 +806,29 @@
             border: 1px solid rgba(72, 187, 120, 0.2);
         }
     </style>
+
+    <!-- Glass Refraction Effects Stylesheet -->
+    <link rel="stylesheet" href="../glass/glass.css">
 </head>
 <body>
+    <!-- Glass SVG Refraction Filters -->
+    <svg style="display: none; width: 0; height: 0;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glass-refract">
+          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" result="noise" seed="42" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="glass-refract-strong">
+          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" result="noise" seed="42" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="glass-chromatic">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
+          <feColorMatrix in="blurred" type="saturate" values="1.5" result="saturated" />
+        </filter>
+      </defs>
+    </svg>
+
     <header>
         <div class="header-content">
             <a href="/" class="logo">XGEREMY<sup>™</sup></a>
@@ -853,20 +874,20 @@
 
             <!-- Stats Grid -->
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card glass-card">
                     <div class="stat-label">Puntos Totales</div>
                     <div class="stat-value" id="totalPoints">0</div>
                     <div class="stat-detail" id="creditValue">$0 CLP</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card glass-card">
                     <div class="stat-label">Tu Tier</div>
                     <div class="stat-value" id="tierName">—</div>
-                    <div class="tier-badge" id="tierBadge">—</div>
+                    <div class="tier-badge glass-pill" id="tierBadge">—</div>
                 </div>
             </div>
 
             <!-- Progress Section -->
-            <div class="progress-section">
+            <div class="progress-section glass-card">
                 <div class="progress-header">
                     <h3>Progreso hacia el próximo nivel</h3>
                     <div class="progress-meta" id="progressMeta">0%</div>
@@ -928,7 +949,7 @@
             </div>
 
             <!-- Leaderboard -->
-            <div class="leaderboard-section">
+            <div class="leaderboard-section glass-card">
                 <h3>🏆 Top 3 Clientes</h3>
                 <div class="leaderboard-list" id="leaderboard">
                     <div class="empty-state">
