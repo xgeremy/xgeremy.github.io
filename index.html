@@ -1401,24 +1401,8 @@
         }
     </style>
     
-    <!-- Glass Refraction Effects Stylesheet - Z1Code/glass-refraction compiled -->
-    <link rel="stylesheet" href="glass/css/glass.css">
-    <link rel="stylesheet" href="glass/custom.css">
 </head>
 <body>
-    <!-- SVG refraction filters - Z1Code/glass-refraction -->
-    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <filter id="glass-refract" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="0.3" result="preblur"/>
-          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" seed="42" result="noise"/>
-          <feGaussianBlur in="noise" stdDeviation="3" result="smooth"/>
-          <feDisplacementMap in="preblur" in2="smooth" scale="8" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
-          <feColorMatrix in="displaced" type="saturate" values="1.3"/>
-        </filter>
-      </defs>
-    </svg>
-
     <header id="header">
         <div class="header-content">
             <div class="logo">
