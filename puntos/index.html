@@ -279,36 +279,93 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 28px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            padding: 32px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .stat-card:hover {
-            border-color: rgba(34, 197, 94, 0.3);
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+            border-color: rgba(34, 197, 94, 0.4);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(34, 197, 94, 0.05) 100%);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(34, 197, 94, 0.15);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
         }
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .stat-value {
-            font-size: 36px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
         }
 
         .stat-detail {
             color: var(--text-tertiary);
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .tier-badge {
@@ -327,6 +384,21 @@
             color: #cd7f32;
         }
 
+        .tier-plata {
+            background: rgba(192, 192, 192, 0.2);
+            color: #c0c0c0;
+        }
+
+        .tier-oro {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .tier-novato {
+            background: rgba(139, 139, 139, 0.2);
+            color: #8b8b8b;
+        }
+
         .tier-silver {
             background: rgba(192, 192, 192, 0.2);
             color: #c0c0c0;
@@ -338,11 +410,36 @@
         }
 
         .progress-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.03) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 18px;
+            padding: 40px;
             margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
+            animation: pulse-bg 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
         }
 
         .progress-header {
@@ -350,34 +447,62 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
         }
 
         .progress-header h3 {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
         }
 
         .progress-meta {
-            color: var(--text-secondary);
-            font-size: 12px;
+            color: #22c55e;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 6px 12px;
+            border-radius: 12px;
         }
 
         .progress-bar-container {
             position: relative;
-            height: 8px;
-            background: var(--bg-tertiary);
-            border-radius: 4px;
+            height: 12px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #22c55e, #f5f5f7);
-            border-radius: 4px;
+            background: linear-gradient(90deg, #22c55e 0%, #4ade80 50%, #22c55e 100%);
+            background-size: 200% 100%;
+            border-radius: 12px;
             width: 0%;
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 16px rgba(34, 197, 94, 0.4);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            animation: liquid-wave 3s ease-in-out infinite, progress-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes liquid-wave {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+
+        @keyframes progress-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(34, 197, 94, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            }
         }
 
         .progress-info {
@@ -385,23 +510,42 @@
             justify-content: space-between;
             font-size: 13px;
             color: var(--text-secondary);
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-info span {
+            background: var(--bg-tertiary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(34, 197, 94, 0.1);
         }
 
         .clp-needed {
-            background: var(--bg-tertiary);
-            padding: 16px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(34, 197, 94, 0.05) 100%);
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
-            margin-top: 16px;
             color: var(--text-secondary);
             font-size: 13px;
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .clp-needed:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(34, 197, 94, 0.1) 100%);
         }
 
         .clp-needed strong {
             display: block;
-            font-size: 20px;
+            font-size: 18px;
             color: #22c55e;
             margin-top: 8px;
+            font-weight: 700;
         }
 
         .missions-section {
@@ -478,16 +622,14 @@
         }
 
         .leaderboard-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
             padding: 32px;
             margin-bottom: 40px;
         }
 
         .leaderboard-section.leaderboard-featured {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.04) 100%);
-            border: 1px solid rgba(34, 197, 94, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -501,6 +643,7 @@
             height: 200%;
             background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
             animation: pulse 4s ease-in-out infinite;
+            pointer-events: none;
         }
 
         @keyframes pulse {
@@ -520,7 +663,7 @@
             font-size: 20px;
             margin-bottom: 24px;
             color: #22c55e;
-            text-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+            font-weight: 700;
         }
 
         .leaderboard-section h3 {
@@ -533,44 +676,59 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 12px;
+            position: relative;
+            z-index: 1;
         }
 
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
+            padding: 18px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .leaderboard-item:hover {
             border-color: rgba(34, 197, 94, 0.3);
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(34, 197, 94, 0.05) 100%);
+            transform: translateX(4px);
+            box-shadow: 0 8px 16px rgba(34, 197, 94, 0.1);
         }
 
         .leaderboard-rank {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-secondary);
-            width: 30px;
+            width: 35px;
             text-align: center;
+            font-size: 18px;
         }
 
         .leaderboard-rank.rank1 {
             color: #22c55e;
-            font-size: 18px;
+            font-size: 24px;
+            animation: bounce 2s infinite;
         }
 
         .leaderboard-rank.rank2 {
             color: #c0c0c0;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         .leaderboard-rank.rank3 {
             color: #cd7f32;
-            font-size: 14px;
+            font-size: 18px;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
         }
 
         .leaderboard-name {
@@ -582,8 +740,11 @@
 
         .leaderboard-points {
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 6px 12px;
+            border-radius: 8px;
         }
 
         .empty-state {
@@ -707,18 +868,18 @@
             <!-- Progress Section -->
             <div class="progress-section">
                 <div class="progress-header">
-                    <h3>Progreso hacia próximo nivel</h3>
+                    <h3>Progreso hacia el próximo nivel</h3>
                     <div class="progress-meta" id="progressMeta">0%</div>
                 </div>
                 <div class="progress-bar-container">
                     <div class="progress-bar" id="progressBar" style="width: 0%"></div>
                 </div>
                 <div class="progress-info">
-                    <span id="currentTierProgress">0 / 150 puntos</span>
-                    <span id="nextMilestone">150 puntos = Premiación especial</span>
+                    <span id="currentTierProgress">0 puntos</span>
+                    <span id="nextMilestone">Próximo nivel</span>
                 </div>
                 <div class="clp-needed">
-                    Sigue acumulando puntos
+                    <strong id="clpRemaining">¡A por más puntos!</strong>
                 </div>
             </div>
 

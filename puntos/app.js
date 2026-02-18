@@ -71,17 +71,21 @@ function updateDashboard() {
     updateTierBadge(tier);
 
     // Progress Bar
-    const pointsInTier = totalPoints % 150;
-    const progressPercent = Math.min((pointsInTier / 150) * 100, 100);
-    document.getElementById('progressBar').style.width = progressPercent + '%';
+    const nextTierInfo = getNextTierInfo(totalPoints);
+    const pointsForNextTier = nextTierInfo.goal;
+    const pointsEarned = nextTierInfo.current;
+    const pointsToGoal = pointsForNextTier - pointsEarned;
+    const progressPercent = (pointsEarned / pointsForNextTier) * 100;
+    
+    document.getElementById('progressBar').style.width = Math.min(progressPercent, 100) + '%';
     document.getElementById('progressMeta').textContent = Math.round(progressPercent) + '%';
 
     // Progress Info
-    document.getElementById('currentTierProgress').textContent = `${pointsInTier} / 150 puntos`;
+    document.getElementById('currentTierProgress').textContent = `${pointsEarned} / ${pointsForNextTier} puntos`;
+    document.getElementById('nextMilestone').textContent = `Próximo tier: ${nextTierInfo.tier}`;
 
-    // CLP Needed
-    const clpNeeded = (150 - pointsInTier) * 1000;
-    document.getElementById('clpRemaining').textContent = `$${clpNeeded.toLocaleString('es-CL')}`;
+    // CLP Needed (opcional, cambiar si lo deseas)
+    document.getElementById('clpRemaining').textContent = `${pointsToGoal} puntos para ${nextTierInfo.tier}`;
 
     // Leaderboard
     updateLeaderboard();
@@ -90,9 +94,24 @@ function updateDashboard() {
 // Get tier según puntos
 function getTier(points) {
     points = parseInt(points) || 0;
-    if (points >= 101) return 'Gold';
-    if (points >= 51) return 'Silver';
-    return 'Bronze';
+    if (points >= 101) return 'Oro';
+    if (points >= 51) return 'Plata';
+    if (points >= 25) return 'Bronce';
+    return 'Novato';
+}
+
+// Get next tier info
+function getNextTierInfo(points) {
+    points = parseInt(points) || 0;
+    if (points < 25) {
+        return { tier: 'Bronce', goal: 25, current: points };
+    } else if (points < 51) {
+        return { tier: 'Plata', goal: 51, current: points };
+    } else if (points < 101) {
+        return { tier: 'Oro', goal: 101, current: points };
+    } else {
+        return { tier: 'Maestro', goal: 150, current: points };
+    }
 }
 
 // Update tier badge
