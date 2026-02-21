@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuidados del Tatuaje - XGEREMY™</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #1d1d1f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --text-tertiary: #6e6e73;
+            --accent: #f5f5f7;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            z-index: 9999;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 0.5px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 980px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 22px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 28px;
+            width: auto;
+            opacity: 0.9;
+        }
+
+        .back-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 400;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .hero-simple {
+            padding: 120px 22px 60px;
+            text-align: center;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .hero-simple h1 {
+            font-size: 48px;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            margin-bottom: 12px;
+        }
+
+        .hero-simple p {
+            font-size: 21px;
+            color: var(--text-secondary);
+            line-height: 1.381;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 22px 100px;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        .info-card h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon {
+            font-size: 32px;
+        }
+
+        .info-card h3 {
+            font-size: 21px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: var(--text-primary);
+        }
+
+        .info-card p, .info-card li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-card li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .info-card li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .warning-box p {
+            color: #ff3b30;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .tip-box {
+            background: rgba(48, 209, 88, 0.1);
+            border: 1px solid rgba(48, 209, 88, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .tip-box p {
+            color: #30d158;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .contact-cta {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(29, 29, 31, 0.5) 100%);
+            border-radius: 18px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .contact-cta h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .contact-cta p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .button {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: -0.022em;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 980px;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 245, 247, 0.3);
+        }
+
+        footer {
+            background: var(--bg-primary);
+            border-top: 0.5px solid var(--border);
+            padding: 40px 22px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        @media (max-width: 734px) {
+            .hero-simple h1 {
+                font-size: 32px;
+            }
+
+            .hero-simple p {
+                font-size: 17px;
+            }
+
+            .info-card {
+                padding: 24px;
+            }
+
+            .info-card h2 {
+                font-size: 24px;
+            }
+
+            .info-card h3 {
+                font-size: 19px;
+            }
+
+            .contact-cta {
+                padding: 32px 24px;
+            }
+
+            .contact-cta h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo" class="logo-img">
+                XGEREMY<sup>™</sup>
+            </a>
+            <a href="/" class="back-link">← Volver al inicio</a>
+        </div>
+    </header>
+
+    <section class="hero-simple">
+        <h1>Información Importante</h1>
+        <p>Cuidados esenciales para tu nuevo tatuaje</p>
+    </section>
+
+    <div class="content">
+        <div class="info-card">
+            <h2><span class="icon">🩹</span> Cuidados Generales</h2>
+            
+            <p>Después de hacerte el tatuaje, es fundamental seguir estas indicaciones para asegurar una correcta cicatrización y preservar la calidad de tu diseño.</p>
+
+            <h3>Primeras Horas</h3>
+            <ul>
+                <li>Mantén el vendaje protector durante 2-4 horas.</li>
+                <li>Retira el vendaje cuidadosamente con las manos limpias.</li>
+                <li>Lava suavemente con agua tibia y jabón neutro.</li>
+            </ul>
+
+            <h3>Primeros Días (Días 1-7)</h3>
+            <ul>
+                <li>Lava el tatuaje 2-3 veces al día con agua tibia y jabón neutro.</li>
+                <li>Seca con toques suaves usando papel absorbente o toalla limpia.</li>
+                <li>Aplica una capa fina de crema cicatrizante sin fragancia.</li>
+                <li>No cubras el tatuaje a menos que sea necesario (ropa ajustada o sucia).</li>
+            </ul>
+
+            <h3>Segunda Semana (Días 8-14)</h3>
+            <ul>
+                <li>Continúa lavando 2 veces al día.</li>
+                <li>Aplica crema hidratante sin fragancia.</li>
+                <li>Es normal que la piel se descame, NO arranques las costras.</li>
+                <li>Mantén la zona hidratada pero no en exceso.</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>⚠️ IMPORTANTE:</strong> No sumerjas el tatuaje en piscinas, playas, tinas o jacuzzis durante las primeras 2-3 semanas.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h2><span class="icon">☀️</span> Exposición Solar</h2>
+            <ul>
+                <li>Evita la exposición directa al sol durante el primer mes.</li>
+                <li>Después de 28 días de cicatrización, usa protector solar SPF 50+ siempre que el tatuaje esté expuesto.</li>
+                <li>El sol es el principal enemigo de la durabilidad de los colores.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2><span class="icon">❌</span> Qué NO Hacer</h2>
+            <ul>
+                <li>NO rasques ni arranques las costras o piel descamada.</li>
+                <li>NO uses ropa ajustada que roce constantemente el tatuaje.</li>
+                <li>NO te expongas a sudoración excesiva (gimnasio, deportes intensos).</li>
+                <li>NO uses productos con alcohol, perfumes o fragancias.</li>
+                <li>NO permitas que mascotas laman o toquen el tatuaje.</li>
+                <li>NO uses cremas con retinol, ácidos o exfoliantes en la zona.</li>
+                <li>NO vayas a la playa ni a la piscina durante el primer mes.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2><span class="icon">💊</span> Productos Recomendados</h2>
+            <ul>
+                <li>Jabón neutro sin fragancia (ej: jabón de glicerina)</li>
+                <li>Crema cicatrizante: Bepanthen o Aquaphor sin fragancia</li>
+                <li>Crema hidratante: Eucerin, CeraVe, o Lubriderm sin fragancia</li>
+                <li>Protector solar SPF 50+ mineral</li>
+            </ul>
+
+            <div class="tip-box">
+                <p><strong>💡 TIP:</strong> Menos es más. Una capa muy fina de crema es suficiente. El exceso puede obstruir los poros y retrasar la cicatrización.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h2><span class="icon">🚨</span> Señales de Alerta</h2>
+            <p>Consulta inmediatamente si presentas:</p>
+            <ul>
+                <li>Enrojecimiento excesivo o que empeora después de 3 días</li>
+                <li>Hinchazón considerable o calor en la zona</li>
+                <li>Pus, líquido amarillento o mal olor</li>
+                <li>Fiebre o malestar general</li>
+                <li>Dolor intenso que no mejora</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2><span class="icon">⏱️</span> Tiempo de Cicatrización</h2>
+            <ul>
+                <li><strong>Cicatrización superficial:</strong> 2-3 semanas</li>
+                <li><strong>Cicatrización completa:</strong> 3-4 meses</li>
+                <li>Durante este tiempo la piel se está regenerando en capas profundas</li>
+                <li>Continúa cuidando tu tatuaje incluso después de que parezca estar "curado"</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2><span class="icon">✨</span> Mantenimiento a Largo Plazo</h2>
+            <ul>
+                <li>Hidrata diariamente la zona del tatuaje</li>
+                <li>Usa SIEMPRE protector solar cuando esté expuesto</li>
+                <li>Exfolia suavemente la piel 1-2 veces por semana (después de cicatrizar)</li>
+                <li>Mantén una buena hidratación corporal general</li>
+            </ul>
+
+            <h3>Garantía y Retoque</h3>
+            <p>Todos mis tatuajes incluyen una garantía que consiste en un retoque gratuito en caso de que el tatuaje no cicatrice correctamente. Si notas algún problema durante la cicatrización, contáctame y coordinamos una cita para evaluarlo y retocarlo sin costo adicional.</p>
+            <p style="font-size: 10px; opacity: 0.5; margin-top: 12px;"><em>*Sujeto a evaluación en algunos casos</em></p>
+        </div>
+
+        <div class="contact-cta">
+            <h2>¿Dudas o Consultas?</h2>
+            <p>Si tienes alguna pregunta sobre el cuidado de tu tatuaje, no dudes en contactarme</p>
+            <a href="https://wa.me/56937669973" class="button">Contactar por WhatsApp</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>XGEREMY<sup>™</sup> · Blackwork · Dotwork · Fine Line</p>
+        <p style="margin-top: 8px;">Copyright © 2026 XGEREMY. All rights reserved.</p>
+    </footer>
+</body>
+</html>

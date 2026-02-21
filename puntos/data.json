@@ -1,0 +1,34 @@
+[
+  {
+    "nombre": "Gerald Monsalve",
+    "email": "geraldmonsalve392@gmail.com",
+    "puntos": 1,
+    "tier": "Novato",
+    "ultimoTatuaje": "—",
+    "montoCLP": 0
+  },
+  {
+    "nombre": "Marco López",
+    "email": "marco.lopez@example.com",
+    "puntos": 22,
+    "tier": "Bronce",
+    "ultimoTatuaje": "15/02/2026",
+    "montoCLP": 180000
+  },
+  {
+    "nombre": "Sofia Rodríguez",
+    "email": "sofia.rodriguez@example.com",
+    "puntos": 18,
+    "tier": "Bronce",
+    "ultimoTatuaje": "12/02/2026",
+    "montoCLP": 150000
+  },
+  {
+    "nombre": "Andrés García",
+    "email": "andres.garcia@example.com",
+    "puntos": 15,
+    "tier": "Bronce",
+    "ultimoTatuaje": "10/02/2026",
+    "montoCLP": 120000
+  }
+]
