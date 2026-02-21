@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,30 +77,6 @@
 }
 
 /* ── LIGHT MODE ── */
-[data-theme="light"] {
-  --bg:       #f5f5f7;
-  --bg-2:     #e8e8ed;
-  --bg-3:     #d8d8de;
-  --text:     #1d1d1f;
-  --text-2:   #515154;
-  --text-3:   #8a8a8e;
-  --border:   rgba(0,0,0,0.08);
-  --accent:   #8a6d4a;
-
-  --glass-bg:    rgba(255,255,255,0.55);
-  --glass-bg-2:  rgba(255,255,255,0.38);
-  --glass-bdr:   rgba(255,255,255,0.7);
-  --glass-bdr-h: rgba(255,255,255,0.9);
-  --glass-spec:  rgba(255,255,255,0.9);
-
-  --nav-bg: rgba(235,235,240,0.82);
-  --theme-icon: "🌙";
-
-  --pts: rgba(138,109,74,0.9);
-  --pts-dim: rgba(138,109,74,0.12);
-  --pts-border: rgba(138,109,74,0.22);
-}
-
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 
@@ -234,10 +210,6 @@ header {
   transition:background .35s, border-color .35s;
   /* NO auto-hide — always visible */
 }
-[data-theme="light"] header {
-  background:linear-gradient(140deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55));
-  border-color:rgba(255,255,255,0.7);
-}
 header::before {
   content:'';
   position:absolute; top:0; left:0; right:0; height:1px;
@@ -269,8 +241,6 @@ nav a {
   transition:opacity .3s, background .3s;
 }
 nav a:hover { opacity:1; background:rgba(255,255,255,0.07); }
-[data-theme="light"] nav a:hover { background:rgba(0,0,0,0.05); }
-
 .nav-agendar {
   margin-left:4px;
   padding:8px 16px !important;
@@ -293,22 +263,7 @@ nav a:hover { opacity:1; background:rgba(255,255,255,0.07); }
 }
 .back-link:hover { opacity:1; background:rgba(255,255,255,.07); }
 
-/* Theme toggle */
-.theme-toggle {
-  width:34px; height:34px;
-  border-radius:10px;
-  background:var(--glass-bg);
-  backdrop-filter:blur(10px);
-  border:1px solid var(--glass-bdr);
-  color:var(--text);
-  font-size:15px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
-  transition:background .3s, border-color .3s, transform .3s;
-  margin-left:4px;
-  flex-shrink:0;
-}
-.theme-toggle:hover { border-color:var(--glass-bdr-h); transform:scale(1.08); }
+
 
 /* ── ANIMATIONS ── */
 @keyframes xg-shimmer {
@@ -330,11 +285,7 @@ nav a:hover { opacity:1; background:rgba(255,255,255,0.07); }
 .fade-in.visible { opacity:1; transform:translateY(0); }
 
 /* ── GALLERY — animated shiny border ── */
-@property --xg-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
+
 .gallery-item {
   aspect-ratio:1080/1350;
   border-radius:18px; overflow:visible; position:relative;
@@ -349,28 +300,8 @@ nav a:hover { opacity:1; background:rgba(255,255,255,0.07); }
   width:100%; height:100%; object-fit:cover;
   display:block;
 }
-/* Rotating shiny border */
-.gallery-item::before {
-  content:'';
-  position:absolute;
-  inset:-1.5px;
-  border-radius:19.5px;
-  background:conic-gradient(
-    from var(--xg-angle),
-    transparent 0deg,
-    transparent 60deg,
-    rgba(255,255,255,0.8) 90deg,
-    rgba(200,184,154,0.6) 120deg,
-    rgba(150,100,255,0.4) 140deg,
-    transparent 180deg,
-    transparent 360deg
-  );
-  z-index:2;
-  animation:xg-spin-border 4s linear infinite;
-  pointer-events:none;
-}
-@keyframes xg-spin-border {
-  to { --xg-angle: 360deg; }
+.gallery-item::before { display:none; }
+
 }
 /* Glass overlay shine */
 .gallery-item::after {
@@ -454,7 +385,6 @@ footer {
       opacity:0; animation:fadeInUp 1s ease forwards;
       filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));
     }
-    [data-theme="light"] .hero-logo { filter:drop-shadow(0 4px 12px rgba(0,0,0,.2)); }
     .hero h1 sup { font-size:.3em; font-weight:400; opacity:.5; }
     .hero-subtitle {
       font-size:28px; line-height:1.14; font-weight:400; letter-spacing:.005em;
@@ -749,16 +679,13 @@ footer {
   <div id="xg-grain"></div>
 
   
-    <header>
+        <header>
       <div class="header-content">
         <a href="/" class="logo">
           <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo" class="logo-img">
           XGEREMY<sup>™</sup>
         </a>
         <nav>
-          <a href="/cuidados.html">Cuidados</a>
-          <a href="/consentimiento.html">Consentimiento</a>
-          <button class="theme-toggle" id="themeToggle" title="Cambiar tema">☀️</button>
           <a href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20agendar%20un%20tatuaje" target="_blank" rel="noopener" class="nav-agendar">Agendar →</a>
         </nav>
       </div>
@@ -963,37 +890,15 @@ footer {
 
   <script>
     
-  // ── THEME TOGGLE ──
-  (function(){
-    const root = document.documentElement;
-    const btn  = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('xg-theme') || 'dark';
-    root.setAttribute('data-theme', saved);
-    if(btn) btn.textContent = saved === 'dark' ? '☀️' : '🌙';
-    if(btn) btn.addEventListener('click', () => {
-      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', cur);
-      localStorage.setItem('xg-theme', cur);
-      btn.textContent = cur === 'dark' ? '☀️' : '🌙';
-    });
-    // Scroll reveal
-    const revObs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target); } });
-    }, { threshold:.1 });
-    document.querySelectorAll('.fade-in').forEach(el => revObs.observe(el));
-  })();
+  
 
 
-    // Header scroll — always visible (no auto-hide)
-    const header = document.querySelector('header');
     window.addEventListener('scroll', () => {
-      if(window.scrollY > 80) {
-        header.style.background = document.documentElement.getAttribute('data-theme') === 'light'
-          ? 'linear-gradient(140deg, rgba(255,255,255,0.92), rgba(255,255,255,0.82))'
-          : 'linear-gradient(140deg, rgba(8,8,8,0.92), rgba(8,8,8,0.82))';
-      } else {
-        header.style.background = '';
-      }
+      const header = document.querySelector('header');
+      if(!header) return;
+      header.style.background = window.scrollY > 80
+        ? 'linear-gradient(140deg, rgba(8,8,8,0.94), rgba(8,8,8,0.86))'
+        : '';
     }, {passive:true});
 
     function toggleBonusDetails() {
