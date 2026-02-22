@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /puntos/
+
+Sitemap: https://xgeremy.work/sitemap.xml
