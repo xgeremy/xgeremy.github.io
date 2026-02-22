@@ -949,6 +949,14 @@ footer {
     modal.addEventListener('touchstart', e => ts=e.changedTouches[0].screenX);
     modal.addEventListener('touchend', e => { const dx=e.changedTouches[0].screenX-ts; if(dx<-50) showSlide((cur+1)%slides.length); if(dx>50) showSlide((cur-1+slides.length)%slides.length); });
     document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key==='ArrowRight') showSlide((cur+1)%slides.length); if(e.key==='ArrowLeft') showSlide((cur-1+slides.length)%slides.length); if(e.key==='Escape') { modal.classList.remove('active'); document.body.style.overflow=''; } });
-  </script>
+  
+  // Scroll reveal
+  (function(){
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  })();
+</script>
 </body>
 </html>
