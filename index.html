@@ -728,6 +728,36 @@ footer {
       .scroll-top { bottom:18px; right:18px; }
       .reviews-container { height:85vh; }
     }
+
+    /* ── CARD TILT 3D ── */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform .08s ease-out, box-shadow .3s;
+    }
+    .tilt-card .tilt-shine {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.13) 0%, transparent 70%);
+      opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 2;
+    }
+    .tilt-card:hover .tilt-shine { opacity: 1; }
+
+
+    /* ── VISIT COUNTER ── */
+    .visit-counter {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-2); font-weight: 400;
+      opacity: .55; letter-spacing: .01em;
+    }
+    .visit-counter .vc-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,.6);
+      animation: vc-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes vc-pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.5; transform:scale(0.7); }
+    }
+
     .hidden-seo { position:absolute; left:-9999px; }
 
     /* ── SKELETON SCREENS ── */
@@ -1025,7 +1055,11 @@ footer {
         </div>
       </div>
       <div class="footer-bottom">
-        <p>Copyright © 2026 XGEREMY. All rights reserved.</p>
+                <p>© 2026 XGEREMY™. All rights reserved.</p>
+        <p class="visit-counter" id="visitCounter">
+          <span class="vc-dot"></span>
+          <span id="vcNum">—</span> visitas
+        </p>
       </div>
     </div>
   </footer>
@@ -1216,6 +1250,61 @@ footer {
       }
       window.addEventListener('scroll',function(){if(!tick){requestAnimationFrame(run);tick=true;}},{passive:true});
       run();
+    })();
+
+
+    // ── CARD TILT 3D ──────────────────────────────────────────
+    (function(){
+      if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+      function initTilt(el) {
+        var shine = document.createElement('div');
+        shine.className = 'tilt-shine';
+        if(window.getComputedStyle(el).position === 'static') el.style.position = 'relative';
+        el.appendChild(shine);
+
+        el.addEventListener('mousemove', function(e) {
+          var r  = el.getBoundingClientRect();
+          var cx = r.left + r.width  / 2;
+          var cy = r.top  + r.height / 2;
+          var dx = (e.clientX - cx) / (r.width  / 2);
+          var dy = (e.clientY - cy) / (r.height / 2);
+          var maxDeg = 10;
+          var rx = -dy * maxDeg;
+          var ry =  dx * maxDeg;
+          el.style.transform = 'perspective(700px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) scale3d(1.025,1.025,1.025)';
+          shine.style.background = 'radial-gradient(circle at '+(((dx+1)/2)*100).toFixed(0)+'% '+(((dy+1)/2)*100).toFixed(0)+'%, rgba(255,255,255,.16) 0%, transparent 65%)';
+        });
+        el.addEventListener('mouseleave', function() {
+          el.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+        });
+      }
+      document.querySelectorAll('.xg-card, .gallery-item, .reward-card').forEach(initTilt);
+    })();
+
+
+    // ── VISIT COUNTER — GoatCounter ───────────────────────────
+    (function(){
+      fetch('https://xgeremy.goatcounter.com/counter//.json')
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          var n = d && d.count ? parseInt(d.count.replace(/,/g,'')) : null;
+          if(!n) return;
+          var el = document.getElementById('vcNum');
+          if(!el) return;
+          // Animate count up
+          var start = Math.max(0, n - 80), cur = start;
+          var step = Math.ceil((n - start) / 40);
+          var iv = setInterval(function(){
+            cur = Math.min(cur + step, n);
+            el.textContent = cur.toLocaleString('es-CL');
+            if(cur >= n) clearInterval(iv);
+          }, 28);
+        })
+        .catch(function(){
+          // silently fail — counter just stays hidden
+          var c = document.getElementById('visitCounter');
+          if(c) c.style.display = 'none';
+        });
     })();
 
     // Scroll reveal

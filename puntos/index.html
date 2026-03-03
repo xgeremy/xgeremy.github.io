@@ -585,7 +585,169 @@ footer {
       .progress-section { padding:20px; }
       .container { padding:80px 14px 40px; }
     }
+
+    /* ── MEMBERSHIP CARD ── */
+    .card-section {
+      padding: 28px; margin-bottom: 16px;
+    }
+    .card-section h3 { font-size: 15px; font-weight: 600; margin-bottom: 20px; color: var(--text); }
+
+    .membership-card {
+      width: 100%; max-width: 380px; margin: 0 auto;
+      aspect-ratio: 85.6 / 53.98; /* ISO/IEC 7810 ID-1 ratio */
+      border-radius: 16px; position: relative; overflow: hidden;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform .08s ease-out;
+      box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 4px 16px rgba(0,0,0,.4);
+    }
+
+    /* Gradient base by tier */
+    .card-bg {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+      transition: background .5s ease;
+    }
+    .tier-Bronce  .card-bg { background: linear-gradient(135deg, #2d1a0a 0%, #4a2c0f 45%, #7a4520 100%); }
+    .tier-Plata   .card-bg { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 45%, #404040 100%); }
+    .tier-Oro     .card-bg { background: linear-gradient(135deg, #1a1400 0%, #2d2200 45%, #4a3800 100%); }
+    .tier-Maestro .card-bg { background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 45%, #2d0a4a 100%); }
+
+    /* Subtle noise texture */
+    .card-noise {
+      position: absolute; inset: 0; border-radius: inherit;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .4; pointer-events: none;
+    }
+
+    /* Holographic shimmer */
+    .card-holo {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: linear-gradient(105deg,
+        transparent 20%, rgba(255,255,255,.04) 30%,
+        rgba(255,255,255,.10) 38%, rgba(255,255,255,.04) 45%,
+        transparent 55%, rgba(255,255,255,.04) 65%,
+        rgba(255,255,255,.08) 73%, rgba(255,255,255,.04) 80%,
+        transparent 90%
+      );
+      pointer-events: none;
+    }
+
+    /* Top edge highlight */
+    .card-edge {
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.25) 40%, rgba(255,255,255,.4) 60%, transparent);
+      pointer-events: none;
+    }
+
+    /* Circle decoration (like Mastercard) */
+    .card-circles {
+      position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+      display: flex; gap: -8px;
+    }
+    .card-circle {
+      width: 44px; height: 44px; border-radius: 50%;
+      position: relative;
+    }
+    .card-circle:first-child {
+      background: rgba(235,30,37,.75);
+      margin-right: -14px; z-index: 1;
+    }
+    .card-circle:last-child {
+      background: rgba(247,158,27,.75);
+    }
+    .tier-Maestro .card-circle:first-child { background: rgba(120,40,200,.75); }
+    .tier-Maestro .card-circle:last-child  { background: rgba(60,130,255,.75); }
+    .tier-Oro     .card-circle:first-child  { background: rgba(200,160,40,.8); }
+    .tier-Oro     .card-circle:last-child   { background: rgba(240,200,60,.8); }
+    .tier-Plata   .card-circle:first-child  { background: rgba(160,160,170,.7); }
+    .tier-Plata   .card-circle:last-child   { background: rgba(210,210,220,.7); }
+
+    /* Chip */
+    .card-chip {
+      position: absolute; left: 22px; top: 38%;
+      width: 38px; height: 30px; border-radius: 5px;
+      background: linear-gradient(135deg, #d4a843 0%, #f5d27a 30%, #b8892a 60%, #e8c460 100%);
+      box-shadow: 0 2px 6px rgba(0,0,0,.4);
+    }
+    .card-chip::before {
+      content: ''; position: absolute; inset: 5px;
+      border: 1px solid rgba(0,0,0,.2); border-radius: 3px;
+      background: linear-gradient(135deg, #c49530 0%, #e8c460 50%, #c49530 100%);
+    }
+    .card-chip::after {
+      content: ''; position: absolute;
+      top: 50%; left: 0; right: 0; height: 1px;
+      background: rgba(0,0,0,.15); transform: translateY(-50%);
+    }
+
+    /* NFC icon */
+    .card-nfc {
+      position: absolute; left: 66px; top: 40%;
+      display: flex; flex-direction: column; gap: 2.5px;
+      transform: translateY(-50%);
+    }
+    .card-nfc span {
+      display: block; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,.3);
+      background: transparent;
+    }
+    .card-nfc span:nth-child(1) { width:8px; height:8px; }
+    .card-nfc span:nth-child(2) { width:13px; height:13px; margin-left:-2.5px; }
+    .card-nfc span:nth-child(3) { width:18px; height:18px; margin-left:-5px; }
+
+    /* Content layer */
+    .card-content {
+      position: absolute; inset: 0; padding: 18px 22px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      z-index: 2;
+    }
+    .card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .card-brand {
+      font-size: 16px; font-weight: 800; letter-spacing: .12em;
+      text-transform: uppercase; color: rgba(255,255,255,.9);
+      text-shadow: 0 1px 4px rgba(0,0,0,.5);
+    }
+    .card-tier-label {
+      font-size: 10px; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(255,255,255,.5);
+      margin-top: 3px;
+    }
+    .card-bottom {
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .card-holder-name {
+      font-size: 13px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(255,255,255,.85);
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 160px;
+    }
+    .card-points-wrap { text-align: right; }
+    .card-points-num {
+      font-size: 22px; font-weight: 700; color: rgba(255,255,255,.95);
+      line-height: 1; text-shadow: 0 1px 6px rgba(0,0,0,.5);
+    }
+    .card-points-label {
+      font-size: 9px; font-weight: 500; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(255,255,255,.45);
+    }
+
+    /* Download button */
+    .card-download-btn {
+      display: block; width: 100%; max-width: 380px; margin: 14px auto 0;
+      padding: 11px; text-align: center;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px; color: var(--text-2); font-family: var(--font);
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: all .3s; backdrop-filter: blur(12px);
+    }
+    .card-download-btn:hover { background: rgba(255,255,255,.12); color: var(--text); border-color: rgba(255,255,255,.22); }
   </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </head>
 <body>
   
@@ -688,6 +850,40 @@ footer {
         </div>
       </div>
 
+      <div class="leaderboard-section xg-card card-section">
+        <h3>💳 Mi Tarjeta XGEREMY</h3>
+        <div class="membership-card" id="memberCard">
+          <div class="card-bg"></div>
+          <div class="card-noise"></div>
+          <div class="card-holo"></div>
+          <div class="card-edge"></div>
+          <div class="card-chip"></div>
+          <div class="card-nfc">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="card-circles">
+            <div class="card-circle"></div>
+            <div class="card-circle"></div>
+          </div>
+          <div class="card-content">
+            <div class="card-top">
+              <div>
+                <div class="card-brand">XGEREMY</div>
+                <div class="card-tier-label" id="cardTierLabel">— Tier</div>
+              </div>
+            </div>
+            <div class="card-bottom">
+              <div class="card-holder-name" id="cardName">—</div>
+              <div class="card-points-wrap">
+                <div class="card-points-num" id="cardPoints">—</div>
+                <div class="card-points-label">puntos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="card-download-btn" id="cardDownloadBtn" onclick="downloadCard()">↓ Guardar tarjeta</button>
+      </div>
+
       <div class="leaderboard-section xg-card">
         <h3>🏆 Top 3 Clientes</h3>
         <div class="leaderboard-list" id="leaderboard">
@@ -714,6 +910,59 @@ footer {
     }, { threshold: 0.08 });
     document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
   })();
+
+    // ── MEMBERSHIP CARD ────────────────────────────────────────
+    function updateCard() {
+      if(!currentUser) return;
+      var card  = document.getElementById('memberCard');
+      var name  = document.getElementById('cardName');
+      var pts   = document.getElementById('cardPoints');
+      var label = document.getElementById('cardTierLabel');
+      if(!card) return;
+
+      var totalPoints = parseInt(currentUser.puntos) || 0;
+      var tier = getTier(totalPoints);
+
+      // Update text
+      name.textContent  = (currentUser.nombre || '').toUpperCase();
+      pts.textContent   = totalPoints;
+      label.textContent = tier + ' Member';
+
+      // Update tier class on card
+      card.className = 'membership-card tier-' + tier;
+
+      // Tilt on mouse
+      card.addEventListener('mousemove', function(e){
+        var r  = card.getBoundingClientRect();
+        var dx = (e.clientX - r.left - r.width/2)  / (r.width/2);
+        var dy = (e.clientY - r.top  - r.height/2) / (r.height/2);
+        card.style.transform = 'perspective(800px) rotateX('+(-dy*12).toFixed(2)+'deg) rotateY('+(dx*12).toFixed(2)+'deg) scale(1.03)';
+        card.querySelector('.card-holo').style.opacity = 0.6 + Math.abs(dx)*0.4;
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+        card.querySelector('.card-holo').style.opacity = 1;
+      });
+    }
+
+    function downloadCard() {
+      var card = document.getElementById('memberCard');
+      if(!card) return;
+      // Use html2canvas if available, else show copy tip
+      if(typeof html2canvas !== 'undefined') {
+        html2canvas(card, {scale:3, backgroundColor:null, useCORS:true}).then(function(canvas){
+          var a = document.createElement('a');
+          a.download = 'xgeremy-card.png';
+          a.href = canvas.toDataURL('image/png');
+          a.click();
+        });
+      } else {
+        // Fallback: screenshot hint
+        var btn = document.getElementById('cardDownloadBtn');
+        btn.textContent = '📸 Haz screenshot para guardar';
+        setTimeout(function(){ btn.textContent = '↓ Guardar tarjeta'; }, 3000);
+      }
+    }
 </script>
 </body>
 </html>
