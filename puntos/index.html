@@ -884,6 +884,51 @@ footer {
         <button class="card-download-btn" id="cardDownloadBtn" onclick="downloadCard()">↓ Guardar tarjeta</button>
       </div>
 
+
+      <div class="xg-card card-section" id="cardSection" style="display:none">
+        <h3>💳 Tu Tarjeta XGEREMY</h3>
+        <div id="membershipCard" class="xg-membership-card card-tier-novato" title="Mantén presionado para guardar">
+
+          <!-- Background & effects -->
+          <div class="card-bg"></div>
+          <div class="card-holo"></div>
+          <div class="card-shine" id="cardShine"></div>
+
+          <!-- Points badge top left -->
+          <div class="card-points" id="cardPoints">0 pts</div>
+
+          <!-- Logo top right -->
+          <div class="card-logo">XGEREMY</div>
+
+          <!-- Chip + NFC -->
+          <div class="card-chip"></div>
+          <div class="card-nfc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5">
+              <path d="M12 4C8 4 5 7.6 5 12s3 8 7 8"/>
+              <path d="M12 7.5C9.5 7.5 8 9.5 8 12s1.5 4.5 4 4.5"/>
+              <path d="M12 11c-.5 0-1 .4-1 1s.5 1 1 1"/>
+            </svg>
+          </div>
+
+          <!-- Card number -->
+          <div class="card-number" id="cardNumber">•••• •••• •••• 0001</div>
+
+          <!-- Holder + tier -->
+          <div class="card-holder">
+            <div class="card-holder-label">Titular</div>
+            <div class="card-holder-name" id="cardName">—</div>
+          </div>
+
+          <div class="card-tier-label">
+            <div class="tier-dots"><span></span><span></span></div>
+            <div class="card-tier-text" id="cardTierText">Novato</div>
+          </div>
+        </div>
+        <button class="card-download-btn" id="downloadCardBtn">
+          ↓ Guardar tarjeta
+        </button>
+      </div>
+
       <div class="leaderboard-section xg-card">
         <h3>🏆 Top 3 Clientes</h3>
         <div class="leaderboard-list" id="leaderboard">
@@ -963,6 +1008,139 @@ footer {
         setTimeout(function(){ btn.textContent = '↓ Guardar tarjeta'; }, 3000);
       }
     }
+
+    // MEMBERSHIP CARD
+    (function(){
+      var card = document.getElementById('membershipCard');
+      if(!card) return;
+
+      // Tilt on mousemove
+      if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+        card.addEventListener('mousemove', function(e){
+          var r=card.getBoundingClientRect();
+          var dx=(e.clientX-r.left-r.width/2)/(r.width/2);
+          var dy=(e.clientY-r.top-r.height/2)/(r.height/2);
+          card.style.transform='perspective(1000px) rotateX('+(-dy*12).toFixed(2)+'deg) rotateY('+(dx*12).toFixed(2)+'deg) scale3d(1.04,1.04,1.04)';
+          var shine=document.getElementById('cardShine');
+          if(shine) shine.style.background='radial-gradient(circle at '+(50+dx*40)+'% '+(50+dy*40)+'%, rgba(255,255,255,.15) 0%, transparent 55%)';
+        });
+        card.addEventListener('mouseleave', function(){
+          card.style.transform='perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+        });
+      }
+
+      // updateCard(user) — call this after login
+      window.updateMembershipCard = function(user, points, tier){
+        var section = document.getElementById('cardSection');
+        if(section) section.style.display='block';
+
+        // Name
+        var nameEl = document.getElementById('cardName');
+        if(nameEl) nameEl.textContent = (user.nombre || user.name || user.email.split('@')[0]).toUpperCase();
+
+        // Points
+        var ptsEl = document.getElementById('cardPoints');
+        if(ptsEl) ptsEl.textContent = points + ' pts';
+
+        // Card number from email hash
+        var hash = user.email.split('').reduce(function(a,c){return a+c.charCodeAt(0);},0);
+        var num = String(1000 + (hash % 9000)).padStart(4,'0');
+        var numEl = document.getElementById('cardNumber');
+        if(numEl) numEl.textContent = '•••• •••• •••• '+num;
+
+        // Tier class + text
+        var tierMap = {
+          'Novato':'novato','Bronze':'bronze','Bronce':'bronze',
+          'Plata':'plata','Silver':'plata','Oro':'oro','Gold':'oro'
+        };
+        var tierKey = tierMap[tier] || 'novato';
+        card.className = card.className.replace(/card-tier-\w+/,'') + ' card-tier-' + tierKey;
+        var tierTextEl = document.getElementById('cardTierText');
+        if(tierTextEl) tierTextEl.textContent = tier || 'Novato';
+      };
+
+      // Download card as image via canvas
+      document.getElementById('downloadCardBtn').addEventListener('click', function(){
+        var W=760, H=479;
+        var canvas=document.createElement('canvas');
+        canvas.width=W; canvas.height=H;
+        var ctx=canvas.getContext('2d');
+
+        // Tier colors
+        var tierColors={
+          novato:['#1c1c1e','#2c2c2e','#161618'],
+          bronze:['#2b1d0e','#4a2e10','#1a0f05'],
+          plata:['#1a1a2e','#2d2d3d','#111119'],
+          oro:['#1a1500','#332900','#1a1200']
+        };
+        var tierKey=(card.className.match(/card-tier-(\w+)/)||['','novato'])[1];
+        var cols=tierColors[tierKey]||tierColors.novato;
+
+        // BG gradient
+        var g=ctx.createLinearGradient(0,0,W,H);
+        g.addColorStop(0,cols[0]); g.addColorStop(.5,cols[1]); g.addColorStop(1,cols[2]);
+        ctx.roundRect=ctx.roundRect||function(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();};
+        ctx.roundRect(0,0,W,H,32); ctx.fillStyle=g; ctx.fill();
+
+        // Subtle noise overlay
+        for(var i=0;i<3000;i++){
+          ctx.fillStyle='rgba(255,255,255,'+(Math.random()*.025)+')';
+          ctx.fillRect(Math.random()*W, Math.random()*H, 1, 1);
+        }
+
+        // Chip
+        var chipG=ctx.createLinearGradient(62,135,62+106,135+76);
+        chipG.addColorStop(0,'#b8932a'); chipG.addColorStop(.3,'#e8c94a');
+        chipG.addColorStop(.55,'#9a7820'); chipG.addColorStop(1,'#b8932a');
+        ctx.roundRect(62,135,106,76,6); ctx.fillStyle=chipG; ctx.fill();
+        ctx.strokeStyle='rgba(0,0,0,.2)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(62,135+76*.18); ctx.lineTo(62+106,135+76*.18); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(62,135+76*.82); ctx.lineTo(62+106,135+76*.82); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(62+106*.38,135); ctx.lineTo(62+106*.38,135+76); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(62+106*.62,135); ctx.lineTo(62+106*.62,135+76); ctx.stroke();
+
+        // Points badge
+        ctx.fillStyle='rgba(255,255,255,.07)';
+        ctx.roundRect(62,48,110,28,14); ctx.fill();
+        var pText=document.getElementById('cardPoints').textContent;
+        ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='600 13px DM Sans,sans-serif';
+        ctx.textAlign='center'; ctx.fillText(pText,117,67);
+
+        // XGEREMY logo
+        ctx.fillStyle='rgba(255,255,255,.88)'; ctx.font='800 20px DM Sans,sans-serif';
+        ctx.textAlign='right'; ctx.letterSpacing='.1em';
+        ctx.fillText('XGEREMY', W-52, 72);
+
+        // Card number
+        ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='400 22px "Courier New",monospace';
+        ctx.textAlign='left';
+        var numText=document.getElementById('cardNumber').textContent;
+        ctx.fillText(numText, 62, H*0.68+10);
+
+        // Holder label
+        ctx.fillStyle='rgba(255,255,255,.3)'; ctx.font='400 11px DM Sans,sans-serif';
+        ctx.textAlign='left'; ctx.fillText('TITULAR', 62, H*0.84);
+        ctx.fillStyle='rgba(255,255,255,.85)'; ctx.font='600 17px DM Sans,sans-serif';
+        var nm=document.getElementById('cardName').textContent;
+        ctx.fillText(nm, 62, H*0.84+22);
+
+        // Tier circles + text
+        var dotCols={novato:'rgba(255,255,255,.2)',bronze:'#cd7f32',plata:'#b8c0cc',oro:'#f4d03f'};
+        var dotC=dotCols[tierKey]||dotCols.novato;
+        ctx.beginPath(); ctx.arc(W-80,H*0.84+10,10,0,Math.PI*2); ctx.fillStyle=dotC; ctx.fill();
+        ctx.beginPath(); ctx.arc(W-55,H*0.84+10,10,0,Math.PI*2);
+        ctx.fillStyle=(tierKey==='novato'||tierKey==='bronze')?'rgba(255,255,255,.15)':dotC; ctx.fill();
+        ctx.fillStyle='rgba(255,255,255,.35)'; ctx.font='400 10px DM Sans,sans-serif';
+        ctx.textAlign='right';
+        ctx.fillText((document.getElementById('cardTierText').textContent||'Novato').toUpperCase(), W-42, H*0.84+28);
+
+        // Download
+        var a=document.createElement('a');
+        a.download='xgeremy-card.png';
+        a.href=canvas.toDataURL('image/png');
+        a.click();
+      });
+    })();
 </script>
 </body>
 </html>
