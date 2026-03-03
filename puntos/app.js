@@ -69,7 +69,7 @@ function updateDashboard() {
     document.getElementById('creditValue').textContent = `$${creditValue.toLocaleString('es-CL')} CLP`;
     document.getElementById('tierName').textContent = tier;
     updateTierBadge(tier);
-    if(window.updateMembershipCard) window.updateMembershipCard(currentUser, totalPoints, tier);
+    if(window.updateTattooCard) window.updateTattooCard(currentUser, totalPoints, tier);
 
     // Progress Bar
     const nextTierInfo = getNextTierInfo(totalPoints);
