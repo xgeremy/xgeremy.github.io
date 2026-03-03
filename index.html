@@ -808,9 +808,24 @@ footer {
         gap: 28px !important;
       }
     }
+
+    /* PAGE TRANSITION LOADER */
+    #xg-loader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .32s ease;}
+    #xg-loader.active{opacity:1;pointer-events:all;}
+    #xg-loader.out{opacity:0;}
+    .loader-inner{display:flex;flex-direction:column;align-items:center;gap:20px;opacity:0;transform:translateY(10px);transition:opacity .4s,transform .45s cubic-bezier(.16,1,.3,1);}
+    #xg-loader.active .loader-inner{opacity:1;transform:translateY(0);}
+    .ldr-img{width:42px;height:42px;filter:drop-shadow(0 0 18px rgba(255,255,255,.18));}
+    .ldr-track{width:110px;height:1.5px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
+    .ldr-fill{height:100%;width:0%;background:linear-gradient(90deg,#c8b89a,rgba(245,245,247,.85));border-radius:2px;transition:width .55s cubic-bezier(.4,0,.2,1);}
+    #xg-loader.active .ldr-fill{width:82%;}
+    #xg-loader.done .ldr-fill{width:100%;}
+    .ldr-name{font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,245,247,.35);margin-top:-6px;}
+    @media(prefers-reduced-motion:reduce){.section-headline,.section-subheadline,.gallery-grid,.process-steps,.rewards-grid,.about-stats .stat{transform:none!important;}}
   </style>
 </head>
 <body>
+  <div id="xg-loader" aria-hidden="true"><div class="loader-inner"><img src="https://i.imgur.com/cFOFY4I.png" class="ldr-img" alt="" width="42" height="42"><div class="ldr-track"><div class="ldr-fill"></div></div><span class="ldr-name">XGEREMY</span></div></div>
   
   <svg id="xg-filters" aria-hidden="true">
     <defs>
@@ -851,7 +866,7 @@ footer {
     </div>
   </section>
 
-  <section class="about fade-in" id="about">
+  <section class="about fade-in" id="about" data-px="0.03">
     <div class="about-image" style="position:relative;">
       <div class="skeleton" id="aboutImgSkel" style="position:absolute;inset:0;border-radius:20px;z-index:0;"></div>
       <img loading="lazy" decoding="async" src="https://i.imgur.com/GWu0skP.jpg"
@@ -885,7 +900,7 @@ footer {
     </div>
   </section>
 
-  <section class="gallery fade-in" id="work">
+  <section class="gallery fade-in" id="work" data-px="0.04">
     <h2 class="section-headline">Selected Work<sup>®</sup></h2>
     <!-- Skeleton: shown until JS marks images loaded -->
     <div class="skel-gallery" id="gallerySkel" aria-hidden="true">
@@ -906,7 +921,7 @@ footer {
     </div>
   </section>
 
-  <section class="process fade-in" id="process">
+  <section class="process fade-in" id="process" data-px="0.06">
     <h2 class="section-headline">El Proceso<sup>™</sup></h2>
     <p class="section-subheadline">De la idea a la obra maestra</p>
     <div class="process-steps">
@@ -928,7 +943,7 @@ footer {
     </div>
   </section>
 
-  <section class="rewards fade-in" id="rewards">
+  <section class="rewards fade-in" id="rewards" data-px="0.04">
     <h2 class="section-headline">Gana Puntos<sup>®</sup></h2>
     <p class="section-subheadline">Acumula puntos en cada tatuaje y canjea premios exclusivos</p>
     <div class="rewards-grid">
@@ -1142,6 +1157,65 @@ footer {
       setTimeout(() => {
         if(skel.parentNode) { skel.remove(); grid.style.display = ''; }
       }, 2500);
+    })();
+
+
+    // PAGE TRANSITION LOADER
+    (function(){
+      var L=document.getElementById('xg-loader');
+      if(!L)return;
+      if(sessionStorage.getItem('xg-nav')){
+        sessionStorage.removeItem('xg-nav');
+        L.classList.add('active');
+        setTimeout(function(){L.classList.add('done');},60);
+        setTimeout(function(){L.classList.add('out');},600);
+        setTimeout(function(){L.style.display='none';},930);
+      }
+      document.addEventListener('click',function(e){
+        var a=e.target.closest('a');
+        if(!a)return;
+        var href=a.getAttribute('href');
+        if(!href||href[0]==='#'||href.indexOf('http')===0||
+           href.indexOf('mailto')===0||href.indexOf('tel')===0||
+           a.target==='_blank')return;
+        e.preventDefault();
+        sessionStorage.setItem('xg-nav','1');
+        L.style.display='';
+        L.classList.remove('out','done');
+        L.classList.add('active');
+        setTimeout(function(){L.classList.add('done');},60);
+        setTimeout(function(){window.location.href=href;},500);
+      });
+    })();
+
+    // SECTION PARALLAX
+    (function(){
+      if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+      var secs=Array.from(document.querySelectorAll('[data-px]'));
+      var stats=Array.from(document.querySelectorAll('.about-stats .stat'));
+      var tick=false, vh=window.innerHeight;
+      window.addEventListener('resize',function(){vh=window.innerHeight;},{passive:true});
+      function run(){
+        secs.forEach(function(sec){
+          var sp=parseFloat(sec.dataset.px)||0.05;
+          var r=sec.getBoundingClientRect();
+          var m=r.top+r.height/2-vh/2;
+          var hd=sec.querySelector('.section-headline,.about-content h2');
+          var sb=sec.querySelector('.section-subheadline');
+          var cd=sec.querySelector('.gallery-grid,.process-steps,.rewards-grid');
+          if(hd)hd.style.transform='translateY('+(m*sp*0.8).toFixed(2)+'px)';
+          if(sb)sb.style.transform='translateY('+(m*sp*1.1).toFixed(2)+'px)';
+          if(cd)cd.style.transform='translateY('+(m*sp*-0.35).toFixed(2)+'px)';
+        });
+        stats.forEach(function(s,i){
+          var r=s.getBoundingClientRect();
+          var m=r.top+r.height/2-vh/2;
+          s.style.transform='translateY('+(m*(0.035+i*0.012)).toFixed(2)+'px)';
+        });
+        tick=false;
+      }
+      window.addEventListener('scroll',function(){if(!tick){requestAnimationFrame(run);tick=true;}},{passive:true});
+      run();
     })();
 
     // Scroll reveal
