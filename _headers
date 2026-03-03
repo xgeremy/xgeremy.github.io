@@ -1,0 +1,15 @@
+/*
+  Cache-Control: public, max-age=3600
+  X-Content-Type-Options: nosniff
+
+/*.html
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/sw.js
+  Cache-Control: no-cache
+
+/*.js
+  Cache-Control: public, max-age=86400
+
+/*.css
+  Cache-Control: public, max-age=86400
