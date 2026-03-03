@@ -3,3 +3,6 @@ Allow: /
 Disallow: /puntos/
 
 Sitemap: https://xgeremy.work/sitemap.xml
+
+# Admin
+Disallow: /admin/
