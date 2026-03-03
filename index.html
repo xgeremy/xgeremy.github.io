@@ -13,7 +13,11 @@
   <meta property="og:url" content="https://xgeremy.work/">
   <meta property="og:title" content="XGEREMY™ | Tatuajes en Valparaíso y Viña del Mar">
   <meta property="og:description" content="Tatuador blackwork en Valparaíso y Viña del Mar. +3 años de experiencia, 250+ clientes satisfechos. Agenda tu sesión hoy.">
-  <meta property="og:image" content="https://i.imgur.com/cFOFY4I.png">
+  <meta property="og:image" content="https://i.imgur.com/OlGXhSl.jpg">
+  <meta property="og:image:width" content="1080">
+  <meta property="og:image:height" content="1350">
+  <meta property="og:image:alt" content="Tatuaje blackwork por XGEREMY™ - Tatuador en Valparaíso y Viña del Mar">
+  <meta name="twitter:image" content="https://i.imgur.com/OlGXhSl.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="XGEREMY™ | Tatuajes Valparaíso y Viña del Mar">
   <meta name="twitter:description" content="Tatuador blackwork en Valparaíso y Viña del Mar. Diseños únicos.">
@@ -21,6 +25,9 @@
   <meta name="geo.placename" content="Viña del Mar, Valparaíso">
   <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
   
+  <!-- Preload above-fold assets → mejora LCP -->
+  <link rel="preload" as="image" href="https://i.imgur.com/cFOFY4I.png" fetchpriority="high">
+  <link rel="preload" as="image" href="https://i.imgur.com/GWu0skP.jpg" fetchpriority="high">
   <!-- DM Sans — non-blocking async font load -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -722,6 +729,85 @@ footer {
       .reviews-container { height:85vh; }
     }
     .hidden-seo { position:absolute; left:-9999px; }
+
+    /* ── SKELETON SCREENS ── */
+    @keyframes xg-skel {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg,
+        rgba(255,255,255,.04) 0px,
+        rgba(255,255,255,.09) 80px,
+        rgba(255,255,255,.04) 160px
+      );
+      background-size: 800px 100%;
+      animation: xg-skel 1.6s ease-in-out infinite;
+      border-radius: 12px;
+    }
+    .skel-gallery {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      padding: 4px;
+    }
+    .skel-gallery .skel-item {
+      aspect-ratio: 1080/1350;
+      border-radius: 18px;
+    }
+    .skel-about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 100px 22px;
+      align-items: center;
+    }
+    .skel-about .skel-img {
+      aspect-ratio: 1;
+      border-radius: 20px;
+    }
+    .skel-about .skel-lines { display:flex; flex-direction:column; gap:14px; }
+    .skel-about .skel-h { height:44px; width:60%; border-radius:8px; }
+    .skel-about .skel-p  { height:18px; width:90%; border-radius:6px; }
+    .skel-about .skel-p.short { width:75%; }
+
+    /* ── MOBILE SWIPE GALLERY ── */
+    @media(max-width:734px){
+      .gallery-grid {
+        display: flex !important;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 4px 22px 12px;
+        /* hide scrollbar */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .gallery-grid::-webkit-scrollbar { display:none; }
+      .gallery-grid .gallery-item {
+        flex: 0 0 78vw;
+        max-width: 320px;
+        scroll-snap-align: center;
+      }
+      .skel-gallery {
+        display: flex !important;
+        overflow-x: hidden;
+        gap: 12px;
+        padding: 4px 22px;
+      }
+      .skel-gallery .skel-item {
+        flex: 0 0 78vw;
+        max-width: 320px;
+      }
+      .skel-about {
+        grid-template-columns: 1fr !important;
+        padding: 60px 22px !important;
+        gap: 28px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -766,8 +852,13 @@ footer {
   </section>
 
   <section class="about fade-in" id="about">
-    <div class="about-image">
-      <img loading="lazy" decoding="async" src="https://i.imgur.com/GWu0skP.jpg" alt="Geremy Monsalve - Tatuador en Valparaíso y Viña del Mar" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">
+    <div class="about-image" style="position:relative;">
+      <div class="skeleton" id="aboutImgSkel" style="position:absolute;inset:0;border-radius:20px;z-index:0;"></div>
+      <img loading="lazy" decoding="async" src="https://i.imgur.com/GWu0skP.jpg"
+           alt="Geremy Monsalve - Tatuador en Valparaíso y Viña del Mar"
+           id="aboutImg"
+           style="width:100%;height:100%;object-fit:cover;border-radius:18px;position:relative;z-index:1;opacity:0;transition:opacity .4s ease;"
+           onload="this.style.opacity='1';document.getElementById('aboutImgSkel').style.display='none';">
     </div>
     <div class="about-content">
       <h2>Sobre mí<sup>©</sup></h2>
@@ -796,7 +887,16 @@ footer {
 
   <section class="gallery fade-in" id="work">
     <h2 class="section-headline">Selected Work<sup>®</sup></h2>
-    <div class="gallery-grid">
+    <!-- Skeleton: shown until JS marks images loaded -->
+    <div class="skel-gallery" id="gallerySkel" aria-hidden="true">
+      <div class="skeleton skel-item"></div>
+      <div class="skeleton skel-item"></div>
+      <div class="skeleton skel-item"></div>
+      <div class="skeleton skel-item"></div>
+      <div class="skeleton skel-item"></div>
+      <div class="skeleton skel-item"></div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid" style="display:none">
       <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 1"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/OlGXhSl.jpg" alt="Tatuaje blackwork Valparaíso - XGEREMY"></div></div>
       <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 2"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/dE8Sr9J.jpg" alt="Tatuaje blackwork Viña del Mar - XGEREMY"></div></div>
       <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 3"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/Fe9oSoD.jpg" alt="Tatuaje dotwork Valparaíso Chile"></div></div>
@@ -1008,7 +1108,43 @@ footer {
     modal.addEventListener('touchend', e => { const dx=e.changedTouches[0].screenX-ts; if(dx<-50) showSlide((cur+1)%slides.length); if(dx>50) showSlide((cur-1+slides.length)%slides.length); });
     document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key==='ArrowRight') showSlide((cur+1)%slides.length); if(e.key==='ArrowLeft') showSlide((cur-1+slides.length)%slides.length); if(e.key==='Escape') { modal.classList.remove('active'); document.body.style.overflow=''; } });
   
-  // Scroll reveal
+
+    // ── SERVICE WORKER ──
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] registered:', r.scope))
+          .catch(e => console.warn('[SW] failed:', e));
+      });
+    }
+
+    // ── SKELETON → GALLERY reveal ──
+    (function(){
+      const skel = document.getElementById('gallerySkel');
+      const grid = document.getElementById('galleryGrid');
+      if(!skel || !grid) return;
+      const imgs = grid.querySelectorAll('img');
+      let loaded = 0;
+      function reveal() {
+        loaded++;
+        if(loaded >= Math.min(3, imgs.length)) {
+          skel.style.transition = 'opacity .35s';
+          skel.style.opacity = '0';
+          grid.style.display = '';
+          setTimeout(() => skel.remove(), 380);
+        }
+      }
+      imgs.forEach(img => {
+        if(img.complete) reveal();
+        else { img.addEventListener('load', reveal); img.addEventListener('error', reveal); }
+      });
+      // Fallback: force show after 2.5s
+      setTimeout(() => {
+        if(skel.parentNode) { skel.remove(); grid.style.display = ''; }
+      }, 2500);
+    })();
+
+    // Scroll reveal
   (function(){
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });

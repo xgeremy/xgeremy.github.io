@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Página no encontrada | XGEREMY™</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" media="print" onload="this.media='all'">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --bg:#050505; --text:#f5f5f7; --text-2:#86868b;
+      --glass-bg:rgba(255,255,255,.065); --glass-bdr:rgba(255,255,255,.105);
+      --glass-bdr-h:rgba(255,255,255,.22); --glass-spec:rgba(255,255,255,.20);
+      --ch-blue:rgba(100,190,255,.055); --ch-violet:rgba(150,90,255,.045);
+    }
+    body {
+      font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+      background:var(--bg); color:var(--text);
+      min-height:100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:40px 20px;
+      -webkit-font-smoothing:antialiased; overflow:hidden;
+    }
+
+    /* Background grain */
+    body::after {
+      content:''; position:fixed; inset:-50%; width:200%; height:200%;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+      opacity:.018; pointer-events:none; z-index:0;
+    }
+
+    .container { position:relative; z-index:1; max-width:520px; }
+
+    /* Big 404 */
+    .four-o-four {
+      font-size:clamp(96px,22vw,180px); font-weight:700; line-height:1;
+      letter-spacing:-.04em; margin-bottom:8px;
+      background:linear-gradient(135deg, rgba(245,245,247,.15) 0%, rgba(245,245,247,.05) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      -webkit-text-stroke:1px rgba(255,255,255,.12);
+      user-select:none;
+    }
+
+    .logo-link {
+      display:inline-flex; align-items:center; gap:8px; margin-bottom:48px;
+      text-decoration:none; color:var(--text); font-size:15px; font-weight:700;
+      letter-spacing:.06em; text-transform:uppercase; opacity:.6;
+      transition:opacity .3s;
+    }
+    .logo-link:hover { opacity:1; }
+    .logo-link img { width:22px; height:22px; }
+
+    h1 {
+      font-size:clamp(22px,4vw,32px); font-weight:600; letter-spacing:-.02em;
+      margin-bottom:14px;
+    }
+    p {
+      font-size:17px; color:var(--text-2); line-height:1.65;
+      margin-bottom:36px; font-weight:300;
+    }
+
+    .btn-group { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+    .btn-solid {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:13px 26px; background:var(--text); color:var(--bg);
+      border:none; border-radius:13px; font-family:inherit;
+      font-size:15px; font-weight:600; text-decoration:none;
+      cursor:pointer; transition:all .3s;
+    }
+    .btn-solid:hover { opacity:.85; transform:translateY(-2px); }
+
+    .btn-glass {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:13px 26px;
+      background:var(--glass-bg); border:1px solid var(--glass-bdr);
+      border-radius:13px; font-family:inherit;
+      font-size:15px; font-weight:500; color:var(--text); text-decoration:none;
+      backdrop-filter:blur(20px); cursor:pointer;
+      transition:all .3s; position:relative; overflow:hidden;
+    }
+    .btn-glass::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent,var(--glass-spec) 50%,transparent);
+    }
+    .btn-glass:hover {
+      border-color:var(--glass-bdr-h); transform:translateY(-2px);
+      box-shadow:0 12px 32px rgba(0,0,0,.2),
+        inset 1px 1px 0 var(--ch-blue), inset -1px -1px 0 var(--ch-violet);
+    }
+
+    .hint {
+      margin-top:48px; font-size:12px; color:var(--text-2);
+      opacity:.4; letter-spacing:.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="logo-link">
+      <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo">
+      XGEREMY™
+    </a>
+    <div class="four-o-four">404</div>
+    <h1>Página no encontrada</h1>
+    <p>Esta URL no existe. Quizás fue movida, eliminada,<br>o nunca existió para empezar.</p>
+    <div class="btn-group">
+      <a href="/" class="btn-solid">← Volver al inicio</a>
+      <a href="https://wa.me/56937669973" target="_blank" rel="noopener" class="btn-glass">Contactar →</a>
+    </div>
+    <p class="hint">XGEREMY™ · Blackwork · Valparaíso · Chile</p>
+  </div>
+</body>
+</html>
