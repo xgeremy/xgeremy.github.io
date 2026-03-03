@@ -852,6 +852,24 @@ footer {
     #xg-loader.done .ldr-fill{width:100%;}
     .ldr-name{font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,245,247,.35);margin-top:-6px;}
     @media(prefers-reduced-motion:reduce){.section-headline,.section-subheadline,.gallery-grid,.process-steps,.rewards-grid,.about-stats .stat{transform:none!important;}}
+
+    /* CARD TILT 3D */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+      transition: transform .12s ease, box-shadow .3s ease;
+      will-change: transform;
+    }
+    .tilt-card:hover { box-shadow: 0 32px 64px rgba(0,0,0,.45); }
+    .tilt-shine {
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.13) 0%, transparent 65%);
+      pointer-events: none; z-index: 2;
+      transition: opacity .2s;
+      opacity: 0;
+    }
+    .tilt-card:hover .tilt-shine { opacity: 1; }
   </style>
 </head>
 <body>
@@ -911,15 +929,15 @@ footer {
       <p>Tatuador radicado en Chile con más de 3 años de experiencia creando piezas únicas y personalizadas.</p>
       <p>En cada tatuaje mi enfoque es combinar técnica, precisión y visión artística.</p>
       <div class="about-stats">
-        <div class="stat xg-card">
+        <div class="stat xg-card tilt-card">
           <span class="stat-number">250+</span>
           <span class="stat-label">Tatuajes</span>
         </div>
-        <div class="stat xg-card">
+        <div class="stat xg-card tilt-card">
           <span class="stat-number">3+</span>
           <span class="stat-label">Años</span>
         </div>
-        <div class="stat xg-card">
+        <div class="stat xg-card tilt-card">
           <span class="stat-number">100%</span>
           <span class="stat-label">Satisfacción</span>
         </div>
@@ -942,12 +960,12 @@ footer {
       <div class="skeleton skel-item"></div>
     </div>
     <div class="gallery-grid" id="galleryGrid" style="display:none">
-      <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 1"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/OlGXhSl.jpg" alt="Tatuaje blackwork Valparaíso - XGEREMY"></div></div>
-      <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 2"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/dE8Sr9J.jpg" alt="Tatuaje blackwork Viña del Mar - XGEREMY"></div></div>
-      <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 3"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/Fe9oSoD.jpg" alt="Tatuaje dotwork Valparaíso Chile"></div></div>
-      <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 4"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/fC7MkxI.jpg" alt="Tatuaje personalizado Valparaíso"></div></div>
-      <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 5"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/epGDrVn.jpg" alt="Tatuaje fine line Viña del Mar"></div></div>
-      <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 6"><div class="gi-inner"><img loading="lazy" decoding="async" src="https://i.imgur.com/0fJ1uH4.jpg" alt="Tatuaje blackwork Chile - XGEREMY™"></div></div>
+      <div class="gallery-item tilt-card" aria-label="Tatuaje blackwork ejemplo 1"><div class="gi-inner"><div class="tilt-shine"></div><img loading="lazy" decoding="async" src="https://i.imgur.com/OlGXhSl.jpg" alt="Tatuaje blackwork Valparaíso - XGEREMY"></div></div>
+      <div class="gallery-item tilt-card" aria-label="Tatuaje blackwork ejemplo 2"><div class="gi-inner"><div class="tilt-shine"></div><img loading="lazy" decoding="async" src="https://i.imgur.com/dE8Sr9J.jpg" alt="Tatuaje blackwork Viña del Mar - XGEREMY"></div></div>
+      <div class="gallery-item tilt-card" aria-label="Tatuaje blackwork ejemplo 3"><div class="gi-inner"><div class="tilt-shine"></div><img loading="lazy" decoding="async" src="https://i.imgur.com/Fe9oSoD.jpg" alt="Tatuaje dotwork Valparaíso Chile"></div></div>
+      <div class="gallery-item tilt-card" aria-label="Tatuaje blackwork ejemplo 4"><div class="gi-inner"><div class="tilt-shine"></div><img loading="lazy" decoding="async" src="https://i.imgur.com/fC7MkxI.jpg" alt="Tatuaje personalizado Valparaíso"></div></div>
+      <div class="gallery-item tilt-card" aria-label="Tatuaje blackwork ejemplo 5"><div class="gi-inner"><div class="tilt-shine"></div><img loading="lazy" decoding="async" src="https://i.imgur.com/epGDrVn.jpg" alt="Tatuaje fine line Viña del Mar"></div></div>
+      <div class="gallery-item tilt-card" aria-label="Tatuaje blackwork ejemplo 6"><div class="gi-inner"><div class="tilt-shine"></div><img loading="lazy" decoding="async" src="https://i.imgur.com/0fJ1uH4.jpg" alt="Tatuaje blackwork Chile - XGEREMY™"></div></div>
     </div>
   </section>
 
@@ -977,19 +995,19 @@ footer {
     <h2 class="section-headline">Gana Puntos<sup>®</sup></h2>
     <p class="section-subheadline">Acumula puntos en cada tatuaje y canjea premios exclusivos</p>
     <div class="rewards-grid">
-      <div class="reward-card xg-card">
+      <div class="reward-card tilt-card xg-card">
         <div class="reward-icon">★</div>
         <h3>Acumula Puntos</h3>
         <p>Gana puntos con cada tatuaje que te hagas</p>
         <span class="reward-detail">1 punto = $1.000 CLP</span>
       </div>
-      <div class="reward-card xg-card">
+      <div class="reward-card tilt-card xg-card">
         <div class="reward-icon">◆</div>
         <h3>Canjea Premios</h3>
         <p>Accede a beneficios y premios especiales</p>
         <span class="reward-detail">Sube de nivel y desbloquea beneficios</span>
       </div>
-      <div class="reward-card xg-card bonus-card" onclick="toggleBonusDetails()">
+      <div class="reward-card tilt-card xg-card bonus-card" onclick="toggleBonusDetails()">
         <div class="reward-icon">◊</div>
         <h3>Misiones Secundarias</h3>
         <p>Gana puntos extras con misiones secundarias</p>
@@ -1305,6 +1323,44 @@ footer {
           var c = document.getElementById('visitCounter');
           if(c) c.style.display = 'none';
         });
+    })();
+
+
+    // CARD TILT 3D
+    (function(){
+      if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+      var MAX = 10, SHINE_MAX = 60;
+      function attach(card){
+        card.addEventListener('mousemove', function(e){
+          var r = card.getBoundingClientRect();
+          var cx = r.left + r.width/2, cy = r.top + r.height/2;
+          var dx = (e.clientX - cx) / (r.width/2);
+          var dy = (e.clientY - cy) / (r.height/2);
+          var rotY = dx * MAX, rotX = -dy * MAX;
+          card.style.transform = 'perspective(800px) rotateX('+rotX.toFixed(2)+'deg) rotateY('+rotY.toFixed(2)+'deg) scale3d(1.03,1.03,1.03)';
+          var shine = card.querySelector('.tilt-shine');
+          if(shine){
+            var sx = 50 + dx*SHINE_MAX, sy = 50 + dy*SHINE_MAX;
+            shine.style.background = 'radial-gradient(circle at '+sx+'% '+sy+'%, rgba(255,255,255,.18) 0%, transparent 60%)';
+          }
+        });
+        card.addEventListener('mouseleave', function(){
+          card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+        });
+      }
+      document.querySelectorAll('.tilt-card').forEach(attach);
+    })();
+
+
+    // VISIT COUNTER via GoatCounter public API
+    (function(){
+      fetch('https://xgeremy.goatcounter.com/counter//_.json')
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          var el = document.getElementById('visitCounter');
+          if(el && d && d.count) el.textContent = d.count + ' visitas';
+        })
+        .catch(function(){});
     })();
 
     // Scroll reveal
