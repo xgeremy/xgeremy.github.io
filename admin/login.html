@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · XGEREMY</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=optional">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#050505;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);
+      --text:rgba(245,245,247,.92);--text-2:rgba(245,245,247,.45);--text-3:rgba(245,245,247,.22);
+      --accent:#c8b89a;--danger:#ff453a;--font:'DM Sans',system-ui,sans-serif;
+      --radius:16px;
+    }
+    html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--text);}
+    body{display:flex;align-items:center;justify-content:center;padding:24px;
+         background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(200,184,154,.07),transparent);}
+
+    .card{
+      width:100%;max-width:400px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:48px 40px;
+      box-shadow:0 40px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07);
+    }
+
+    .brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:40px;}
+    .brand-icon{
+      width:52px;height:52px;
+      background:rgba(200,184,154,.1);
+      border:1px solid rgba(200,184,154,.2);
+      border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
+    }
+    .brand-title{font-size:20px;font-weight:700;letter-spacing:.02em;}
+    .brand-sub{font-size:13px;color:var(--text-2);font-weight:400;}
+
+    .field{margin-bottom:16px;}
+    label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);margin-bottom:8px;}
+    input{
+      width:100%;padding:14px 16px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:12px;
+      color:var(--text);font-family:var(--font);font-size:15px;
+      outline:none;transition:border-color .2s,background .2s;
+      -webkit-appearance:none;
+    }
+    input:focus{border-color:rgba(200,184,154,.45);background:rgba(255,255,255,.06);}
+    input::placeholder{color:var(--text-3);}
+    input[type="password"]{letter-spacing:.1em;}
+
+    .btn{
+      width:100%;padding:14px;margin-top:8px;
+      background:var(--accent);border:none;border-radius:12px;
+      color:#050505;font-family:var(--font);font-size:15px;font-weight:600;
+      cursor:pointer;transition:all .2s;
+      position:relative;overflow:hidden;
+    }
+    .btn:hover{background:#d4c4a8;transform:translateY(-1px);box-shadow:0 8px 24px rgba(200,184,154,.25);}
+    .btn:active{transform:translateY(0);}
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .btn-text{transition:opacity .2s;}
+    .btn.loading .btn-text{opacity:0;}
+    .btn-spinner{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      opacity:0;transition:opacity .2s;
+    }
+    .btn.loading .btn-spinner{opacity:1;}
+    .spinner{width:20px;height:20px;border:2px solid rgba(0,0,0,.2);border-top-color:#050505;border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .error{
+      margin-top:16px;padding:12px 14px;
+      background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.2);
+      border-radius:10px;font-size:13px;color:var(--danger);
+      display:none;
+    }
+    .error.show{display:block;}
+
+    .hint{margin-top:28px;text-align:center;font-size:12px;color:var(--text-3);}
+    .hint a{color:var(--text-2);text-decoration:none;}
+    .hint a:hover{color:var(--text);}
+
+    /* Rate limit indicator */
+    .attempts{font-size:11px;color:var(--text-3);text-align:right;margin-top:6px;min-height:16px;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">XGEREMY Admin</div>
+        <div class="brand-sub">Panel de control</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Correo</label>
+      <input type="email" id="emailInput" placeholder="tu@email.com" autocomplete="email" autofocus>
+    </div>
+
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="passInput" placeholder="••••••••••" autocomplete="current-password">
+    </div>
+
+    <button class="btn" id="loginBtn" onclick="handleLogin()">
+      <span class="btn-text">Ingresar</span>
+      <span class="btn-spinner"><span class="spinner"></span></span>
+    </button>
+
+    <div class="attempts" id="attemptsInfo"></div>
+    <div class="error" id="errorMsg"></div>
+
+    <div class="hint"><a href="/">← Volver al sitio</a></div>
+  </div>
+
+  <script>
+  // ── SECURITY CONFIG ─────────────────────────────────────────
+  // PBKDF2-SHA256 of 'jeremias191004G' with salt 'xg_admin_2026_$alt_v1geremymons@gmail.com', 100000 iterations
+  // Run: hashlib.pbkdf2_hmac('sha256', pass.encode(), (salt+email).encode(), 100000).hex()
+  const ADMIN_EMAIL = 'geremymons@gmail.com';
+  const ADMIN_HASH  = '10d7c6b7b1be6a8268d40d9ad1fafa69dd858e8a8db88acc9f4755e80c9e580e';
+  const SALT        = 'xg_admin_2026_\u0024alt_v1';
+  const SESSION_KEY = 'xg_admin_sess';
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_MS   = 15 * 60 * 1000; // 15 minutes
+
+  // ── RATE LIMITING (localStorage-based) ──────────────────────
+  function getAttemptData() {
+    try { return JSON.parse(localStorage.getItem('xg_login_attempts') || '{"count":0,"until":0}'); }
+    catch { return {count:0, until:0}; }
+  }
+  function saveAttemptData(d) { localStorage.setItem('xg_login_attempts', JSON.stringify(d)); }
+
+  function checkLocked() {
+    const d = getAttemptData();
+    if (d.until && Date.now() < d.until) return d.until;
+    return false;
+  }
+
+  function recordAttempt(success) {
+    let d = getAttemptData();
+    if (success) { saveAttemptData({count:0, until:0}); return; }
+    d.count++;
+    if (d.count >= MAX_ATTEMPTS) { d.until = Date.now() + LOCKOUT_MS; }
+    saveAttemptData(d);
+  }
+
+  function updateAttemptsUI() {
+    const d = getAttemptData();
+    const el = document.getElementById('attemptsInfo');
+    const locked = checkLocked();
+    if (locked) {
+      const mins = Math.ceil((locked - Date.now()) / 60000);
+      el.textContent = `Bloqueado. Intentar en ${mins} min.`;
+      el.style.color = 'rgba(255,69,58,.6)';
+    } else if (d.count > 0) {
+      el.textContent = `${MAX_ATTEMPTS - d.count} intentos restantes`;
+    } else {
+      el.textContent = '';
+    }
+  }
+
+  // ── PBKDF2 in browser ───────────────────────────────────────
+  async function deriveKey(password, emailSalt) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']
+    );
+    const bits = await crypto.subtle.deriveBits({
+      name: 'PBKDF2',
+      salt: enc.encode(SALT + emailSalt),
+      iterations: 100000,
+      hash: 'SHA-256'
+    }, keyMaterial, 256);
+    return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // ── HANDLE LOGIN ────────────────────────────────────────────
+  async function handleLogin() {
+    const emailEl = document.getElementById('emailInput');
+    const passEl  = document.getElementById('passInput');
+    const btn     = document.getElementById('loginBtn');
+    const errEl   = document.getElementById('errorMsg');
+
+    const email    = emailEl.value.trim().toLowerCase();
+    const password = passEl.value;
+
+    errEl.classList.remove('show');
+
+    // Check lockout
+    const locked = checkLocked();
+    if (locked) {
+      updateAttemptsUI();
+      showError('Demasiados intentos. Espera antes de volver a intentar.');
+      return;
+    }
+
+    // Basic validation
+    if (!email || !password) { showError('Completa todos los campos.'); return; }
+
+    // Loading state
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    try {
+      // Artificial delay to prevent timing attacks
+      await new Promise(r => setTimeout(r, 800 + Math.random() * 400));
+
+      const hash = await deriveKey(password, email);
+
+      if (email !== ADMIN_EMAIL || hash !== ADMIN_HASH) {
+        recordAttempt(false);
+        updateAttemptsUI();
+        showError('Credenciales incorrectas.');
+        passEl.value = '';
+        return;
+      }
+
+      // SUCCESS — create session token
+      recordAttempt(true);
+      const token = {
+        email,
+        ts: Date.now(),
+        exp: Date.now() + 8 * 60 * 60 * 1000, // 8 hours
+        sig: await deriveKey(email + Date.now(), 'session_sig')
+      };
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(token));
+      window.location.href = '/admin/';
+
+    } catch (err) {
+      showError('Error al verificar. Intenta de nuevo.');
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+
+  // ── ENTER KEY ───────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleLogin();
+  });
+
+  // ── CHECK IF ALREADY LOGGED IN ──────────────────────────────
+  (function() {
+    try {
+      const sess = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null');
+      if (sess && sess.exp > Date.now() && sess.email === ADMIN_EMAIL) {
+        window.location.href = '/admin/';
+      }
+    } catch {}
+    updateAttemptsUI();
+  })();
+  </script>
+</body>
+</html>

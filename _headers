@@ -13,3 +13,10 @@
 
 /*.css
   Cache-Control: public, max-age=86400
+
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Cache-Control: no-store, no-cache
