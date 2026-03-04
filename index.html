@@ -380,7 +380,7 @@ navigator.serviceWorker.register('/sw.js')
 
 
 (function(){
-fetch('https://xgeremy.goatcounter.com/counter//_.json'
+fetch('https://xgeremy.goatcounter.com/counter//_.json')
 .then(function(r){ return r.json(); })
 .then(function(d){
 var n = d && d.count ? parseInt(d.count.replace(/,/g,'')) : null;
@@ -428,7 +428,7 @@ document.querySelectorAll('.tilt-card').forEach(attach);
 })();
 
 (function(){
-fetch('https://xgeremy.goatcounter.com/counter//_.json'
+fetch('https://xgeremy.goatcounter.com/counter//_.json')
 .then(function(r){ return r.json(); })
 .then(function(d){
 var el = document.getElementById('visitCounter');
