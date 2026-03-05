@@ -301,7 +301,7 @@
       <button class="qab" onclick="nav('agenda',gnb('agenda'))">📅 Disponibilidad</button>
       <button class="qab" onclick="nav('flash',gnb('flash'))">⚡ Flash</button>
       <button class="qab" onclick="showCM()">👤 Nuevo cliente</button>
-      <button class="qab" onclick="nav('finanzas',gnb('finanzas'));setTimeout(()=>ftgl(),120)">💵 Registrar ingreso</button>
+      <button class="qab" onclick="nav('finanzas',gnb('finanzas'));setTimeout(ftgl,150)">💵 Registrar ingreso</button>
       <button class="qab" onclick="window.open('https://xgeremy.github.io','_blank')">🌐 Ver sitio</button>
     </div>
     <div class="g-kpi">
@@ -705,7 +705,17 @@
 
 <script>
 const SK='xg_admin_sess',AE='geremymons@gmail.com';
-if(sessionStorage.getItem(SK)!==AE)location.href='/admin/login.html';
+(function(){
+  try{
+    const raw=sessionStorage.getItem(SK);
+    if(!raw){location.href='/admin/login.html';return;}
+    // Support both plain email (legacy) and JSON token (new login)
+    let ok=false;
+    if(raw===AE){ok=true;}
+    else{try{const t=JSON.parse(raw);ok=t&&t.email===AE&&(!t.exp||t.exp>Date.now());}catch{ok=false;}}
+    if(!ok)location.href='/admin/login.html';
+  }catch(e){location.href='/admin/login.html';}
+})();
 
 const SUPA_URL='https://lmopbyirrhhpluuussjf.supabase.co';
 const SUPA_KEY='sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj';
@@ -903,7 +913,7 @@ function renderFinanzas(){
   const Out=data.filter(t=>t.type==='out').reduce((s,t)=>s+(parseInt(t.amount)||0),0);
   document.getElementById('fn-in').textContent=fclp(In);
   document.getElementById('fn-out').textContent=fclp(Out);
-  const net=In-Out;document.getElementById('fn-net').textContent=fclp(net);document.getElementById('fn-net').className='fi-val '+(net>=0?'pos':'neg');
+  const net=In-Out;document.getElementById('fn-net').textContent=fclp(net);const fnNet=document.getElementById('fn-net');fnNet.className='fi-val '+(net>=0?'pos':'neg');
   document.getElementById('fn-in-d').textContent=all?'Todo el historial':'Este mes';
   const tb=document.getElementById('tx-tbody');
   if(!data.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="ei">$</div><div class="et">Sin movimientos</div></div></td></tr>`;return;}
