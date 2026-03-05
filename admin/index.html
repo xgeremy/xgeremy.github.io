@@ -332,23 +332,31 @@
 <!-- ANALYTICS -->
 <div class="view" id="v-analytics">
   <div class="topbar">
-    <div><div class="page-title"><button class="ham" onclick="openNav()">☰</button>Analíticas</div><div class="page-sub">Tráfico vía GoatCounter</div></div>
+    <div><div class="page-title"><button class="ham" onclick="openNav()">☰</button>Analíticas</div><div class="page-sub">Tráfico en tiempo real vía GoatCounter</div></div>
+    <div class="tb-acts"><button class="btn btn-g btn-sm" onclick="loadGC()">↺ Actualizar</button></div>
   </div>
   <div class="content">
-    <div class="g3" style="margin-bottom:16px">
-      <div class="kpi"><div class="kpi-lbl">Total visitas</div><div class="kpi-val" id="gc-tot">—</div><div class="kpi-ic">↗</div></div>
-      <div class="kpi"><div class="kpi-lbl">Páginas activas</div><div class="kpi-val">4</div><div class="kpi-ic">⊞</div></div>
-      <div class="kpi"><div class="kpi-lbl">Analytics</div><div class="kpi-val" style="font-size:16px;color:var(--green)">Activo</div><div class="kpi-ic">◉</div></div>
+    <div class="g4" style="margin-bottom:16px">
+      <div class="kpi"><div class="kpi-lbl">Visitas totales</div><div class="kpi-val" id="gc-tot">—</div><div class="kpi-sub">Todas las páginas</div><div class="kpi-ic">↗</div></div>
+      <div class="kpi"><div class="kpi-lbl">Inicio</div><div class="kpi-val" id="gc-home">—</div><div class="kpi-sub">xgeremy.github.io</div><div class="kpi-ic">🏠</div></div>
+      <div class="kpi"><div class="kpi-lbl">Cuidados</div><div class="kpi-val" id="gc-cuidados">—</div><div class="kpi-sub">Página post-tatuaje</div><div class="kpi-ic">📋</div></div>
+      <div class="kpi"><div class="kpi-lbl">Puntos</div><div class="kpi-val" id="gc-puntos">—</div><div class="kpi-sub">Leaderboard</div><div class="kpi-ic">★</div></div>
     </div>
-    <div class="card">
-      <div class="card-hd"><div class="card-title">Páginas del sitio</div></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <a href="https://xgeremy.github.io" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Inicio</span><span style="color:var(--t3);font-size:11px">xgeremy.github.io →</span></a>
-        <a href="https://xgeremy.github.io/cuidados.html" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Cuidados post-tatuaje</span><span style="color:var(--t3);font-size:11px">→</span></a>
-        <a href="https://xgeremy.github.io/consentimiento.html" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Consentimiento</span><span style="color:var(--t3);font-size:11px">→</span></a>
-        <a href="https://xgeremy.github.io/puntos/" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Puntos & Leaderboard</span><span style="color:var(--t3);font-size:11px">→</span></a>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Visitas por página</div><div class="card-sub" id="gc-updated">Cargando...</div></div></div>
+        <div id="gc-pages-list" style="margin-top:4px"></div>
       </div>
-      <div style="margin-top:12px"><a href="https://xgeremy.goatcounter.com" target="_blank" class="btn btn-p" style="width:100%;justify-content:center">Abrir GoatCounter completo →</a></div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Estado del sitio</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+          <a href="https://xgeremy.github.io" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Inicio</span><span style="color:var(--t3);font-size:11px">↗</span></a>
+          <a href="https://xgeremy.github.io/cuidados.html" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Cuidados</span><span style="color:var(--t3);font-size:11px">↗</span></a>
+          <a href="https://xgeremy.github.io/consentimiento.html" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Consentimiento</span><span style="color:var(--t3);font-size:11px">↗</span></a>
+          <a href="https://xgeremy.github.io/puntos/" target="_blank" class="btn btn-g" style="justify-content:space-between"><span>Puntos & Leaderboard</span><span style="color:var(--t3);font-size:11px">↗</span></a>
+        </div>
+        <a href="https://xgeremy.goatcounter.com" target="_blank" class="btn btn-p" style="width:100%;justify-content:center">Dashboard completo en GoatCounter →</a>
+      </div>
     </div>
   </div>
 </div>
@@ -830,7 +838,54 @@ function renderOV(){
   document.getElementById('tier-prog').innerHTML=Object.entries(tco).map(([k,v])=>`<div class="pr-row"><div class="pr-lbl">${k}</div><div class="pr-bar"><div class="pr-fill" style="width:${Math.round(v/tot*100)}%"></div></div><div class="pr-val">${v}</div></div>`).join('');
 }
 function saveQN(){localStorage.setItem('xg_qn',document.getElementById('qnote').value);}
-function loadGC(){fetch('https://xgeremy.goatcounter.com/counter//_.json').then(r=>r.json()).then(d=>{const v=d&&d.count?d.count:'—';document.getElementById('kpi-v').textContent=v;document.getElementById('gc-tot').textContent=v;}).catch(()=>{});}
+function loadGC(){
+  const GC='https://xgeremy.goatcounter.com/counter';
+  const pages=[
+    {id:'gc-home',path:'//.',label:'Inicio',url:'https://xgeremy.github.io'},
+    {id:'gc-cuidados',path:'//cuidados.html.',label:'Cuidados',url:'https://xgeremy.github.io/cuidados.html'},
+    {id:'gc-consentimiento',path:'//consentimiento.html.',label:'Consentimiento',url:'https://xgeremy.github.io/consentimiento.html'},
+    {id:'gc-puntos',path:'//puntos/.',label:'Puntos',url:'https://xgeremy.github.io/puntos/'},
+  ];
+  // Fetch total
+  fetch(GC+'//_.json').then(r=>r.json()).then(d=>{
+    const v=d&&d.count?d.count:'—';
+    const el1=document.getElementById('kpi-v');if(el1)el1.textContent=v;
+    const el2=document.getElementById('gc-tot');if(el2)el2.textContent=v;
+  }).catch(()=>{});
+  // Fetch per-page
+  let results=[];
+  let done=0;
+  pages.forEach(p=>{
+    fetch(GC+p.path+'json').then(r=>r.json()).then(d=>{
+      const v=d&&d.count?d.count:'0';
+      const el=document.getElementById(p.id);if(el)el.textContent=v;
+      results.push({label:p.label,count:v,url:p.url,raw:parseInt((v||'0').replace(/[^0-9]/g,''))||0});
+    }).catch(()=>{
+      const el=document.getElementById(p.id);if(el)el.textContent='—';
+      results.push({label:p.label,count:'—',url:p.url,raw:0});
+    }).finally(()=>{
+      done++;
+      if(done===pages.length){
+        // Render bar chart in analytics page
+        const list=document.getElementById('gc-pages-list');
+        if(!list)return;
+        const max=Math.max(...results.map(r=>r.raw),1);
+        list.innerHTML=results.map(r=>`
+          <div style="margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+              <a href="${r.url}" target="_blank" style="font-size:13px;font-weight:500;color:var(--t1);text-decoration:none">${r.label}</a>
+              <span style="font-size:13px;font-weight:600;color:var(--a)">${r.count}</span>
+            </div>
+            <div style="height:4px;background:var(--sep);border-radius:99px;overflow:hidden">
+              <div style="height:100%;width:${Math.round(r.raw/max*100)}%;background:var(--a);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)"></div>
+            </div>
+          </div>`).join('');
+        const upd=document.getElementById('gc-updated');
+        if(upd)upd.textContent='Actualizado '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
+      }
+    });
+  });
+}
 
 // CRM
 function renderCRM(data){
