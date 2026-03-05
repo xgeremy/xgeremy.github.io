@@ -202,6 +202,7 @@
     .topbar{padding:0 16px}
   }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="ovl" id="ovl" onclick="closeNav()"></div>
@@ -535,6 +536,11 @@
 const SK='xg_admin_sess',AE='geremymons@gmail.com';
 (function(){try{const s=JSON.parse(sessionStorage.getItem(SK)||'null');if(!s||s.exp<Date.now()||s.email!==AE)location.href='/admin/login.html';}catch{location.href='/admin/login.html';}})();
 
+// SUPABASE
+const SUPA_URL = 'https://lmopbyirrhhpluuussjf.supabase.co';
+const SUPA_KEY = 'sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj';
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
 // STATE
 let clients=[],txList=[],editIdx=-1;
 
@@ -568,16 +574,69 @@ function fclp(n){return'$'+(n/1000).toFixed(0)+'K';}
 
 // LOAD
 async function boot(){
-  const sv=localStorage.getItem('xg_clients');
-  if(sv){try{clients=JSON.parse(sv);}catch{}}
-  if(!clients.length){try{const r=await fetch('/puntos/data.json?'+Date.now());clients=await r.json();localStorage.setItem('xg_clients',JSON.stringify(clients));}catch{}}
-  const st=localStorage.getItem('xg_txs');
-  if(st){try{txList=JSON.parse(st);}catch{}}
+  try{
+    // Load clients from Supabase
+    const {data:cData,error:cErr} = await db.from('clientes').select('*').order('puntos',{ascending:false});
+    if(!cErr && cData && cData.length){
+      clients = cData;
+    } else {
+      // Fallback: localStorage or data.json
+      const sv=localStorage.getItem('xg_clients');
+      if(sv){try{clients=JSON.parse(sv);}catch{}}
+      if(!clients.length){try{const r=await fetch('/puntos/data.json?'+Date.now());clients=await r.json();}catch{}}
+      // If we got clients from fallback, push them to Supabase
+      if(clients.length){
+        for(const c of clients){
+          await db.from('clientes').upsert({
+            nombre:c.nombre,email:c.email,puntos:parseInt(c.puntos)||0,
+            montoCLP:parseInt(c.montoCLP)||0,ultimoTatuaje:c.ultimoTatuaje||'',
+            telefono:c.telefono||'',notas:c.notas||'',tier:c.tier||'Novato'
+          },{onConflict:'email',ignoreDuplicates:false});
+        }
+      }
+    }
+    // Load transactions from Supabase
+    const {data:tData,error:tErr} = await db.from('transacciones').select('*').order('fecha',{ascending:false});
+    if(!tErr && tData) txList = tData.map(t=>({
+      type:t.tipo,amount:t.monto,desc:t.descripcion,
+      date:t.fecha,cat:t.categoria,client:t.cliente
+    }));
+    else{
+      const st=localStorage.getItem('xg_txs');
+      if(st){try{txList=JSON.parse(st);}catch{}}
+    }
+  } catch(e){
+    console.warn('Supabase error, usando localStorage:',e);
+    const sv=localStorage.getItem('xg_clients');
+    if(sv){try{clients=JSON.parse(sv);}catch{}}
+    const st=localStorage.getItem('xg_txs');
+    if(st){try{txList=JSON.parse(st);}catch{}}
+  }
   renderAll();
   loadGC();
 }
-function persist(){localStorage.setItem('xg_clients',JSON.stringify(clients));document.getElementById('crmChip').textContent=clients.length;}
-function persistTx(){localStorage.setItem('xg_txs',JSON.stringify(txList));}
+async function persist(){
+  localStorage.setItem('xg_clients',JSON.stringify(clients));
+  document.getElementById('crmChip').textContent=clients.length;
+  // Sync to Supabase in background
+  for(const c of clients){
+    await db.from('clientes').upsert({
+      nombre:c.nombre,email:c.email,puntos:parseInt(c.puntos)||0,
+      montoCLP:parseInt(c.montoCLP)||0,ultimoTatuaje:c.ultimoTatuaje||'—',
+      telefono:c.telefono||'',notas:c.notas||'',tier:c.tier||getTier(parseInt(c.puntos)||0)
+    },{onConflict:'email'});
+  }
+}
+async function persistTx(){
+  localStorage.setItem('xg_txs',JSON.stringify(txList));
+  // Sync latest tx to Supabase
+  const last = txList[txList.length-1];
+  if(last) await db.from('transacciones').insert({
+    tipo:last.type,monto:parseInt(last.amount)||0,
+    descripcion:last.desc,fecha:last.date,
+    categoria:last.cat||'',cliente:last.client||''
+  }).select();
+}
 
 function renderAll(){renderOverview();renderCRM(clients);renderPoints();renderLB();renderAvail();renderFlash();renderSEO();renderNotes();renderFinanzas();renderConfig();renderConvLinks();}
 
@@ -622,7 +681,16 @@ function saveClient(){
   else{if(clients.find(x=>x.email===em)){toast('Email ya registrado','err');return;}clients.push(c);toast('Cliente agregado ✓');}
   persist();hideForm();renderCRM(clients);renderOverview();renderPoints();
 }
-function deleteClient(){if(editIdx<0)return;if(!confirm('¿Eliminar este cliente?'))return;clients.splice(editIdx,1);persist();hideForm();renderCRM(clients);renderOverview();toast('Cliente eliminado');}
+async function deleteClient(){
+  if(editIdx<0)return;
+  if(!confirm('¿Eliminar este cliente?'))return;
+  const c = clients[editIdx];
+  clients.splice(editIdx,1);
+  await db.from('clientes').delete().eq('email',c.email);
+  localStorage.setItem('xg_clients',JSON.stringify(clients));
+  document.getElementById('crmChip').textContent=clients.length;
+  hideForm();renderCRM(clients);renderOverview();toast('Cliente eliminado');
+}
 
 // POINTS
 function renderPoints(){
@@ -706,7 +774,16 @@ function renderFinanzas(){
 function renderTxList(){const f=document.getElementById('tx-fm').value;const fl=txList.filter(t=>t.date.startsWith(f)).sort((a,b)=>new Date(b.date)-new Date(a.date));document.getElementById('tx-list').innerHTML=fl.length?fl.map((t)=>`<div class="row" style="gap:10px"><span class="badge ${t.type==='in'?'bgr':'bred'}" style="width:56px;justify-content:center">${t.type==='in'?'Ingreso':'Gasto'}</span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">${t.desc||'Sin desc'}</div><div style="font-size:11px;color:var(--text-3)">${t.cat||''}${t.client?' · '+t.client:''} · ${t.date}</div></div><div style="font-size:13px;font-weight:600;color:${t.type==='in'?'var(--green)':'var(--red)'};white-space:nowrap">${t.type==='in'?'+':'−'}$${parseInt(t.amount).toLocaleString('es-CL')}</div><button onclick="delTx(${txList.indexOf(t)})" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:12px;padding:2px">×</button></div>`).join(''):'<div class="empty"><div class="empty-ico">$</div><div class="empty-t">Sin movimientos en '+f+'</div></div>';}
 function showAddTx(){const f=document.getElementById('tx-form');document.getElementById('tx-dt').value=new Date().toISOString().slice(0,10);f.style.display=f.style.display==='none'?'block':'none';}
 function saveTx(){const am=parseInt(document.getElementById('tx-am').value),de=document.getElementById('tx-de').value.trim();if(!am||!de){toast('Monto y descripción requeridos','err');return;}txList.push({type:document.getElementById('tx-ty').value,amount:am,desc:de,date:document.getElementById('tx-dt').value,cat:document.getElementById('tx-ca').value,client:document.getElementById('tx-cl').value.trim()});persistTx();document.getElementById('tx-form').style.display='none';renderFinanzas();toast('Movimiento registrado ✓');}
-function delTx(i){txList.splice(i,1);persistTx();renderFinanzas();}
+async function delTx(i){
+  const t=txList[i];
+  txList.splice(i,1);
+  localStorage.setItem('xg_txs',JSON.stringify(txList));
+  // Remove from Supabase by matching all fields
+  if(t) await db.from('transacciones').delete()
+    .eq('tipo',t.type).eq('monto',parseInt(t.amount)||0)
+    .eq('descripcion',t.desc||'').eq('fecha',t.date);
+  renderFinanzas();
+}
 function exportCSV(){const h='Tipo,Descripción,Monto,Fecha,Categoría,Cliente\n';const r=txList.map(t=>`${t.type==='in'?'Ingreso':'Gasto'},"${t.desc}",${t.amount},${t.date},${t.cat||''},${t.client||''}`).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(h+r);a.download='xgeremy-finanzas.csv';a.click();toast('CSV exportado ✓');}
 
 // NOTES
