@@ -618,24 +618,37 @@ async function boot(){
 async function persist(){
   localStorage.setItem('xg_clients',JSON.stringify(clients));
   document.getElementById('crmChip').textContent=clients.length;
-  // Sync to Supabase in background
-  for(const c of clients){
-    await db.from('clientes').upsert({
-      nombre:c.nombre,email:c.email,puntos:parseInt(c.puntos)||0,
-      montoCLP:parseInt(c.montoCLP)||0,ultimoTatuaje:c.ultimoTatuaje||'—',
-      telefono:c.telefono||'',notas:c.notas||'',tier:c.tier||getTier(parseInt(c.puntos)||0)
-    },{onConflict:'email'});
-  }
+  try{
+    const rows = clients.map(c=>({
+      nombre:c.nombre||'',
+      email:c.email||'',
+      puntos:parseInt(c.puntos)||0,
+      montoCLP:parseInt(c.montoCLP)||0,
+      ultimoTatuaje:c.ultimoTatuaje||'',
+      telefono:c.telefono||'',
+      notas:c.notas||'',
+      tier:getTier(parseInt(c.puntos)||0)
+    }));
+    const {error} = await db.from('clientes').upsert(rows,{onConflict:'email'});
+    if(error){console.error('Supabase error:',error);toast('⚠️ Error al guardar en nube: '+error.message,'err');}
+    else{toast('Cliente guardado ✓');}
+  }catch(e){console.error('Supabase catch:',e);}
 }
 async function persistTx(){
   localStorage.setItem('xg_txs',JSON.stringify(txList));
-  // Sync latest tx to Supabase
-  const last = txList[txList.length-1];
-  if(last) await db.from('transacciones').insert({
-    tipo:last.type,monto:parseInt(last.amount)||0,
-    descripcion:last.desc,fecha:last.date,
-    categoria:last.cat||'',cliente:last.client||''
-  }).select();
+  try{
+    const last = txList[txList.length-1];
+    if(!last) return;
+    const {error} = await db.from('transacciones').insert({
+      tipo:last.type,
+      monto:parseInt(last.amount)||0,
+      descripcion:last.desc||'',
+      fecha:last.date||new Date().toISOString().slice(0,10),
+      categoria:last.cat||'',
+      cliente:last.client||''
+    });
+    if(error) console.error('Supabase tx error:',error);
+  }catch(e){console.error('Supabase tx catch:',e);}
 }
 
 function renderAll(){renderOverview();renderCRM(clients);renderPoints();renderLB();renderAvail();renderFlash();renderSEO();renderNotes();renderFinanzas();renderConfig();renderConvLinks();}
@@ -673,13 +686,13 @@ function filterCRM(){const q=document.getElementById('crm-q').value.toLowerCase(
 function showAddClient(){editIdx=-1;['cf-nom','cf-em','cf-pts','cf-mto','cf-ult','cf-tel','cf-not'].forEach(id=>document.getElementById(id).value='');document.getElementById('form-t').textContent='Nuevo Cliente';document.getElementById('del-btn').style.display='none';document.getElementById('client-form').style.display='block';document.getElementById('cf-nom').focus();}
 function editClient(i){const c=clients[i];editIdx=i;document.getElementById('cf-nom').value=c.nombre||'';document.getElementById('cf-em').value=c.email||'';document.getElementById('cf-pts').value=c.puntos||0;document.getElementById('cf-mto').value=c.montoCLP||0;document.getElementById('cf-ult').value=c.ultimoTatuaje||'';document.getElementById('cf-tel').value=c.telefono||'';document.getElementById('cf-not').value=c.notas||'';document.getElementById('form-t').textContent='Editar Cliente';document.getElementById('del-btn').style.display='inline-flex';document.getElementById('client-form').style.display='block';document.getElementById('cf-nom').focus();}
 function hideForm(){document.getElementById('client-form').style.display='none';editIdx=-1;}
-function saveClient(){
+async function saveClient(){
   const nom=document.getElementById('cf-nom').value.trim(),em=document.getElementById('cf-em').value.trim().toLowerCase();
   if(!nom||!em){toast('Nombre y email son obligatorios','err');return;}
   const c={nombre:nom,email:em,puntos:parseInt(document.getElementById('cf-pts').value)||0,montoCLP:parseInt(document.getElementById('cf-mto').value)||0,ultimoTatuaje:document.getElementById('cf-ult').value.trim()||'—',telefono:document.getElementById('cf-tel').value.trim(),notas:document.getElementById('cf-not').value.trim(),tier:getTier(parseInt(document.getElementById('cf-pts').value)||0)};
-  if(editIdx>=0){clients[editIdx]=c;toast('Cliente actualizado ✓');}
-  else{if(clients.find(x=>x.email===em)){toast('Email ya registrado','err');return;}clients.push(c);toast('Cliente agregado ✓');}
-  persist();hideForm();renderCRM(clients);renderOverview();renderPoints();
+  if(editIdx>=0){clients[editIdx]=c;toast('Guardando...','ok');}
+  else{if(clients.find(x=>x.email===em)){toast('Email ya registrado','err');return;}clients.push(c);toast('Guardando...','ok');}
+  await persist();hideForm();renderCRM(clients);renderOverview();renderPoints();
 }
 async function deleteClient(){
   if(editIdx<0)return;
@@ -773,7 +786,7 @@ function renderFinanzas(){
 }
 function renderTxList(){const f=document.getElementById('tx-fm').value;const fl=txList.filter(t=>t.date.startsWith(f)).sort((a,b)=>new Date(b.date)-new Date(a.date));document.getElementById('tx-list').innerHTML=fl.length?fl.map((t)=>`<div class="row" style="gap:10px"><span class="badge ${t.type==='in'?'bgr':'bred'}" style="width:56px;justify-content:center">${t.type==='in'?'Ingreso':'Gasto'}</span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">${t.desc||'Sin desc'}</div><div style="font-size:11px;color:var(--text-3)">${t.cat||''}${t.client?' · '+t.client:''} · ${t.date}</div></div><div style="font-size:13px;font-weight:600;color:${t.type==='in'?'var(--green)':'var(--red)'};white-space:nowrap">${t.type==='in'?'+':'−'}$${parseInt(t.amount).toLocaleString('es-CL')}</div><button onclick="delTx(${txList.indexOf(t)})" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:12px;padding:2px">×</button></div>`).join(''):'<div class="empty"><div class="empty-ico">$</div><div class="empty-t">Sin movimientos en '+f+'</div></div>';}
 function showAddTx(){const f=document.getElementById('tx-form');document.getElementById('tx-dt').value=new Date().toISOString().slice(0,10);f.style.display=f.style.display==='none'?'block':'none';}
-function saveTx(){const am=parseInt(document.getElementById('tx-am').value),de=document.getElementById('tx-de').value.trim();if(!am||!de){toast('Monto y descripción requeridos','err');return;}txList.push({type:document.getElementById('tx-ty').value,amount:am,desc:de,date:document.getElementById('tx-dt').value,cat:document.getElementById('tx-ca').value,client:document.getElementById('tx-cl').value.trim()});persistTx();document.getElementById('tx-form').style.display='none';renderFinanzas();toast('Movimiento registrado ✓');}
+async function saveTx(){const am=parseInt(document.getElementById('tx-am').value),de=document.getElementById('tx-de').value.trim();if(!am||!de){toast('Monto y descripción requeridos','err');return;}txList.push({type:document.getElementById('tx-ty').value,amount:am,desc:de,date:document.getElementById('tx-dt').value,cat:document.getElementById('tx-ca').value,client:document.getElementById('tx-cl').value.trim()});await persistTx();document.getElementById('tx-form').style.display='none';renderFinanzas();toast('Movimiento registrado ✓');}
 async function delTx(i){
   const t=txList[i];
   txList.splice(i,1);
