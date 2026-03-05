@@ -773,19 +773,39 @@ async function persistTx(){
 // BOOT
 async function boot(){
   try{
+    // Try Supabase first
     const{data:cd,error:ce}=await db.from('clientes').select('*').order('puntos',{ascending:false});
-    if(!ce&&cd&&cd.length){clients=cd;}
-    else{
-      const sv=localStorage.getItem('xg_clients');if(sv)try{clients=JSON.parse(sv);}catch{}
-      if(!clients.length)try{const r=await fetch('/puntos/data.json?'+Date.now());clients=await r.json();}catch{}
-      if(clients.length)for(const c of clients)await db.from('clientes').upsert({nombre:String(c.nombre||''),email:String(c.email||''),puntos:isNaN(parseInt(c.puntos))?0:parseInt(c.puntos),montoCLP:isNaN(parseInt(c.montoCLP))?0:parseInt(c.montoCLP),ultimoTatuaje:String(c.ultimoTatuaje||''),telefono:String(c.telefono||''),notas:String(c.notas||''),tier:String(getTier(isNaN(parseInt(c.puntos))?0:parseInt(c.puntos)))},{onConflict:'email'});
+    if(ce){console.warn('Supabase clientes error:',ce.message);}
+    if(!ce&&cd&&cd.length){
+      clients=cd;
+      console.log('Supabase: cargados',cd.length,'clientes');
+    } else {
+      // Fallback: localStorage
+      const sv=localStorage.getItem('xg_clients');
+      if(sv)try{clients=JSON.parse(sv);}catch{}
+      if(!clients.length){
+        try{const r=await fetch('/puntos/data.json?'+Date.now());clients=await r.json();}catch{}
+      }
+      // Push local data to Supabase
+      if(clients.length){
+        const rows=clients.map(c=>({nombre:String(c.nombre||''),email:String(c.email||''),puntos:isNaN(parseInt(c.puntos))?0:parseInt(c.puntos),montoCLP:isNaN(parseInt(c.montoCLP))?0:parseInt(c.montoCLP),ultimoTatuaje:String(c.ultimoTatuaje||''),telefono:String(c.telefono||''),notas:String(c.notas||''),tier:String(getTier(isNaN(parseInt(c.puntos))?0:parseInt(c.puntos)))}));
+        const{error:ue}=await db.from('clientes').upsert(rows,{onConflict:'email'});
+        if(ue)console.warn('Upsert error:',ue.message);
+        else console.log('Migrados',rows.length,'clientes a Supabase');
+      }
     }
+    // Load transactions
     const{data:td,error:te}=await db.from('transacciones').select('*').order('fecha',{ascending:false});
-    if(!te&&td)txList=td.map(t=>({type:t.tipo,amount:t.monto,desc:t.descripcion,date:t.fecha,cat:t.categoria,client:t.cliente}));
-    else{const st=localStorage.getItem('xg_txs');if(st)try{txList=JSON.parse(st);}catch{};}
+    if(!te&&td){
+      txList=td.map(t=>({type:t.tipo,amount:t.monto,desc:t.descripcion,date:t.fecha,cat:t.categoria,client:t.cliente}));
+    } else {
+      const st=localStorage.getItem('xg_txs');
+      if(st)try{txList=JSON.parse(st);}catch{}
+    }
   }catch(e){
-    const sv=localStorage.getItem('xg_clients');if(sv)try{clients=JSON.parse(sv);}catch{};
-    const st=localStorage.getItem('xg_txs');if(st)try{txList=JSON.parse(st);}catch{};
+    console.error('Boot error:',e);
+    const sv=localStorage.getItem('xg_clients');if(sv)try{clients=JSON.parse(sv);}catch{}
+    const st=localStorage.getItem('xg_txs');if(st)try{txList=JSON.parse(st);}catch{}
   }
   document.getElementById('crmChip').textContent=clients.length;
   const qn=localStorage.getItem('xg_qn');if(qn)document.getElementById('qnote').value=qn;
@@ -932,8 +952,7 @@ async function delTx(i){
   if(t)await db.from('transacciones').delete().eq('tipo',t.type||'').eq('monto',parseInt(t.amount)||0).eq('descripcion',t.desc||'').eq('fecha',t.date||'');
   renderFinanzas();
 }
-function exportCSV(){const rows=[['Fecha','Tipo','Descripción','Categoría','Cliente','Monto'],...txList.map(t=>[t.date,t.type,t.desc,t.cat,t.client,t.amount])];const csv=rows.map(r=>r.map(v=>`"${v||''}"`).join(',')).join('
-');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='finanzas_xgeremy.csv';a.click();}
+function exportCSV(){const rows=[['Fecha','Tipo','Descripcion','Categoria','Cliente','Monto'],...txList.map(t=>[t.date||'',t.type||'',t.desc||'',t.cat||'',t.client||'',t.amount||0])];const csv=rows.map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='finanzas_xgeremy.csv';a.click();}
 
 // CONFIG
 function loadCfg2(){const c=JSON.parse(localStorage.getItem('xg_cfg')||'{}');['cfg-name','cfg-wa','cfg-ig','cfg-email','cfg-city'].forEach(id=>{const el=document.getElementById(id);if(el&&c[id.replace('cfg-','')])el.value=c[id.replace('cfg-','')];});}
