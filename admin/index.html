@@ -620,14 +620,14 @@ async function persist(){
   document.getElementById('crmChip').textContent=clients.length;
   try{
     const rows = clients.map(c=>({
-      nombre:c.nombre||'',
-      email:c.email||'',
-      puntos:parseInt(c.puntos)||0,
-      montoCLP:parseInt(c.montoCLP)||0,
-      ultimoTatuaje:c.ultimoTatuaje||'',
-      telefono:c.telefono||'',
-      notas:c.notas||'',
-      tier:getTier(parseInt(c.puntos)||0)
+      nombre:String(c.nombre||''),
+      email:String(c.email||''),
+      puntos:isNaN(parseInt(c.puntos))?0:parseInt(c.puntos),
+      montoCLP:isNaN(parseInt(c.montoCLP))?0:parseInt(c.montoCLP),
+      ultimoTatuaje:String(c.ultimoTatuaje||''),
+      telefono:String(c.telefono||''),
+      notas:String(c.notas||''),
+      tier:String(getTier(isNaN(parseInt(c.puntos))?0:parseInt(c.puntos)))
     }));
     const {error} = await db.from('clientes').upsert(rows,{onConflict:'email'});
     if(error){console.error('Supabase error:',error);toast('⚠️ Error al guardar en nube: '+error.message,'err');}
@@ -640,8 +640,8 @@ async function persistTx(){
     const last = txList[txList.length-1];
     if(!last) return;
     const {error} = await db.from('transacciones').insert({
-      tipo:last.type,
-      monto:parseInt(last.amount)||0,
+      tipo:String(last.type||'in'),
+      monto:isNaN(parseInt(last.amount))?0:parseInt(last.amount),
       descripcion:last.desc||'',
       fecha:last.date||new Date().toISOString().slice(0,10),
       categoria:last.cat||'',
