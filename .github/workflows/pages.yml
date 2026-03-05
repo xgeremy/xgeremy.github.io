@@ -22,5 +22,10 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+          exclude: |
+            background.mp4
+            admin/index_old.html
+            admin/index_prev.html
+            PUNTOS_SETUP.sh
       - id: deployment
         uses: actions/deploy-pages@v4
