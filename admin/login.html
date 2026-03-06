@@ -9,6 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="XGEREMY">
   <meta name="theme-color" content="#000000">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
   <link rel="apple-touch-icon" sizes="180x180" href="/admin/apple-touch-icon.png">
   <link rel="manifest" href="/admin/manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -130,14 +131,13 @@
 
   <script>
   // ── SECURITY CONFIG ─────────────────────────────────────────
-  // PBKDF2-SHA256 of 'jeremias191004G' with salt 'xg_admin_2026_$alt_v1geremymons@gmail.com', 100000 iterations
-  // Run: hashlib.pbkdf2_hmac('sha256', pass.encode(), (salt+email).encode(), 100000).hex()
+  // PBKDF2-SHA256 (hash precomputado, contraseña no expuesta en código)
   const ADMIN_EMAIL = 'geremymons@gmail.com';
   const ADMIN_HASH  = '10d7c6b7b1be6a8268d40d9ad1fafa69dd858e8a8db88acc9f4755e80c9e580e';
   const SALT        = 'xg_admin_2026_\u0024alt_v1';
   const SESSION_KEY = 'xg_admin_sess';
   const MAX_ATTEMPTS = 3;
-  const LOCKOUT_MS = 30 * 60 * 1000; // 15 minutes
+  const LOCKOUT_MS = 30 * 60 * 1000; // 30 minutes
 
   // ── RATE LIMITING (localStorage-based) ──────────────────────
   function getAttemptData() {
@@ -263,6 +263,13 @@
 
   // ── CHECK IF ALREADY LOGGED IN ──────────────────────────────
   (function() {
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      const warn = document.getElementById('errorMsg');
+      if (warn) { warn.textContent = 'Conexión insegura bloqueada. Abre el sitio con HTTPS.'; warn.classList.add('show'); }
+      const btn = document.getElementById('loginBtn');
+      if (btn) btn.disabled = true;
+      return;
+    }
     try {
       const sess = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null');
       if (sess && sess.exp > Date.now() && sess.email === ADMIN_EMAIL) {
