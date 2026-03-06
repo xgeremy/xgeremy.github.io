@@ -1092,10 +1092,31 @@ html.ios-standalone textarea{font-size:16px !important}
 <script>
 
 // ── AUTH ──
-(function(){try{const r=sessionStorage.getItem('xg_admin_sess');if(!r){location.href='/admin/login.html';return;}let ok=r==='geremymons@gmail.com';if(!ok){try{const t=JSON.parse(r);ok=t&&t.email==='geremymons@gmail.com'&&(!t.exp||t.exp>Date.now());}catch{}}if(!ok)location.href='/admin/login.html';}catch{location.href='/admin/login.html';}})();
+const ADMIN_EMAIL='geremymons@gmail.com';
+const ADMIN_UID='ac0023c2-9fc1-4f01-8e77-792cf8e34456';
 
 // ── SUPABASE ──
 const db=supabase.createClient('https://lmopbyirrhhpluuussjf.supabase.co','sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj');
+async function ensureAdminAuth(){
+  try{
+    const r=await db.auth.getSession();
+    const u=r&&r.data&&r.data.session&&r.data.session.user;
+    if(!u||u.email!==ADMIN_EMAIL||u.id!==ADMIN_UID){
+      try{await db.auth.signOut();}catch{}
+      location.href='/admin/login.html';
+      return false;
+    }
+    return true;
+  }catch{
+    location.href='/admin/login.html';
+    return false;
+  }
+}
+db.auth.onAuthStateChange((evt)=>{
+  if(evt==='SIGNED_OUT'){
+    location.href='/admin/login.html';
+  }
+});
 
 // ── STATE ──
 let clients=[],txList=[],habits=[],goals=[],invItems=[],sessions=[],appointments=[];
@@ -1927,15 +1948,15 @@ function deleteInvItem(){if(invEditIdx<0)return;if(!confirm('Eliminar?'))return;
 function openMoreSheet(){openSheet('more-sht');}
 function navMore(id){closeSheet('more-sht');nav(id);}
 
-function logout(){
+async function logout(){
   if(apptSyncTimer) clearInterval(apptSyncTimer);
   if(sharedSyncTimer) clearInterval(sharedSyncTimer);
   if(apptRealtimeChannel){ try{ db.removeChannel(apptRealtimeChannel); }catch{} }
-  sessionStorage.removeItem('xg_admin_sess');
+  try{ await db.auth.signOut(); }catch{}
   location.href='/admin/login.html';
 }
 document.addEventListener('DOMContentLoaded',()=>{initStars();const nb=document.getElementById('nbody');if(nb)nb.addEventListener('input',saveCurPage);});
-boot();
+ensureAdminAuth().then(ok=>{if(ok)boot();});
 
 // ════════════════════════════════════════════════════
 // NEEDLE SUBCATEGORY
