@@ -111,7 +111,7 @@ function updateDashboard() {
 
     // Progress Info
     document.getElementById('currentTierProgress').textContent = `${pointsEarned} / ${pointsForNextTier} puntos`;
-    document.getElementById('nextMilestone').textContent = `Proximo tier: ${nextTierInfo.tier}`;
+    document.getElementById('nextMilestone').textContent = `Próximo tier: ${nextTierInfo.tier}`;
 
     // CLP Needed (opcional, cambiar si lo deseas)
     document.getElementById('clpRemaining').textContent = `${pointsToGoal} puntos para ${nextTierInfo.tier}`;
@@ -253,7 +253,7 @@ async function loadClientData() {
     checkLogin();
 }
 
-// Check si hay sesion
+// Check si hay sesión
 function checkLogin() {
     if (currentUser) return;
     const savedEmail = localStorage.getItem('xgeremy_user_email');
@@ -287,4 +287,5 @@ function showSuccessMessage(msg) {
         msgEl.style.display = 'none';
     }, 3000);
 }
+
 
