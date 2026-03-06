@@ -1735,7 +1735,10 @@ function invCatLine(item){
 function invStockCell(item, ri){
   if(item.cat==='liquidos'){
     const pct = Math.max(0, Math.min(100, +item.pct||0));
-    return `<div style="display:flex;align-items:center;gap:6px"><button class="pts-btn m" onclick="invAdjust(${ri},-1)">−</button><div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div><button class="pts-btn p" onclick="invAdjust(${ri},1)">+</button></div>`;
+    return `<div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div>`;
+  }
+  if(item.cat==='tintas'){
+    return `<strong>${item.stock||0}</strong>`;
   }
   return `<div style="display:flex;align-items:center;gap:6px"><button class="pts-btn m" onclick="invAdjust(${ri},-1)">−</button><strong>${item.stock||0}</strong><button class="pts-btn p" onclick="invAdjust(${ri},1)">+</button></div>`;
 }
