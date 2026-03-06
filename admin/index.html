@@ -13,6 +13,9 @@
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
 }
+if (/iPhone/i.test(navigator.userAgent || '') && window.screen && ((screen.width===414 && screen.height===896) || (screen.width===896 && screen.height===414))) {
+  document.documentElement.classList.add('iphone11');
+}
 </script>
 <link rel="apple-touch-icon" sizes="180x180" href="/admin/apple-touch-icon.png">
 <link rel="manifest" href="/admin/manifest.webmanifest">
@@ -443,6 +446,8 @@ html.ios-standalone .tabbar{position:fixed !important;bottom:0 !important;height
 html.ios-standalone .sw{padding-bottom:calc(60px + var(--safe-bottom))}
 html.ios-standalone .screen{padding-bottom:10px}
 html.ios-standalone .app{height:100svh;min-height:100svh}
+html.ios-standalone.iphone11 .tabbar{height:60px !important;padding-bottom:0 !important;bottom:0 !important}
+html.ios-standalone.iphone11 .sw{padding-bottom:60px !important}
 html.ios-standalone .inp,
 html.ios-standalone input,
 html.ios-standalone select,
@@ -1727,12 +1732,12 @@ function invCatLine(item){
   const prov = item.prov ? ` · ${item.prov}` : '';
   return `${base}${sub}${prov}`;
 }
-function invStockCell(item){
+function invStockCell(item, ri){
   if(item.cat==='liquidos'){
     const pct = Math.max(0, Math.min(100, +item.pct||0));
-    return `<div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div>`;
+    return `<div style="display:flex;align-items:center;gap:6px"><button class="pts-btn m" onclick="invAdjust(${ri},-1)">−</button><div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div><button class="pts-btn p" onclick="invAdjust(${ri},1)">+</button></div>`;
   }
-  return `<strong>${item.stock||0}</strong>`;
+  return `<div style="display:flex;align-items:center;gap:6px"><button class="pts-btn m" onclick="invAdjust(${ri},-1)">−</button><strong>${item.stock||0}</strong><button class="pts-btn p" onclick="invAdjust(${ri},1)">+</button></div>`;
 }
 function renderInventory(){
   const low=invItems.filter(i=>invStatus(i)==='low_stock').length;
@@ -1769,9 +1774,27 @@ function renderInventory(){
     } else filtered=invItems.filter(i=>(i.cat||'otro')===invFilter);
   }
   const tb=document.getElementById('inv-tbody');if(!tb)return;
-  tb.innerHTML=filtered.map(item=>{const ri=invItems.indexOf(item);return`<tr><td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div></td><td>${invStockCell(item)}</td><td>${invBadge(item)}</td><td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td></tr>`;}).join('');
+  tb.innerHTML=filtered.map(item=>{const ri=invItems.indexOf(item);return`<tr><td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div></td><td>${invStockCell(item,ri)}</td><td>${invBadge(item)}</td><td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td></tr>`;}).join('');
 }
 function setInvFilter(f){invFilter=f;renderInventory();}
+function invAdjust(idx, delta){
+  const item=invItems[idx]; if(!item) return;
+  if(item.cat==='liquidos'){
+    const step=5;
+    const pct=Math.max(0,Math.min(100,(+item.pct||(+item.stock||0)) + (delta*step)));
+    item.pct=pct; item.stock=pct;
+    if(pct===0)item.status='out_of_stock'; else if(item.status==='out_of_stock')item.status='in_stock';
+  } else {
+    const v=Math.max(0,(+item.stock||0)+delta);
+    item.stock=v;
+    if(v===0)item.status='out_of_stock';
+    else if(v<=(+item.min||1))item.status='low_stock';
+    else if(item.status!=='ordered')item.status='in_stock';
+  }
+  localStorage.setItem('xg_inventory',JSON.stringify(invItems));
+  upsertInventoryToSupabase(item);
+  renderInventory();
+}
 function updLiquidPct(v){
   const pct=Math.max(0,Math.min(100,+v||0));
   const r=document.getElementById('im-pct-ring');if(r)r.style.setProperty('--pct',pct);
