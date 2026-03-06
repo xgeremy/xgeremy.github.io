@@ -1033,7 +1033,7 @@ html.ios-standalone textarea{font-size:16px !important}
     <div class="sht-body">
       <div class="frow"><div class="fld"><div class="fld-lbl">Nombre *</div><input class="inp" id="im-name"></div><div class="fld"><div class="fld-lbl">Categoria</div><select class="inp" id="im-cat" onchange="onInvCatChange(this.value)"><option value="tintas">Tintas</option><option value="agujas">Agujas</option><option value="liquidos">Liquidos</option><option value="higiene">Higiene</option><option value="maquina">Maquina</option><option value="descartable">Descartable</option><option value="otro">Otro</option></select></div></div><div class="needle-sub" id="needle-sub"><div class="fld-lbl" style="margin-bottom:8px">Subcategoria de aguja</div><div class="needle-grid"><button type="button" class="needle-btn" id="nb-RM" onclick="selNeedle('RM')">RM</button><button type="button" class="needle-btn" id="nb-M1" onclick="selNeedle('M1')">M1</button><button type="button" class="needle-btn" id="nb-RS" onclick="selNeedle('RS')">RS</button><button type="button" class="needle-btn" id="nb-RL" onclick="selNeedle('RL')">RL</button></div><input type="hidden" id="im-needle" value=""></div>
       <div class="needle-sub" id="liquid-sub"><div class="fld-lbl">Porcentaje restante</div><div class="frow"><div class="fld"><input class="inp" id="im-pct" type="number" min="0" max="100" value="100" oninput="updLiquidPct(this.value)"></div><div class="fld"><div class="liq-stock"><span class="liq-ring" id="im-pct-ring" style="--pct:100"></span><span id="im-pct-lbl">100%</span></div></div></div></div>
-      <div class="frow" id="inv-stock-row"><div class="fld"><div class="fld-lbl">Stock actual</div><input class="inp" id="im-stock" type="number" value="0"></div><div class="fld"><div class="fld-lbl">Stock minimo</div><input class="inp" id="im-min" type="number" value="1"></div></div>
+      <div class="frow" id="inv-stock-row"><div class="fld"><div class="fld-lbl">Stock actual</div><div style="display:flex;align-items:center;gap:6px"><button type="button" class="pts-btn m" onclick="invEditAdjust(-1)">−</button><input class="inp" id="im-stock" type="number" value="0"><button type="button" class="pts-btn p" onclick="invEditAdjust(1)">+</button></div></div><div class="fld"><div class="fld-lbl">Stock minimo</div><input class="inp" id="im-min" type="number" value="1"></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Status</div><select class="inp" id="im-status"><option value="in_stock">In stock</option><option value="low_stock">Low stock</option><option value="out_of_stock">Out of stock</option><option value="ordered">Ordered</option></select></div><div class="fld"><div class="fld-lbl">Proveedor</div><input class="inp" id="im-prov"></div></div>
       <div class="fld"><div class="fld-lbl">Notas / Link</div><input class="inp" id="im-notes"></div>
     </div>
@@ -1737,10 +1737,7 @@ function invStockCell(item, ri){
     const pct = Math.max(0, Math.min(100, +item.pct||0));
     return `<div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div>`;
   }
-  if(item.cat==='tintas'){
-    return `<strong>${item.stock||0}</strong>`;
-  }
-  return `<div style="display:flex;align-items:center;gap:6px"><button class="pts-btn m" onclick="invAdjust(${ri},-1)">−</button><strong>${item.stock||0}</strong><button class="pts-btn p" onclick="invAdjust(${ri},1)">+</button></div>`;
+  return `<strong>${item.stock||0}</strong>`;
 }
 function renderInventory(){
   const low=invItems.filter(i=>invStatus(i)==='low_stock').length;
@@ -1780,23 +1777,11 @@ function renderInventory(){
   tb.innerHTML=filtered.map(item=>{const ri=invItems.indexOf(item);return`<tr><td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div></td><td>${invStockCell(item,ri)}</td><td>${invBadge(item)}</td><td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td></tr>`;}).join('');
 }
 function setInvFilter(f){invFilter=f;renderInventory();}
-function invAdjust(idx, delta){
-  const item=invItems[idx]; if(!item) return;
-  if(item.cat==='liquidos'){
-    const step=5;
-    const pct=Math.max(0,Math.min(100,(+item.pct||(+item.stock||0)) + (delta*step)));
-    item.pct=pct; item.stock=pct;
-    if(pct===0)item.status='out_of_stock'; else if(item.status==='out_of_stock')item.status='in_stock';
-  } else {
-    const v=Math.max(0,(+item.stock||0)+delta);
-    item.stock=v;
-    if(v===0)item.status='out_of_stock';
-    else if(v<=(+item.min||1))item.status='low_stock';
-    else if(item.status!=='ordered')item.status='in_stock';
-  }
-  localStorage.setItem('xg_inventory',JSON.stringify(invItems));
-  upsertInventoryToSupabase(item);
-  renderInventory();
+function invEditAdjust(delta){
+  const el=document.getElementById('im-stock');
+  if(!el) return;
+  const v=Math.max(0,(+el.value||0)+delta);
+  el.value=v;
 }
 function updLiquidPct(v){
   const pct=Math.max(0,Math.min(100,+v||0));
