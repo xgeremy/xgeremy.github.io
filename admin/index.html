@@ -339,6 +339,18 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 .tx-date{font-size:12px;color:var(--ink3);margin-top:1px}
 .tx-amt{font-size:15px;font-weight:600}
 .tx-amt.in{color:var(--green)}.tx-amt.out{color:var(--red)}
+.fin-ads{padding:12px 14px;margin-top:-2px}
+.fin-ads-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fin-ads-title{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3)}
+.fin-ads-pill{padding:4px 10px;border-radius:999px;background:var(--blue2);color:var(--blue);font-size:12px;font-weight:700}
+.fin-ads-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.fin-ads-row input[type=range]{flex:1}
+.fin-ads-num{width:70px}
+.fin-ads-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.fin-ads-kpi{background:var(--bg3);border:1px solid var(--sep);border-radius:10px;padding:9px 10px}
+.fin-ads-kpi .k{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4)}
+.fin-ads-kpi .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:2px;font-variant-numeric:tabular-nums}
+.fin-ads-note{font-size:11px;color:var(--ink3);margin-top:9px}
 /* EMPTY */
 .empty{text-align:center;padding:48px 20px}
 .empty-ic{width:48px;height:48px;border-radius:16px;background:var(--bg3);display:grid;place-items:center;margin:0 auto 14px;transition:background .25s}
@@ -801,6 +813,21 @@ html.ios-standalone textarea{font-size:16px !important}
       <div class="hstat"><div class="hstat-val" id="fn-out">$0</div><div class="hstat-lbl">Gastos</div></div>
     </div>
   </div>
+  <div class="cg fin-ads">
+    <div class="fin-ads-head">
+      <div class="fin-ads-title">Reinversion en publicidad</div>
+      <div class="fin-ads-pill" id="ads-pct-pill">15%</div>
+    </div>
+    <div class="fin-ads-row">
+      <input id="ads-pct" type="range" min="0" max="100" step="1" value="15" oninput="updAdsPct(this.value)">
+      <input class="inp fin-ads-num" id="ads-pct-num" type="number" min="0" max="100" value="15" oninput="updAdsPct(this.value)">
+    </div>
+    <div class="fin-ads-grid">
+      <div class="fin-ads-kpi"><div class="k">Sugerido Ads</div><div class="v" id="ads-amt">$0</div></div>
+      <div class="fin-ads-kpi"><div class="k">Te queda</div><div class="v" id="ads-left">$0</div></div>
+    </div>
+    <div class="fin-ads-note">Tip rapido: usa entre 10% y 20% para crecer sin desordenar caja.</div>
+  </div>
   <div class="seg"><button class="seg-btn on" onclick="setTxF('month',this)">Este mes</button><button class="seg-btn" onclick="setTxF('all',this)">Todo</button></div>
   <div id="tx-form" style="display:none;padding:0 16px 12px">
     <div class="cg" style="padding:16px">
@@ -1065,6 +1092,7 @@ let clients=[],txList=[],habits=[],goals=[],invItems=[],sessions=[],appointments
 let editClientIdx=-1,sessEditIdx=-1,invEditIdx=-1,goalEditIdx=-1,apptEditIdx=-1;
 let curRating=3,npages=[],curPg=0,svTimer=null,toastTimer=null;
 let avData=Array(7).fill(0),invFilter='all',txFilterVal='month',goalSeg='monthly';
+let adsPct=Math.max(0,Math.min(100,+(localStorage.getItem('xg_ads_pct')||15)));
 let calDate=new Date(),calView='month',calSelected=today();
 let apptSyncTimer=null, apptRealtimeChannel=null, appointmentsInitialized=false;
 let sharedSyncTimer=null;
@@ -1618,12 +1646,32 @@ function saveFlash(){localStorage.setItem('xg_flash',JSON.stringify({title:(docu
 // ── FINANCE ──
 function setTxF(f,el){txFilterVal=f;document.querySelectorAll('#s-finance .seg-btn').forEach(b=>b.classList.remove('on'));if(el)el.classList.add('on');renderFinance();}
 function showTxForm(){const w=document.getElementById('tx-form');if(w){const show=w.style.display!=='block';w.style.display=show?'block':'none';if(show){const dt=document.getElementById('tx-dt');if(dt)dt.value=today();}}}
+function updAdsPct(val){
+  const pct=Math.max(0,Math.min(100,parseInt(val,10)||0));
+  adsPct=pct;
+  localStorage.setItem('xg_ads_pct',String(pct));
+  const a=document.getElementById('ads-pct');if(a&&String(a.value)!==String(pct))a.value=pct;
+  const n=document.getElementById('ads-pct-num');if(n&&String(n.value)!==String(pct))n.value=pct;
+  const p=document.getElementById('ads-pct-pill');if(p)p.textContent=`${pct}%`;
+  renderFinance();
+}
+function renderAdsPlan(income){
+  const pct=Math.max(0,Math.min(100,parseInt(adsPct,10)||0));
+  const amount=Math.round((+income||0)*(pct/100));
+  const left=Math.max((+income||0)-amount,0);
+  const p=document.getElementById('ads-pct-pill');if(p)p.textContent=`${pct}%`;
+  const a=document.getElementById('ads-pct');if(a&&String(a.value)!==String(pct))a.value=pct;
+  const n=document.getElementById('ads-pct-num');if(n&&String(n.value)!==String(pct))n.value=pct;
+  const am=document.getElementById('ads-amt');if(am)am.textContent=fclp(amount);
+  const lf=document.getElementById('ads-left');if(lf)lf.textContent=fclp(left);
+}
 function renderFinance(){
   const n=new Date(),mo=n.getMonth(),yr=n.getFullYear();
   const data=txFilterVal==='month'?txList.filter(t=>{const d=new Date(t.date);return d.getMonth()===mo&&d.getFullYear()===yr;}):txList;
   const In=data.filter(t=>t.type==='in').reduce((s,t)=>s+(+t.amount||0),0);
   const Out=data.filter(t=>t.type==='out').reduce((s,t)=>s+(+t.amount||0),0);
   [['fn-net',fclp(In-Out)],['fn-in',fclp(In)],['fn-out',fclp(Out)]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+  renderAdsPlan(In);
   const el=document.getElementById('tx-list');if(!el)return;
   if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="empty-t">Sin movimientos</div></div>`;return;}
   el.innerHTML=[...data].reverse().map(t=>`<div class="tx-item"><div class="tx-ic ${t.type==='in'?'tx-in':'tx-out'}"><svg viewBox="0 0 24 24">${t.type==='in'?'<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>':'<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>'}</svg></div><div class="tx-info"><div class="tx-desc">${t.desc||'—'}</div><div class="tx-date">${fdate(t.date)} · ${t.cat||''}</div></div><div class="tx-amt ${t.type==='in'?'in':'out'}">${t.type==='in'?'+':'−'}${fclp(t.amount||0)}</div></div>`).join('');
