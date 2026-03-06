@@ -1254,7 +1254,7 @@ async function loadSharedFromSupabase(){
         const cat=isNeedle?'agujas':rawCat;
         const subcat=isNeedle?rawCat.split(':')[1]:'';
         const stock=+r.stock||0;
-        return {id:r.id,name:r.name,cat,subcat,stock,pct:cat==='liquidos'?stock:null,min:+r.min||1,status:String(r.unit||''),prov:r.prov||'',notes:r.notes||''};
+        return {id:r.id,name:r.name,cat,subcat,stock,pct:(cat==='liquidos'||cat==='tintas')?stock:null,min:+r.min||1,status:String(r.unit||''),prov:r.prov||'',notes:r.notes||''};
       });
       localStorage.setItem('xg_inventory',JSON.stringify(invItems));
     }
@@ -1706,7 +1706,7 @@ function normalizeInvItem(it){
     cat,
     subcat:String(subcat||''),
     stock,
-    pct:cat==='liquidos' ? (+((it&&it.pct)!=null?it.pct:stock)||0) : null,
+    pct:(cat==='liquidos' || cat==='tintas') ? (+((it&&it.pct)!=null?it.pct:stock)||0) : null,
     min:+((it&&it.min)!=null?it.min:1)||1,
     status:String((it&&it.status)||''),
     prov:String((it&&it.prov)||''),
@@ -1739,7 +1739,7 @@ function invCatLine(item){
 }
 function invStockCell(item, ri){
   if(item.cat==='liquidos' || item.cat==='tintas'){
-    const pct = Math.max(0, Math.min(100, +item.pct||0));
+    const pct = Math.max(0, Math.min(100, +((item.pct!=null?item.pct:item.stock)||0)));
     return `<div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div>`;
   }
   return `<strong>${item.stock||0}</strong>`;
