@@ -429,7 +429,8 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 @media(max-width:640px){
   :root{--tabh:68px}
   .sdbar{display:none}
-  .tabbar{display:flex}
+  .sw{padding-bottom:calc(var(--tabh) + var(--safe-bottom))}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:130}
   .tab{padding:8px 2px 0;gap:2px}
   .tb-title{font-size:15px}
   .tab-lbl{font-size:9px}
@@ -439,6 +440,7 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 }
 html.ios-standalone .topbar{height:calc(var(--topbh) + max(var(--safe-top),12px));padding:max(var(--safe-top),12px) 20px 0}
 html.ios-standalone .tabbar{height:calc(62px + var(--safe-bottom));padding-bottom:var(--safe-bottom)}
+html.ios-standalone .sw{padding-bottom:calc(62px + var(--safe-bottom))}
 html.ios-standalone .screen{padding-bottom:10px}
 html.ios-standalone .app{height:100svh;min-height:100svh}
 html.ios-standalone .inp,
