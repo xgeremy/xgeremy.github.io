@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="XGEREMY">
   <meta name="theme-color" content="#000000">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://lmopbyirrhhpluuussjf.supabase.co; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
   <link rel="apple-touch-icon" sizes="180x180" href="/admin/apple-touch-icon.png">
   <link rel="manifest" href="/admin/manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -129,13 +129,14 @@
     <div class="hint"><a href="/">← Volver al sitio</a></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // ── SECURITY CONFIG ─────────────────────────────────────────
-  // PBKDF2-SHA256 (hash precomputado, contraseña no expuesta en código)
   const ADMIN_EMAIL = 'geremymons@gmail.com';
-  const ADMIN_HASH  = '10d7c6b7b1be6a8268d40d9ad1fafa69dd858e8a8db88acc9f4755e80c9e580e';
-  const SALT        = 'xg_admin_2026_\u0024alt_v1';
-  const SESSION_KEY = 'xg_admin_sess';
+  const ADMIN_UID   = 'ac0023c2-9fc1-4f01-8e77-792cf8e34456';
+  const SB_URL      = 'https://lmopbyirrhhpluuussjf.supabase.co';
+  const SB_ANON     = 'sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj';
+  const db = supabase.createClient(SB_URL, SB_ANON);
   const MAX_ATTEMPTS = 3;
   const LOCKOUT_MS = 30 * 60 * 1000; // 30 minutes
 
@@ -175,21 +176,6 @@
     }
   }
 
-  // ── PBKDF2 in browser ───────────────────────────────────────
-  async function deriveKey(password, emailSalt) {
-    const enc = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey(
-      'raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']
-    );
-    const bits = await crypto.subtle.deriveBits({
-      name: 'PBKDF2',
-      salt: enc.encode(SALT + emailSalt),
-      iterations: 100000,
-      hash: 'SHA-256'
-    }, keyMaterial, 256);
-    return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-
   // ── HANDLE LOGIN ────────────────────────────────────────────
   async function handleLogin() {
     const emailEl = document.getElementById('emailInput');
@@ -221,9 +207,8 @@
       // Artificial delay to prevent timing attacks
       await new Promise(r => setTimeout(r, 800 + Math.random() * 400));
 
-      const hash = await deriveKey(password, email);
-
-      if (email !== ADMIN_EMAIL || hash !== ADMIN_HASH) {
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+      if (error || !data || !data.user) {
         recordAttempt(false);
         updateAttemptsUI();
         showError('Credenciales incorrectas.');
@@ -231,15 +216,18 @@
         return;
       }
 
-      // SUCCESS — create session token
+      // Only allow your admin user
+      const u = data.user;
+      if (u.email !== ADMIN_EMAIL || u.id !== ADMIN_UID) {
+        await db.auth.signOut();
+        recordAttempt(false);
+        updateAttemptsUI();
+        showError('Esta cuenta no tiene permisos de admin.');
+        return;
+      }
+
+      // SUCCESS
       recordAttempt(true);
-      const token = {
-        email,
-        ts: Date.now(),
-        exp: Date.now() + 8 * 60 * 60 * 1000, // 8 hours
-        sig: await deriveKey(email + Date.now(), 'session_sig')
-      };
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(token));
       window.location.href = '/admin/';
 
     } catch (err) {
@@ -262,7 +250,7 @@
   });
 
   // ── CHECK IF ALREADY LOGGED IN ──────────────────────────────
-  (function() {
+  (async function() {
     if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       const warn = document.getElementById('errorMsg');
       if (warn) { warn.textContent = 'Conexión insegura bloqueada. Abre el sitio con HTTPS.'; warn.classList.add('show'); }
@@ -271,8 +259,9 @@
       return;
     }
     try {
-      const sess = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null');
-      if (sess && sess.exp > Date.now() && sess.email === ADMIN_EMAIL) {
+      const r = await db.auth.getSession();
+      const u = r && r.data && r.data.session && r.data.session.user;
+      if (u && u.email === ADMIN_EMAIL && u.id === ADMIN_UID) {
         window.location.href = '/admin/';
       }
     } catch {}
