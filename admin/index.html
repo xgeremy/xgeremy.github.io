@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="XGEREMY">
 <meta name="theme-color" content="#000000">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://lmopbyirrhhpluuussjf.supabase.co https://cdn.jsdelivr.net https://xgeremy.goatcounter.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://lmopbyirrhhpluuussjf.supabase.co https://xgeremy.goatcounter.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <title>Studio OS</title>
 <meta name="robots" content="noindex,nofollow,noarchive">
 <script>
@@ -1117,6 +1117,14 @@ db.auth.onAuthStateChange((evt)=>{
     location.href='/admin/login.html';
   }
 });
+function armIdleLogout(){
+  if(idleTimer)clearTimeout(idleTimer);
+  idleTimer=setTimeout(async ()=>{
+    toast('Sesión cerrada por inactividad','err');
+    try{await db.auth.signOut();}catch{}
+    location.href='/admin/login.html';
+  },IDLE_LIMIT_MS);
+}
 
 // ── STATE ──
 let clients=[],txList=[],habits=[],goals=[],invItems=[],sessions=[],appointments=[];
@@ -1128,6 +1136,8 @@ let adsOpen=((localStorage.getItem('xg_ads_open')||'1')==='1');
 let calDate=new Date(),calView='month',calSelected=today();
 let apptSyncTimer=null, apptRealtimeChannel=null, appointmentsInitialized=false;
 let sharedSyncTimer=null;
+let idleTimer=null;
+const IDLE_LIMIT_MS=20*60*1000;
 let APPOINTMENTS_TABLE='appointments_v2';
 const SESSIONS_TABLE='sessions_v2';
 const HABITS_TABLE='habits_v2';
@@ -1447,14 +1457,15 @@ function saveQN(){localStorage.setItem('xg_qn',(document.getElementById('qnote')
 
 // ── GOATCOUNTER ──
 async function loadGC(){
-  const GC='https://xgeremy.goatcounter.com',token=localStorage.getItem('xg_gc_token');
+  const GC='https://xgeremy.goatcounter.com';
   const pages=[{label:'Inicio',path:'//.',},{label:'Cuidados',path:'//cuidados.html.',},{label:'Consentimiento',path:'//consentimiento.html.',},{label:'Puntos',path:'//puntos/.',}];
   try{const r=await fetch(GC+'/counter//_.json');const d=await r.json();const v=d&&d.count?d.count:'—';['gc-tot','h-visits'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=v;});}catch{}
   const results=[];
   for(const p of pages){try{const r=await fetch(GC+'/counter/'+p.path+'json');const d=await r.json();results.push({label:p.label,count:d&&d.count?d.count:'0',raw:parseInt((d&&d.count||'0').replace(/[^0-9]/g,''))||0});}catch{results.push({label:p.label,count:'—',raw:0});}}
   const gl=document.getElementById('gc-pages');
   if(gl){const mx=Math.max(...results.map(r=>r.raw),1);gl.innerHTML=results.sort((a,b)=>b.raw-a.raw).map((r,i)=>`<div class="crow"><div class="lb-rank ${i===0?'gold':''}">${i+1}</div><div class="crow-main"><div class="crow-title">${r.label}</div><div style="height:3px;background:var(--bg4);border-radius:99px;margin-top:6px;overflow:hidden"><div style="height:100%;width:${Math.round(r.raw/mx*100)}%;background:var(--blue);border-radius:99px;transition:width .6s"></div></div></div><div class="crow-val">${r.count}</div></div>`).join('');}
-  if(token){try{const H={'Authorization':'Bearer '+token};const now=new Date(),mon=new Date(now);mon.setDate(now.getDate()-(now.getDay()||7)+1);const r=await fetch(`${GC}/api/v0/stats/total?start=${mon.toISOString().slice(0,10)}&end=${today()}`,{headers:H});if(r.ok){const d=await r.json();if(d.total){const we=document.getElementById('gc-week');if(we)we.textContent=(d.total.pageviews||0).toLocaleString();const ue=document.getElementById('gc-uniq');if(ue)ue.textContent=(d.total.visitors||0).toLocaleString();if(d.stats){const ts=d.stats.find(s=>s.day===today());const te=document.getElementById('gc-today');if(te&&ts)te.textContent=(ts.pageviews||0).toLocaleString();}}}}catch{}}
+  // Secure mode: no admin token in browser for private analytics API.
+  [['gc-week','—'],['gc-uniq','—'],['gc-today','—']].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
 }
 
 // ══════════════════════════════════════
@@ -1955,8 +1966,16 @@ async function logout(){
   try{ await db.auth.signOut(); }catch{}
   location.href='/admin/login.html';
 }
-document.addEventListener('DOMContentLoaded',()=>{initStars();const nb=document.getElementById('nbody');if(nb)nb.addEventListener('input',saveCurPage);});
-ensureAdminAuth().then(ok=>{if(ok)boot();});
+document.addEventListener('DOMContentLoaded',()=>{
+  initStars();
+  const nb=document.getElementById('nbody');
+  if(nb)nb.addEventListener('input',saveCurPage);
+  ['click','keydown','touchstart','mousemove','scroll'].forEach(evt=>{
+    window.addEventListener(evt,armIdleLogout,{passive:true});
+  });
+  armIdleLogout();
+});
+ensureAdminAuth().then(ok=>{if(ok){boot();armIdleLogout();}});
 
 // ════════════════════════════════════════════════════
 // NEEDLE SUBCATEGORY
