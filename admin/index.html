@@ -9,6 +9,11 @@
 <meta name="theme-color" content="#000000">
 <title>Studio OS</title>
 <meta name="robots" content="noindex,nofollow,noarchive">
+<script>
+if (window.navigator.standalone) {
+  document.documentElement.classList.add('ios-standalone');
+}
+</script>
 <link rel="apple-touch-icon" sizes="180x180" href="/admin/apple-touch-icon.png">
 <link rel="manifest" href="/admin/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +34,7 @@
   --font:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
   --r:12px;--r2:16px;--r3:20px;--r4:28px;
   --tabh:82px;--topbh:52px;--sdw:260px;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
   --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.4,.64,1);
   --sh:0 1px 0 var(--sep),0 2px 12px rgba(0,0,0,.05);
   --sh2:0 4px 24px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.04);
@@ -89,7 +95,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 /* SCREEN AREA */
 .sw{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
 /* TOPBAR */
-.topbar{height:calc(var(--topbh) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 20px 0;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-bottom:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
+.topbar{height:calc(var(--topbh) + var(--safe-top));padding:var(--safe-top) 20px 0;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-bottom:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
 .tb-title{font-size:17px;font-weight:600;letter-spacing:-.025em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px}
 .tb-right{display:flex;align-items:center;gap:6px}
 .icon-btn{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:none;cursor:pointer;display:grid;place-items:center;color:var(--ink2);transition:all .15s;flex-shrink:0}
@@ -102,7 +108,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 .screen.on{display:block;animation:sIn .2s var(--ease)}
 @keyframes sIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* BOTTOM TAB BAR */
-.tabbar{height:calc(var(--tabh) + env(safe-area-inset-bottom,0px));padding:0 4px calc(env(safe-area-inset-bottom,0px) + 2px);display:flex;align-items:flex-start;justify-content:space-around;background:var(--bg2);border-top:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
+.tabbar{height:calc(var(--tabh) + var(--safe-bottom));padding:0 4px var(--safe-bottom);display:flex;align-items:flex-start;justify-content:space-around;background:var(--bg2);border-top:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 2px 0;cursor:pointer;border:none;background:none;color:var(--ink4);transition:color .15s;min-width:0}
 .tab.on{color:var(--blue)}
 .tab svg{width:23px;height:23px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--spring)}
@@ -420,6 +426,9 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
   .quick-btn{min-height:96px}
   .quick-btn span{font-size:12px !important}
 }
+html.ios-standalone .topbar{height:calc(var(--topbh) + max(var(--safe-top),12px));padding:max(var(--safe-top),12px) 20px 0}
+html.ios-standalone .tabbar{height:calc(62px + var(--safe-bottom));padding-bottom:var(--safe-bottom)}
+html.ios-standalone .screen{padding-bottom:10px}
 @media(min-width:641px){
   .tabbar{display:none}
   .sdbar{display:flex}
