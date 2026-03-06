@@ -1961,14 +1961,31 @@ function sendEmailGmail() {
   if (!c || !c.email) { toast('Cliente sin email registrado', 'err'); return; }
   const body = buildEmailBody();
   const subject = 'Confirmación de tu sesión de tatuaje - XGEREMY';
-  window.open(
-    'https://mail.google.com/mail/?view=cm&fs=1' +
-    '&to=' + encodeURIComponent(c.email) +
-    '&su=' + encodeURIComponent(subject) +
-    '&body=' + encodeURIComponent(body),
-    '_blank'
-  );
-  toast('Abriendo Gmail...');
+  const to = encodeURIComponent(c.email);
+  const su = encodeURIComponent(subject);
+  const bo = encodeURIComponent(body);
+  const gmailAppUrl = `googlegmail:///co?to=${to}&subject=${su}&body=${bo}`;
+  const mailtoUrl = `mailto:${c.email}?subject=${su}&body=${bo}`;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+  if (isMobile) {
+    let switched = false;
+    const onHidden = () => { switched = true; cleanup(); };
+    const cleanup = () => {
+      document.removeEventListener('visibilitychange', onHidden);
+      window.removeEventListener('pagehide', onHidden);
+    };
+    document.addEventListener('visibilitychange', onHidden);
+    window.addEventListener('pagehide', onHidden);
+    window.location.href = gmailAppUrl;
+    setTimeout(() => {
+      cleanup();
+      if (!switched) window.location.href = mailtoUrl;
+    }, 900);
+    toast('Abriendo app de Gmail...');
+    return;
+  }
+  window.location.href = mailtoUrl;
+  toast('Abriendo app de correo...');
 }
 function copyEmailBody() {
   const body = buildEmailBody();
