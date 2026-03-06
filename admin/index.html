@@ -1753,7 +1753,17 @@ async function loadApptsFromSupabase() {
 async function syncApptToSupabase(appt, idx) {
   if (!appt) return;
   try {
+    // Supports both schemas: id auto-generated or manual required.
+    if (!appt.id) {
+      const fallbackId = Date.now();
+      appt.id = fallbackId;
+      if (typeof idx === 'number' && appointments[idx]) {
+        appointments[idx].id = fallbackId;
+      }
+      localStorage.setItem('xg_appointments', JSON.stringify(appointments));
+    }
     const row = {
+      id: +appt.id,
       client: String(appt.client || ''),
       date: String(appt.date || today()),
       time: String(appt.time || ''),
@@ -1766,16 +1776,11 @@ async function syncApptToSupabase(appt, idx) {
       type: String(appt.type || 'tattoo'),
       status: String(appt.status || 'pending')
     };
-    if (appt.id) {
-      const { error } = await db.from(APPOINTMENTS_TABLE).update(row).eq('id', appt.id);
-      if (error) throw error;
-    } else {
-      const { data, error } = await db.from(APPOINTMENTS_TABLE).insert(row).select();
-      if (error) throw error;
-      if (data && data[0]) {
-        appointments[idx].id = data[0].id;
-        localStorage.setItem('xg_appointments', JSON.stringify(appointments));
-      }
+    const { data, error } = await db.from(APPOINTMENTS_TABLE).upsert(row, { onConflict: 'id' }).select();
+    if (error) throw error;
+    if (data && data[0] && typeof idx === 'number' && appointments[idx]) {
+      appointments[idx].id = data[0].id || appointments[idx].id;
+      localStorage.setItem('xg_appointments', JSON.stringify(appointments));
     }
     return true;
   } catch (e) {
