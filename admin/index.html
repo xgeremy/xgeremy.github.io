@@ -412,6 +412,14 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
   .tabbar{display:none}
   .sdbar{display:flex}
 }
+
+/* MORE SHEET BUTTONS */
+.more-btn{background:var(--bg2);border:none;border-radius:14px;padding:14px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .15s;width:100%;border:1px solid var(--sep)}
+.more-btn:hover,.more-btn:active{background:var(--bg3);transform:scale(.97)}
+.more-btn span{font-size:12px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3}
+.more-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
+.more-ic svg{width:18px;height:18px}
+
 </style>
 </head>
 <body>
@@ -796,7 +804,7 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
     <button class="tab" onclick="nav('calendar',this)" data-s="calendar"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="tab-lbl">Citas</span></button>
     <button class="tab" onclick="nav('crm',this)" data-s="crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="tab-lbl">Clientes</span></button>
     <button class="tab" onclick="nav('finance',this)" data-s="finance"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span class="tab-lbl">Finanzas</span></button>
-    <button class="tab" onclick="nav('config',this)" data-s="config"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="tab-lbl">Config</span></button>
+    <button class="tab" onclick="openMoreSheet()" id="tab-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg><span class="tab-lbl">Más</span></button>
   </nav>
 </div><!-- /sw -->
 </div><!-- /app -->
@@ -1396,9 +1404,55 @@ function editInvItem(idx){invEditIdx=idx;const item=invItems[idx];['im-name','im
 function saveInvItem(){const name=(document.getElementById('im-name').value||'').trim();if(!name){toast('Nombre requerido','err');return;}const stock=+document.getElementById('im-stock').value||0,min=+document.getElementById('im-min').value||1;const item={name,cat:document.getElementById('im-cat').value||'tintas',stock,min,unit:(document.getElementById('im-unit').value||'').trim(),prov:(document.getElementById('im-prov').value||'').trim(),notes:(document.getElementById('im-notes').value||'').trim()};if(invEditIdx>=0)invItems[invEditIdx]=item;else invItems.push(item);invEditIdx=-1;localStorage.setItem('xg_inventory',JSON.stringify(invItems));closeSheet('inv-sht');renderInventory();toast('Ítem guardado');}
 function deleteInvItem(){if(invEditIdx<0)return;if(!confirm('Eliminar?'))return;invItems.splice(invEditIdx,1);invEditIdx=-1;localStorage.setItem('xg_inventory',JSON.stringify(invItems));closeSheet('inv-sht');renderInventory();}
 
+
+function openMoreSheet(){openSheet('more-sht');}
+function navMore(id){closeSheet('more-sht');nav(id);}
+
 function logout(){sessionStorage.removeItem('xg_admin_sess');location.href='/admin/login.html';}
 document.addEventListener('DOMContentLoaded',()=>{initStars();const nb=document.getElementById('nbody');if(nb)nb.addEventListener('input',saveCurPage);});
 boot();
 </script>
+
+<!-- ══ MORE SHEET (mobile) ══ -->
+<div class="sovl" id="more-sht">
+  <div class="sht" style="border-radius:22px 22px 0 0;max-height:88vh">
+    <div class="sht-handle"></div>
+    <div class="sht-head" style="padding-bottom:12px">
+      <div class="sht-title">Menú</div>
+      <button class="sht-close" onclick="closeSheet('more-sht')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div style="padding:0 14px 8px;overflow-y:auto">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Analíticas</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <button onclick="navMore('analytics')" class="more-btn"><div class="more-ic" style="background:var(--blue2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span>Analíticas</span></button>
+        <button onclick="navMore('seo')" class="more-btn"><div class="more-ic" style="background:var(--green2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><span>SEO</span></button>
+      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Clientes</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <button onclick="navMore('points')" class="more-btn"><div class="more-ic" style="background:var(--gold2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span>Puntos</span></button>
+        <button onclick="navMore('leaderboard')" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><span>Leaderboard</span></button>
+        <button onclick="navMore('sessions')" class="more-btn"><div class="more-ic" style="background:var(--teal2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span>Sesiones</span></button>
+      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Sitio web</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <button onclick="navMore('pageeditor')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><span>Editor</span></button>
+        <button onclick="navMore('agenda')" class="more-btn"><div class="more-ic" style="background:var(--blue2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><span>Disponibilidad</span></button>
+        <button onclick="navMore('flash')" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>Flash del Mes</span></button>
+      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Negocio & Personal</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <button onclick="navMore('habits')" class="more-btn"><div class="more-ic" style="background:var(--green2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span>Hábitos</span></button>
+        <button onclick="navMore('goals')" class="more-btn"><div class="more-ic" style="background:var(--blue2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><span>Objetivos</span></button>
+        <button onclick="navMore('inventory')" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><span>Inventario</span></button>
+        <button onclick="navMore('notes')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>Notas</span></button>
+        <button onclick="navMore('config')" class="more-btn"><div class="more-ic" style="background:var(--bg4)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><span>Config</span></button>
+      </div>
+    </div>
+    <div style="padding:8px 14px 14px;border-top:1px solid var(--sep);margin-top:4px">
+      <button onclick="logout()" class="btn btn-d btn-full btn-sm">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
