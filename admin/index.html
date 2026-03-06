@@ -299,6 +299,10 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 .inv-chip{padding:7px 14px;border-radius:99px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--sep2);background:var(--bg2);color:var(--ink3);white-space:nowrap;transition:all .15s;flex-shrink:0}
 .inv-chip:hover{border-color:var(--ink3);color:var(--ink)}
 .inv-chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.inv-subchips{display:none;gap:6px;overflow-x:auto;padding:0 16px 12px;scrollbar-width:none}
+.inv-subchips::-webkit-scrollbar{display:none}
+.inv-subchip{padding:6px 12px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--sep2);background:var(--bg3);color:var(--ink3);white-space:nowrap;transition:all .15s;flex-shrink:0}
+.inv-subchip.on{background:var(--blue2);border-color:var(--blue);color:var(--blue)}
 .liq-stock{display:inline-flex;align-items:center;gap:8px}
 .liq-ring{--pct:0;--sz:18px;width:var(--sz);height:var(--sz);border-radius:50%;background:
   conic-gradient(#3fd0a0 calc(var(--pct) * 1%), rgba(127,127,127,.22) 0);}
@@ -770,6 +774,7 @@ html.ios-standalone textarea{font-size:16px !important}
     <div class="ktile"><div class="ktile-label">Categorías</div><div class="ktile-val" id="inv-cats">0</div></div>
   </div>
   <div class="inv-chips" id="inv-chips"></div>
+  <div class="inv-subchips" id="inv-subchips"></div>
   <div class="cg"><div class="tbl-wrap"><table class="dtbl"><thead><tr><th>Ítem</th><th>Stock</th><th>Estado</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div></div>
 </div>
 
@@ -1702,7 +1707,6 @@ function invFilterKey(item){
 }
 function invFilterLabel(key){
   if(key==='all') return 'Todos';
-  if(key.startsWith('agujas:')) return key.split(':')[1];
   return key.charAt(0).toUpperCase()+key.slice(1);
 }
 function invStatus(item){
@@ -1731,11 +1735,37 @@ function invStockCell(item){
 function renderInventory(){
   const low=invItems.filter(i=>invStatus(i)==='low_stock').length;
   const empty=invItems.filter(i=>invStatus(i)==='out_of_stock').length;
-  const cats=[...new Set(invItems.map(invFilterKey))];
+  const cats=[...new Set(invItems.map(i=>i.cat||'otro'))];
   [['inv-tot',invItems.length],['inv-low',low],['inv-empty',empty],['inv-cats',cats.length]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
   const cf=document.getElementById('inv-chips');
-  if(cf)cf.innerHTML=['all',...cats].map(c=>`<button class="inv-chip ${invFilter===c?'on':''}" onclick="setInvFilter('${c}')">${invFilterLabel(c)}</button>`).join('');
-  const filtered=invFilter==='all'?invItems:invItems.filter(i=>invFilterKey(i)===invFilter);
+  if(cf)cf.innerHTML=['all',...cats].map(c=>{
+    const on = invFilter===c || (c==='agujas' && String(invFilter||'').startsWith('agujas:'));
+    return `<button class="inv-chip ${on?'on':''}" onclick="setInvFilter('${c}')">${invFilterLabel(c)}</button>`;
+  }).join('');
+
+  const isNeedleScope = invFilter==='agujas' || String(invFilter||'').startsWith('agujas:');
+  const needleTypes=[...new Set(invItems.filter(i=>i.cat==='agujas'&&i.subcat).map(i=>i.subcat))];
+  const sub=document.getElementById('inv-subchips');
+  if(sub){
+    if(isNeedleScope && needleTypes.length){
+      sub.style.display='flex';
+      sub.innerHTML=[`<button class="inv-subchip ${invFilter==='agujas'?'on':''}" onclick="setInvFilter('agujas')">Todas</button>`,
+        ...needleTypes.map(t=>`<button class="inv-subchip ${invFilter===`agujas:${t}`?'on':''}" onclick="setInvFilter('agujas:${t}')">${t}</button>`)
+      ].join('');
+    } else {
+      sub.style.display='none';
+      sub.innerHTML='';
+    }
+  }
+
+  let filtered=invItems;
+  if(invFilter!=='all'){
+    if(invFilter==='agujas') filtered=invItems.filter(i=>i.cat==='agujas');
+    else if(String(invFilter).startsWith('agujas:')){
+      const t=String(invFilter).split(':')[1]||'';
+      filtered=invItems.filter(i=>i.cat==='agujas' && i.subcat===t);
+    } else filtered=invItems.filter(i=>(i.cat||'otro')===invFilter);
+  }
   const tb=document.getElementById('inv-tbody');if(!tb)return;
   tb.innerHTML=filtered.map(item=>{const ri=invItems.indexOf(item);return`<tr><td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div></td><td>${invStockCell(item)}</td><td>${invBadge(item)}</td><td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td></tr>`;}).join('');
 }
