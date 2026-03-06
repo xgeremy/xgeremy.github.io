@@ -431,6 +431,11 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 html.ios-standalone .topbar{height:calc(var(--topbh) + max(var(--safe-top),12px));padding:max(var(--safe-top),12px) 20px 0}
 html.ios-standalone .tabbar{height:calc(62px + var(--safe-bottom));padding-bottom:var(--safe-bottom)}
 html.ios-standalone .screen{padding-bottom:10px}
+html.ios-standalone .app{height:100svh;min-height:100svh}
+html.ios-standalone .inp,
+html.ios-standalone input,
+html.ios-standalone select,
+html.ios-standalone textarea{font-size:16px !important}
 @media(min-width:641px){
   .tabbar{display:none}
   .sdbar{display:flex}
@@ -2012,7 +2017,7 @@ function sendEmailMailto() {
   const c = clients[+sel.value];
   if (!c || !c.email) { toast('Cliente sin email registrado', 'err'); return; }
   const body = buildEmailBody();
-  const subject = 'ConfirmaciÃ³n de tu sesiÃ³n de tatuaje - XGEREMY';
+  const subject = 'Confirmacion de tu sesion de tatuaje - XGEREMY';
   const su = encodeURIComponent(subject);
   const bo = encodeURIComponent(body);
   window.location.href = `mailto:${c.email}?subject=${su}&body=${bo}`;
