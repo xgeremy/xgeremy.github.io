@@ -85,7 +85,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 .sw{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
 /* TOPBAR */
 .topbar{height:var(--topbh);padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-bottom:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
-.tb-title{font-size:17px;font-weight:600;letter-spacing:-.025em}
+.tb-title{font-size:17px;font-weight:600;letter-spacing:-.025em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px}
 .tb-right{display:flex;align-items:center;gap:6px}
 .icon-btn{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:none;cursor:pointer;display:grid;place-items:center;color:var(--ink2);transition:all .15s;flex-shrink:0}
 .icon-btn:hover{background:var(--bg4)}
@@ -407,6 +407,11 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 @media(max-width:640px){
   .sdbar{display:none}
   .tabbar{display:flex}
+  .tb-title{font-size:15px}
+  .tab-lbl{font-size:9px}
+  .quick-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .quick-btn{min-height:96px}
+  .quick-btn span{font-size:12px !important}
 }
 @media(min-width:641px){
   .tabbar{display:none}
@@ -419,6 +424,10 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 .more-btn span{font-size:12px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3}
 .more-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
 .more-ic svg{width:18px;height:18px}
+
+.quick-actions-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.quick-btn{background:var(--bg2);border:none;border-radius:16px;padding:15px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .15s}
+.quick-btn:hover{background:var(--bg3)}
 
 
 .needle-sub{display:none;margin-top:10px}
@@ -501,11 +510,11 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
     </div>
   </div>
   <div style="padding:2px 16px 14px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Acciones rápidas</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-      <button onclick="openApptSheet()" style="background:var(--bg2);border:none;border-radius:16px;padding:15px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'"><div style="width:40px;height:40px;border-radius:12px;background:var(--blue2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Nueva cita</span></button>
-      <button onclick="openSheet('client-sht')" style="background:var(--bg2);border:none;border-radius:16px;padding:15px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'"><div style="width:40px;height:40px;border-radius:12px;background:var(--purple2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Nuevo cliente</span></button>
-      <button onclick="nav('finance');showTxForm()" style="background:var(--bg2);border:none;border-radius:16px;padding:15px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'"><div style="width:40px;height:40px;border-radius:12px;background:var(--green2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Ingreso</span></button>
-      <button onclick="openSheet('session-sht')" style="background:var(--bg2);border:none;border-radius:16px;padding:15px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'"><div style="width:40px;height:40px;border-radius:12px;background:var(--orng2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Sesión</span></button>
+    <div class="quick-actions-grid">
+      <button onclick="openApptSheet()" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--blue2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Nueva cita</span></button>
+      <button onclick="openSheet('client-sht')" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--purple2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Nuevo cliente</span></button>
+      <button onclick="nav('finance');showTxForm()" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--green2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Ingreso</span></button>
+      <button onclick="openSheet('session-sht')" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--orng2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Sesión</span></button>
     </div>
   </div>
   <div style="padding:0 16px 8px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Próximas citas</div><div id="home-upcoming" class="cg"></div></div>
@@ -1010,6 +1019,14 @@ let editClientIdx=-1,sessEditIdx=-1,invEditIdx=-1,goalEditIdx=-1,apptEditIdx=-1;
 let curRating=3,npages=[],curPg=0,svTimer=null,toastTimer=null;
 let avData=Array(7).fill(0),invFilter='all',txFilterVal='month',goalSeg='monthly';
 let calDate=new Date(),calView='month',calSelected=today();
+let apptSyncTimer=null, apptRealtimeChannel=null, appointmentsInitialized=false;
+let sharedSyncTimer=null;
+const APPOINTMENTS_TABLE='appointments_v2';
+const SESSIONS_TABLE='sessions_v2';
+const HABITS_TABLE='habits_v2';
+const GOALS_TABLE='goals_v2';
+const INVENTORY_TABLE='inventory_v2';
+const NOTION_TABLE='notion_pages_v2';
 
 // ── UTILS ──
 function today(){return new Date().toISOString().slice(0,10);}
@@ -1101,11 +1118,11 @@ function nav(id,el){
 async function persistClients(){
   localStorage.setItem('xg_clients',JSON.stringify(clients));
   const chip=document.getElementById('crm-chip');if(chip)chip.textContent=clients.length;
-  try{const rows=clients.map(c=>({nombre:String(c.nombre||''),email:String(c.email||''),puntos:+c.puntos||0,montoCLP:+c.montoCLP||0,ultimoTatuaje:String(c.ultimoTatuaje||''),telefono:String(c.telefono||''),notas:String(c.notas||''),tier:getTier(+c.puntos||0)}));await db.from('clientes').upsert(rows,{onConflict:'email'});toast('Guardado');}catch{toast('Guardado local');}
+  try{const rows=clients.map(c=>({nombre:String(c.nombre||''),email:String(c.email||''),puntos:+c.puntos||0,montoCLP:+c.montoCLP||0,ultimoTatuaje:String(c.ultimoTatuaje||''),telefono:String(c.telefono||''),notas:String(c.notas||''),tier:getTier(+c.puntos||0)}));const {error}=await db.from('clientes').upsert(rows,{onConflict:'email'});if(error)throw error;toast('Guardado');}catch(e){console.error('[Supabase] persist clients failed:',e);toast('Guardado local');}
 }
 async function persistTx(){
   localStorage.setItem('xg_txs',JSON.stringify(txList));
-  try{const l=txList[txList.length-1];if(l)await db.from('transacciones').insert({tipo:String(l.type),monto:+l.amount||0,descripcion:String(l.desc||''),fecha:String(l.date||today()),categoria:String(l.cat||''),cliente:String(l.client||'')});}catch{}
+  try{const l=txList[txList.length-1];if(l){const {error}=await db.from('transacciones').insert({tipo:String(l.type),monto:+l.amount||0,descripcion:String(l.desc||''),fecha:String(l.date||today()),categoria:String(l.cat||''),cliente:String(l.client||'')});if(error)throw error;}}catch(e){console.error('[Supabase] persist tx failed:',e);}
 }
 
 // ── BOOT ──
@@ -1125,9 +1142,118 @@ async function boot(){
   invItems=JSON.parse(localStorage.getItem('xg_inventory')||'[]');
   sessions=JSON.parse(localStorage.getItem('xg_sessions')||'[]');
   appointments=JSON.parse(localStorage.getItem('xg_appointments')||'[]');
+  npages=JSON.parse(localStorage.getItem('xg_notion')||'[]');
+  await loadSharedFromSupabase();
   await loadApptsFromSupabase();
+  setupApptSync();
+  setupSharedSync();
   const qn=localStorage.getItem('xg_qn');if(qn){const el=document.getElementById('qnote');if(el)el.value=qn;}
   loadLBC();renderPE();renderCfg();initNotion();renderHome();loadGC();
+}
+
+async function loadSharedFromSupabase(){
+  try{
+    const [sd,hd,gd,idt,nd]=await Promise.all([
+      db.from(SESSIONS_TABLE).select('*').order('date',{ascending:false}),
+      db.from(HABITS_TABLE).select('*').order('id',{ascending:true}),
+      db.from(GOALS_TABLE).select('*').order('id',{ascending:true}),
+      db.from(INVENTORY_TABLE).select('*').order('id',{ascending:true}),
+      db.from(NOTION_TABLE).select('*').order('id',{ascending:true}),
+    ]);
+    if(!sd.error&&Array.isArray(sd.data)){
+      sessions=sd.data.map(r=>({id:r.id,client:r.client,date:r.date,hours:+r.hours||0,price:+r.price||0,style:r.style||'Blackwork',zone:r.zone||'',sessnum:+r.sessnum||1,pts:+r.pts||0,desc:r.session_desc||'',improve:r.improve||'',rating:+r.rating||3,apptId:r.appt_id||''}));
+      localStorage.setItem('xg_sessions',JSON.stringify(sessions));
+    }
+    if(!hd.error&&Array.isArray(hd.data)){
+      habits=hd.data.map(r=>({id:r.id,habit_key:r.habit_key,name:r.name,cat:r.cat||'salud',log:r.log_json||{}}));
+      localStorage.setItem('xg_habits',JSON.stringify(habits));
+    }
+    if(!gd.error&&Array.isArray(gd.data)){
+      goals=gd.data.map(r=>({id:r.id,title:r.title,desc:r.goal_desc||'',pct:+r.pct||0,due:r.due||'',type:r.goal_type||'monthly'}));
+      localStorage.setItem('xg_goals',JSON.stringify(goals));
+    }
+    if(!idt.error&&Array.isArray(idt.data)){
+      invItems=idt.data.map(r=>({id:r.id,name:r.name,cat:r.cat||'otro',stock:+r.stock||0,min:+r.min||1,unit:r.unit||'',prov:r.prov||'',notes:r.notes||''}));
+      localStorage.setItem('xg_inventory',JSON.stringify(invItems));
+    }
+    if(!nd.error&&Array.isArray(nd.data)){
+      npages=nd.data.map(r=>({id:r.id,page_key:r.page_key||('page-'+r.id),title:r.title||'Sin título',content:r.content_html||''}));
+      localStorage.setItem('xg_notion',JSON.stringify(npages));
+    }
+    return true;
+  }catch(e){
+    console.error('[Supabase] load shared data failed:',e);
+    return false;
+  }
+}
+
+function setupSharedSync(){
+  if(sharedSyncTimer) clearInterval(sharedSyncTimer);
+  sharedSyncTimer=setInterval(async()=>{
+    const ok=await loadSharedFromSupabase();
+    if(!ok) return;
+    if(document.getElementById('s-home')?.classList.contains('on')) renderHome();
+    if(document.getElementById('s-sessions')?.classList.contains('on')) renderSessions();
+    if(document.getElementById('s-habits')?.classList.contains('on')) renderHabits();
+    if(document.getElementById('s-goals')?.classList.contains('on')) renderGoals();
+    if(document.getElementById('s-inventory')?.classList.contains('on')) renderInventory();
+  },15000);
+}
+
+async function upsertSessionToSupabase(s){
+  try{
+    const row={id:s.id,client:String(s.client||''),date:String(s.date||today()),hours:+s.hours||0,price:+s.price||0,style:String(s.style||'Blackwork'),zone:String(s.zone||''),sessnum:+s.sessnum||1,pts:+s.pts||0,session_desc:String(s.desc||''),improve:String(s.improve||''),rating:+s.rating||3,appt_id:s.apptId?+s.apptId:null};
+    const {error}=await db.from(SESSIONS_TABLE).upsert(row,{onConflict:'id'});
+    if(error) throw error;
+    return true;
+  }catch(e){console.error('[Supabase] upsert session failed:',e);return false;}
+}
+async function deleteSessionFromSupabase(id){
+  try{const {error}=await db.from(SESSIONS_TABLE).delete().eq('id',id);if(error)throw error;return true;}catch(e){console.error('[Supabase] delete session failed:',e);return false;}
+}
+async function upsertHabitToSupabase(h){
+  try{
+    const row={id:h.id,habit_key:String(h.habit_key||('hab-'+h.id)),name:String(h.name||''),cat:String(h.cat||'salud'),log_json:h.log||{}};
+    const {error}=await db.from(HABITS_TABLE).upsert(row,{onConflict:'id'});
+    if(error) throw error;
+    return true;
+  }catch(e){console.error('[Supabase] upsert habit failed:',e);return false;}
+}
+async function deleteHabitFromSupabase(id){
+  try{const {error}=await db.from(HABITS_TABLE).delete().eq('id',id);if(error)throw error;return true;}catch(e){console.error('[Supabase] delete habit failed:',e);return false;}
+}
+async function upsertGoalToSupabase(g){
+  try{
+    const row={id:g.id,title:String(g.title||''),goal_desc:String(g.desc||''),pct:+g.pct||0,due:g.due||null,goal_type:String(g.type||'monthly')};
+    const {error}=await db.from(GOALS_TABLE).upsert(row,{onConflict:'id'});
+    if(error) throw error;
+    return true;
+  }catch(e){console.error('[Supabase] upsert goal failed:',e);return false;}
+}
+async function deleteGoalFromSupabase(id){
+  try{const {error}=await db.from(GOALS_TABLE).delete().eq('id',id);if(error)throw error;return true;}catch(e){console.error('[Supabase] delete goal failed:',e);return false;}
+}
+async function upsertInventoryToSupabase(item){
+  try{
+    const row={id:item.id,name:String(item.name||''),cat:String(item.cat||'otro'),stock:+item.stock||0,min:+item.min||1,unit:String(item.unit||''),prov:String(item.prov||''),notes:String(item.notes||'')};
+    const {error}=await db.from(INVENTORY_TABLE).upsert(row,{onConflict:'id'});
+    if(error) throw error;
+    return true;
+  }catch(e){console.error('[Supabase] upsert inventory failed:',e);return false;}
+}
+async function deleteInventoryFromSupabase(id){
+  try{const {error}=await db.from(INVENTORY_TABLE).delete().eq('id',id);if(error)throw error;return true;}catch(e){console.error('[Supabase] delete inventory failed:',e);return false;}
+}
+async function upsertNotionPageToSupabase(p){
+  try{
+    const row={id:p.id,page_key:String(p.page_key||('page-'+p.id)),title:String(p.title||'Sin título'),content_html:String(p.content||'')};
+    const {error}=await db.from(NOTION_TABLE).upsert(row,{onConflict:'id'});
+    if(error) throw error;
+    return true;
+  }catch(e){console.error('[Supabase] upsert notion page failed:',e);return false;}
+}
+async function deleteNotionPageFromSupabase(id){
+  try{const {error}=await db.from(NOTION_TABLE).delete().eq('id',id);if(error)throw error;return true;}catch(e){console.error('[Supabase] delete notion page failed:',e);return false;}
 }
 
 // ── HOME ──
@@ -1289,8 +1415,9 @@ async function saveAppt(){
   const pts=+document.getElementById('ap-pts').value||0;
   const price=+document.getElementById('ap-price').value||0;
   const status=document.getElementById('ap-status').value;
-  const prevStatus=apptEditIdx>=0?appointments[apptEditIdx].status:'';
-  const a={client,date,time:document.getElementById('ap-time').value||'',dur:+document.getElementById('ap-dur').value||0,price,deposit:+document.getElementById('ap-deposit').value||0,pts,zone:(document.getElementById('ap-zone').value||'').trim(),desc:(document.getElementById('ap-desc').value||'').trim(),type:document.getElementById('ap-type').value||'tattoo',status};
+  const prevAppt=apptEditIdx>=0?appointments[apptEditIdx]:null;
+  const prevStatus=prevAppt?prevAppt.status:'';
+  const a={id:(prevAppt&&prevAppt.id)||null,client,date,time:document.getElementById('ap-time').value||'',dur:+document.getElementById('ap-dur').value||0,price,deposit:+document.getElementById('ap-deposit').value||0,pts,zone:(document.getElementById('ap-zone').value||'').trim(),desc:(document.getElementById('ap-desc').value||'').trim(),type:document.getElementById('ap-type').value||'tattoo',status};
   if(apptEditIdx>=0)appointments[apptEditIdx]=a;
   else appointments.push(a);
   localStorage.setItem('xg_appointments',JSON.stringify(appointments));
@@ -1308,7 +1435,9 @@ async function saveAppt(){
     }
     if(pts>0||price>0)toast(`Cita completada: +${pts}pts · ${price?fclp(price):''}`);
   }
-  syncApptToSupabase(appointments[apptEditIdx>=0?apptEditIdx:appointments.length-1],apptEditIdx>=0?apptEditIdx:appointments.length-1);
+  const apptIdx=apptEditIdx>=0?apptEditIdx:appointments.length-1;
+  const syncOk=await syncApptToSupabase(appointments[apptIdx],apptIdx);
+  if(!syncOk) toast('Cita guardada localmente (falló sync remoto)','err');
   closeSheet('appt-sht');
   calSelected=date;
   renderCal();renderHome();
@@ -1320,7 +1449,7 @@ function deleteAppt(){
   const _delAppt=appointments[apptEditIdx];
   appointments.splice(apptEditIdx,1);
   localStorage.setItem('xg_appointments',JSON.stringify(appointments));
-  deleteApptFromSupabase(_delAppt);
+  deleteApptFromSupabase(_delAppt).then(ok=>{ if(!ok) toast('No se pudo borrar en Supabase','err'); });
   closeSheet('appt-sht');renderCal();renderHome();toast('Cita eliminada');
 }
 function renderUpcoming(){
@@ -1388,9 +1517,9 @@ function renderSessions(){
   el.innerHTML=[...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(s=>{const ri=sessions.indexOf(s);const stars='★'.repeat(+s.rating||0)+'☆'.repeat(5-(+s.rating||0));return`<div class="sess-item"><div class="sess-head"><div><div class="sess-client">${s.client}</div><div class="sess-date">${fdate(s.date)} · Sesión #${s.sessnum||1}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="letter-spacing:-1px;color:var(--gold);font-size:14px">${stars}</span><button class="btn btn-s btn-xs" onclick="editSession(${ri})">Editar</button></div></div><div class="sess-tags">${[s.style&&`<span class="bdg bdg-neutral">${s.style}</span>`,s.zone&&`<span class="bdg bdg-blue">${s.zone}</span>`,s.hours&&`<span class="bdg bdg-green">${s.hours}h</span>`,s.price&&`<span class="bdg bdg-gold">${fclp(s.price)}</span>`].filter(Boolean).join('')}</div>${s.desc?`<div style="font-size:13px;color:var(--ink2)">${s.desc}</div>`:''} ${s.improve?`<div class="sess-notes"><span style="color:var(--orange);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em">Por mejorar: </span>${s.improve}</div>`:''}</div>`;}).join('');
 }
 function editSession(idx){sessEditIdx=idx;const s=sessions[idx];['sm-client','sm-zone','sm-desc','sm-improve'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[s.client,s.zone,s.desc,s.improve][i]||'';});document.getElementById('sm-date').value=s.date||today();document.getElementById('sm-hours').value=s.hours||'';document.getElementById('sm-price').value=s.price||'';document.getElementById('sm-sessnum').value=s.sessnum||1;document.getElementById('sm-pts').value=s.pts||0;const ss=document.getElementById('sm-style');if(ss)ss.value=s.style||'Blackwork';setRating(+s.rating||3);document.getElementById('sess-sht-title').textContent='Editar sesión';document.getElementById('sess-del-btn').style.display='flex';const dl=document.getElementById('sm-cl-list');if(dl)dl.innerHTML=clients.map(c=>`<option value="${c.nombre}">`).join('');openSheet('session-sht');}
-async function saveSession(){const client=(document.getElementById('sm-client').value||'').trim();if(!client){toast('Cliente requerido','err');return;}const pts=+document.getElementById('sm-pts').value||0;const price=+document.getElementById('sm-price').value||0;const s={client,date:(document.getElementById('sm-date').value||today()),hours:+document.getElementById('sm-hours').value||0,price,style:document.getElementById('sm-style').value||'Blackwork',zone:(document.getElementById('sm-zone').value||'').trim(),sessnum:+document.getElementById('sm-sessnum').value||1,pts,desc:(document.getElementById('sm-desc').value||'').trim(),improve:(document.getElementById('sm-improve').value||'').trim(),rating:curRating};const _apptLinkId=(document.getElementById('sm-appt-link')||{}).value||'';s.apptId=_apptLinkId;const isNew=sessEditIdx<0;if(sessEditIdx>=0)sessions[sessEditIdx]=s;else sessions.push(s);localStorage.setItem('xg_sessions',JSON.stringify(sessions));// Auto-sum points and income
+async function saveSession(){const client=(document.getElementById('sm-client').value||'').trim();if(!client){toast('Cliente requerido','err');return;}const pts=+document.getElementById('sm-pts').value||0;const price=+document.getElementById('sm-price').value||0;const prev=sessEditIdx>=0?sessions[sessEditIdx]:null;const s={id:(prev&&prev.id)||Date.now(),client,date:(document.getElementById('sm-date').value||today()),hours:+document.getElementById('sm-hours').value||0,price,style:document.getElementById('sm-style').value||'Blackwork',zone:(document.getElementById('sm-zone').value||'').trim(),sessnum:+document.getElementById('sm-sessnum').value||1,pts,desc:(document.getElementById('sm-desc').value||'').trim(),improve:(document.getElementById('sm-improve').value||'').trim(),rating:curRating};const _apptLinkId=(document.getElementById('sm-appt-link')||{}).value||'';s.apptId=_apptLinkId;const isNew=sessEditIdx<0;if(sessEditIdx>=0)sessions[sessEditIdx]=s;else sessions.push(s);localStorage.setItem('xg_sessions',JSON.stringify(sessions));const sOk=await upsertSessionToSupabase(s);if(!sOk)toast('Sesión guardada localmente (falló sync remoto)','err');// Auto-sum points and income
 if(isNew){const cli=clients.find(c=>c.nombre.toLowerCase()===client.toLowerCase());if(cli){if(pts>0){cli.puntos=(+cli.puntos||0)+pts;cli.tier=getTier(cli.puntos);}if(price>0)cli.montoCLP=(+cli.montoCLP||0)+price;await persistClients();}if(price>0){txList.push({type:'in',amount:price,desc:`Sesión · ${client}`,date:s.date,cat:'Tatuaje',client});await persistTx();}if(pts>0||price>0)toast(`Sesión guardada: +${pts}pts · ${price?fclp(price):''}`);}else{toast('Sesión actualizada');}closeSheet('session-sht');renderSessions();}
-function deleteSession(){if(sessEditIdx<0)return;if(!confirm('Eliminar sesión?'))return;sessions.splice(sessEditIdx,1);sessEditIdx=-1;localStorage.setItem('xg_sessions',JSON.stringify(sessions));closeSheet('session-sht');renderSessions();}
+function deleteSession(){if(sessEditIdx<0)return;if(!confirm('Eliminar sesión?'))return;const s=sessions[sessEditIdx];sessions.splice(sessEditIdx,1);sessEditIdx=-1;localStorage.setItem('xg_sessions',JSON.stringify(sessions));if(s&&s.id)deleteSessionFromSupabase(s.id).then(ok=>{if(!ok)toast('No se pudo borrar en Supabase','err');});closeSheet('session-sht');renderSessions();}
 
 // ── AGENDA ──
 const AV_DAYS=['Lu','Ma','Mi','Ju','Vi','Sa','Do'],AV_CLS=['','s-av','s-bz','s-pt'];
@@ -1430,13 +1559,13 @@ function renderPE(){const c=JSON.parse(localStorage.getItem('xg_page_cfg')||'{}'
 function savePCfg(){const c={};PE_KEYS.forEach(id=>{const el=document.getElementById(id);if(el)c[id]=el.value;});localStorage.setItem('xg_page_cfg',JSON.stringify(c));toast('Cambios guardados');}
 
 // ── NOTION ──
-function initNotion(){const sv=localStorage.getItem('xg_notion');if(sv)try{npages=JSON.parse(sv);}catch{}if(!npages.length)npages=[{id:1,title:'Ideas de diseño',content:''},{id:2,title:'Clientes pendientes',content:''},{id:3,title:'Metas del mes',content:''},{id:4,title:'General',content:''}];curPg=0;renderNotion();}
+function initNotion(){const sv=localStorage.getItem('xg_notion');if(sv)try{npages=JSON.parse(sv);}catch{}if(!npages.length)npages=[{id:1,page_key:'page-1',title:'Ideas de diseño',content:''},{id:2,page_key:'page-2',title:'Clientes pendientes',content:''},{id:3,page_key:'page-3',title:'Metas del mes',content:''},{id:4,page_key:'page-4',title:'General',content:''}];npages=npages.map(p=>({...p,page_key:p.page_key||('page-'+p.id)}));curPg=0;renderNotion();}
 function renderNotion(){const list=document.getElementById('npl');if(!list)return;list.innerHTML=npages.map((p,i)=>`<button class="npgbtn ${i===curPg?'on':''}" onclick="openPg(${i})"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="npg-ttl">${p.title||'Sin título'}</span></button>`).join('');loadPg(curPg);}
 function openPg(i){curPg=i;renderNotion();}
 function loadPg(i){const p=npages[i];if(!p)return;const nt=document.getElementById('ntitle'),nb=document.getElementById('nbody');if(nt)nt.value=p.title||'';if(nb)nb.innerHTML=p.content||'';const st=document.getElementById('ns-status');if(st){st.className='nstatus';st.textContent='';}}
-function saveCurPage(){if(!npages[curPg])return;const nt=document.getElementById('ntitle'),nb=document.getElementById('nbody');npages[curPg].title=(nt?nt.value:'') ||'Sin título';npages[curPg].content=nb?nb.innerHTML:'';localStorage.setItem('xg_notion',JSON.stringify(npages));const st=document.getElementById('ns-status');if(st){st.className='nstatus sv';st.textContent='Guardado';clearTimeout(svTimer);svTimer=setTimeout(()=>{if(st){st.className='nstatus';st.textContent='';}},2000);}const btns=document.querySelectorAll('.npgbtn');if(btns[curPg]){const t=btns[curPg].querySelector('.npg-ttl');if(t)t.textContent=npages[curPg].title;}}
-function addPage(){npages.push({id:Date.now(),title:'Nueva página',content:''});curPg=npages.length-1;localStorage.setItem('xg_notion',JSON.stringify(npages));renderNotion();setTimeout(()=>{const nt=document.getElementById('ntitle');if(nt){nt.focus();nt.select();}},50);}
-function deletePage(i){if(npages.length<=1){toast('Mínimo una página','err');return;}if(!confirm('Eliminar página?'))return;npages.splice(i,1);curPg=Math.min(curPg,npages.length-1);localStorage.setItem('xg_notion',JSON.stringify(npages));renderNotion();}
+function saveCurPage(){if(!npages[curPg])return;const nt=document.getElementById('ntitle'),nb=document.getElementById('nbody');npages[curPg].title=(nt?nt.value:'') ||'Sin título';npages[curPg].content=nb?nb.innerHTML:'';localStorage.setItem('xg_notion',JSON.stringify(npages));upsertNotionPageToSupabase(npages[curPg]);const st=document.getElementById('ns-status');if(st){st.className='nstatus sv';st.textContent='Guardado';clearTimeout(svTimer);svTimer=setTimeout(()=>{if(st){st.className='nstatus';st.textContent='';}},2000);}const btns=document.querySelectorAll('.npgbtn');if(btns[curPg]){const t=btns[curPg].querySelector('.npg-ttl');if(t)t.textContent=npages[curPg].title;}}
+function addPage(){const pid=Date.now();npages.push({id:pid,page_key:'page-'+pid,title:'Nueva página',content:''});curPg=npages.length-1;localStorage.setItem('xg_notion',JSON.stringify(npages));upsertNotionPageToSupabase(npages[curPg]);renderNotion();setTimeout(()=>{const nt=document.getElementById('ntitle');if(nt){nt.focus();nt.select();}},50);}
+function deletePage(i){if(npages.length<=1){toast('Mínimo una página','err');return;}if(!confirm('Eliminar página?'))return;const pg=npages[i];npages.splice(i,1);curPg=Math.min(curPg,npages.length-1);localStorage.setItem('xg_notion',JSON.stringify(npages));if(pg&&pg.id)deleteNotionPageFromSupabase(pg.id);renderNotion();}
 function ec(cmd){const nb=document.getElementById('nbody');if(nb)nb.focus();document.execCommand(cmd,false,null);saveCurPage();}
 function ib(type){const nb=document.getElementById('nbody');if(nb)nb.focus();const m={h1:'h1',h2:'h2',bq:'blockquote'};if(m[type])document.execCommand('formatBlock',false,m[type]);saveCurPage();}
 
@@ -1458,9 +1587,9 @@ function renderHabits(){
   el.innerHTML=habits.map((h,idx)=>`<div class="hbit"><div class="hbit-ic" style="background:${CAT_BG[h.cat]||'var(--blue2)'}"><svg viewBox="0 0 24 24" style="stroke:${CAT_COLORS[h.cat]||'var(--blue)'}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="crow-main"><div class="hbit-name">${h.name}</div><div class="hbit-str">${getStreak(h)} días seguidos</div></div><div style="display:flex;gap:4px">${week.map(d=>`<div class="hday ${h.log&&h.log[d]?'done':''} ${d===td&&!(h.log&&h.log[d])?'today':''}" onclick="toggleHabit(${idx},'${d}')">${h.log&&h.log[d]?'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>':dayLabelShort(d)}</div>`).join('')}</div><button class="hbit-del" onclick="deleteHabit(${idx})">×</button></div>`).join('');
 }
 function getStreak(h){let s=0;const cur=new Date(today());for(let i=0;i<90;i++){const d=new Date(cur);d.setDate(cur.getDate()-i);if(h.log&&h.log[d.toISOString().slice(0,10)])s++;else break;}return s;}
-function toggleHabit(idx,date){if(!habits[idx].log)habits[idx].log={};habits[idx].log[date]=!habits[idx].log[date];localStorage.setItem('xg_habits',JSON.stringify(habits));renderHabits();}
-function deleteHabit(idx){if(!confirm('Eliminar hábito?'))return;habits.splice(idx,1);localStorage.setItem('xg_habits',JSON.stringify(habits));renderHabits();}
-function saveHabit(){const name=(document.getElementById('hm-name').value||'').trim();if(!name){toast('Nombre requerido','err');return;}habits.push({id:Date.now(),name,cat:(document.getElementById('hm-cat').value)||'salud',log:{}});localStorage.setItem('xg_habits',JSON.stringify(habits));closeSheet('habit-sht');document.getElementById('hm-name').value='';renderHabits();toast('Hábito agregado');}
+function toggleHabit(idx,date){if(!habits[idx].log)habits[idx].log={};habits[idx].log[date]=!habits[idx].log[date];localStorage.setItem('xg_habits',JSON.stringify(habits));upsertHabitToSupabase(habits[idx]);renderHabits();}
+function deleteHabit(idx){if(!confirm('Eliminar hábito?'))return;const h=habits[idx];habits.splice(idx,1);localStorage.setItem('xg_habits',JSON.stringify(habits));if(h&&h.id)deleteHabitFromSupabase(h.id);renderHabits();}
+function saveHabit(){const name=(document.getElementById('hm-name').value||'').trim();if(!name){toast('Nombre requerido','err');return;}const hid=Date.now();const h={id:hid,habit_key:'hab-'+hid,name,cat:(document.getElementById('hm-cat').value)||'salud',log:{}};habits.push(h);localStorage.setItem('xg_habits',JSON.stringify(habits));upsertHabitToSupabase(h);closeSheet('habit-sht');document.getElementById('hm-name').value='';renderHabits();toast('Hábito agregado');}
 
 // ── GOALS ──
 function setGoalSeg(type,el){goalSeg=type;document.querySelectorAll('#goal-seg .seg-btn').forEach(b=>b.classList.remove('on'));if(el)el.classList.add('on');renderGoals();}
@@ -1470,10 +1599,10 @@ function renderGoals(){
   if(!list.length){el.innerHTML=`<div class="empty"><div class="empty-t">Sin objetivos</div><div class="empty-s">Agrega uno con el botón de arriba</div></div>`;return;}
   el.innerHTML=list.map(g=>{const gi=goals.indexOf(g),pct=Math.min(100,+g.pct||0),done=pct>=100;return`<div class="goal-item ${done?'goal-done':''}"><div class="goal-top"><div class="goal-name">${g.title}</div><div class="goal-pct">${pct}%</div></div><div class="goal-bar"><div class="goal-fill" style="width:${pct}%"></div></div><div style="display:flex;align-items:center;justify-content:space-between"><div class="goal-meta">${g.desc||''}${g.due?' · '+fdate(g.due):''}</div><div style="display:flex;gap:5px"><button class="btn btn-s btn-xs" onclick="editGoal(${gi})">Editar</button><button class="btn btn-s btn-xs" onclick="quickProgress(${gi})">+10%</button></div></div></div>`;}).join('');
 }
-function quickProgress(idx){goals[idx].pct=Math.min(100,(+goals[idx].pct||0)+10);localStorage.setItem('xg_goals',JSON.stringify(goals));renderGoals();toast(goals[idx].pct>=100?'Objetivo completado!':'Progreso actualizado');}
+function quickProgress(idx){goals[idx].pct=Math.min(100,(+goals[idx].pct||0)+10);localStorage.setItem('xg_goals',JSON.stringify(goals));upsertGoalToSupabase(goals[idx]);renderGoals();toast(goals[idx].pct>=100?'Objetivo completado!':'Progreso actualizado');}
 function editGoal(idx){goalEditIdx=idx;const g=goals[idx];['gm-title','gm-desc'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[g.title,g.desc][i]||'';});document.getElementById('gm-pct').value=g.pct||0;document.getElementById('gm-due').value=g.due||'';document.getElementById('gm-type').value=g.type||'monthly';document.getElementById('goal-sht-title').textContent='Editar objetivo';document.getElementById('goal-del-btn').style.display='flex';openSheet('goal-sht');}
-function saveGoal(){const title=(document.getElementById('gm-title').value||'').trim();if(!title){toast('Título requerido','err');return;}const g={title,desc:(document.getElementById('gm-desc').value||'').trim(),pct:+document.getElementById('gm-pct').value||0,due:(document.getElementById('gm-due').value||''),type:(document.getElementById('gm-type').value||'monthly')};if(goalEditIdx>=0)goals[goalEditIdx]=g;else goals.push(g);goalEditIdx=-1;localStorage.setItem('xg_goals',JSON.stringify(goals));closeSheet('goal-sht');renderGoals();toast('Objetivo guardado');}
-function deleteGoal(){if(goalEditIdx<0)return;if(!confirm('Eliminar?'))return;goals.splice(goalEditIdx,1);goalEditIdx=-1;localStorage.setItem('xg_goals',JSON.stringify(goals));closeSheet('goal-sht');renderGoals();}
+function saveGoal(){const title=(document.getElementById('gm-title').value||'').trim();if(!title){toast('Título requerido','err');return;}const prev=goalEditIdx>=0?goals[goalEditIdx]:null;const g={id:(prev&&prev.id)||Date.now(),title,desc:(document.getElementById('gm-desc').value||'').trim(),pct:+document.getElementById('gm-pct').value||0,due:(document.getElementById('gm-due').value||''),type:(document.getElementById('gm-type').value||'monthly')};if(goalEditIdx>=0)goals[goalEditIdx]=g;else goals.push(g);goalEditIdx=-1;localStorage.setItem('xg_goals',JSON.stringify(goals));upsertGoalToSupabase(g);closeSheet('goal-sht');renderGoals();toast('Objetivo guardado');}
+function deleteGoal(){if(goalEditIdx<0)return;if(!confirm('Eliminar?'))return;const g=goals[goalEditIdx];goals.splice(goalEditIdx,1);goalEditIdx=-1;localStorage.setItem('xg_goals',JSON.stringify(goals));if(g&&g.id)deleteGoalFromSupabase(g.id);closeSheet('goal-sht');renderGoals();}
 
 // ── INVENTORY ──
 function invBadge(item){if(!item.stock||item.stock===0)return'<span class="bdg bdg-red">Agotado</span>';if(item.stock<=(+item.min||1))return'<span class="bdg bdg-orange">Stock bajo</span>';return'<span class="bdg bdg-green">OK</span>';}
@@ -1488,14 +1617,20 @@ function renderInventory(){
 }
 function setInvFilter(f){invFilter=f;renderInventory();}
 function editInvItem(idx){invEditIdx=idx;const item=invItems[idx];['im-name','im-cat','im-unit','im-prov','im-notes'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[item.name,item.cat,item.unit,item.prov,item.notes][i]||'';});document.getElementById('im-stock').value=item.stock||0;document.getElementById('im-min').value=item.min||1;document.getElementById('inv-sht-title').textContent='Editar ítem';document.getElementById('inv-del-btn').style.display='flex';openSheet('inv-sht');}
-function saveInvItem(){let name=(document.getElementById('im-name').value||'').trim();const _nt=(document.getElementById('im-needle')||{}).value||'';if(_nt&&!name.includes(_nt))name=name+' · '+_nt;if(!name){toast('Nombre requerido','err');return;}const stock=+document.getElementById('im-stock').value||0,min=+document.getElementById('im-min').value||1;const item={name,cat:document.getElementById('im-cat').value||'tintas',stock,min,unit:(document.getElementById('im-unit').value||'').trim(),prov:(document.getElementById('im-prov').value||'').trim(),notes:(document.getElementById('im-notes').value||'').trim()};if(invEditIdx>=0)invItems[invEditIdx]=item;else invItems.push(item);invEditIdx=-1;localStorage.setItem('xg_inventory',JSON.stringify(invItems));closeSheet('inv-sht');renderInventory();toast('Ítem guardado');}
-function deleteInvItem(){if(invEditIdx<0)return;if(!confirm('Eliminar?'))return;invItems.splice(invEditIdx,1);invEditIdx=-1;localStorage.setItem('xg_inventory',JSON.stringify(invItems));closeSheet('inv-sht');renderInventory();}
+function saveInvItem(){let name=(document.getElementById('im-name').value||'').trim();const _nt=(document.getElementById('im-needle')||{}).value||'';if(_nt&&!name.includes(_nt))name=name+' · '+_nt;if(!name){toast('Nombre requerido','err');return;}const stock=+document.getElementById('im-stock').value||0,min=+document.getElementById('im-min').value||1;const prev=invEditIdx>=0?invItems[invEditIdx]:null;const item={id:(prev&&prev.id)||Date.now(),name,cat:document.getElementById('im-cat').value||'tintas',stock,min,unit:(document.getElementById('im-unit').value||'').trim(),prov:(document.getElementById('im-prov').value||'').trim(),notes:(document.getElementById('im-notes').value||'').trim()};if(invEditIdx>=0)invItems[invEditIdx]=item;else invItems.push(item);invEditIdx=-1;localStorage.setItem('xg_inventory',JSON.stringify(invItems));upsertInventoryToSupabase(item);closeSheet('inv-sht');renderInventory();toast('Ítem guardado');}
+function deleteInvItem(){if(invEditIdx<0)return;if(!confirm('Eliminar?'))return;const item=invItems[invEditIdx];invItems.splice(invEditIdx,1);invEditIdx=-1;localStorage.setItem('xg_inventory',JSON.stringify(invItems));if(item&&item.id)deleteInventoryFromSupabase(item.id);closeSheet('inv-sht');renderInventory();}
 
 
 function openMoreSheet(){openSheet('more-sht');}
 function navMore(id){closeSheet('more-sht');nav(id);}
 
-function logout(){sessionStorage.removeItem('xg_admin_sess');location.href='/admin/login.html';}
+function logout(){
+  if(apptSyncTimer) clearInterval(apptSyncTimer);
+  if(sharedSyncTimer) clearInterval(sharedSyncTimer);
+  if(apptRealtimeChannel){ try{ db.removeChannel(apptRealtimeChannel); }catch{} }
+  sessionStorage.removeItem('xg_admin_sess');
+  location.href='/admin/login.html';
+}
 document.addEventListener('DOMContentLoaded',()=>{initStars();const nb=document.getElementById('nbody');if(nb)nb.addEventListener('input',saveCurPage);});
 boot();
 
@@ -1588,33 +1723,31 @@ function openSessionFromAppt(apptIdx) {
 // ════════════════════════════════════════════════════
 async function loadApptsFromSupabase() {
   try {
-    const { data, error } = await db.from('appointments').select('*').order('date', { ascending: true });
-    if (error || !data || !data.length) return;
-    data.forEach(remote => {
-      const mapped = {
-        id: remote.id,
-        client: remote.client,
-        date: remote.date,
-        time: remote.time || '',
-        dur: remote.dur || 0,
-        price: remote.price || 0,
-        deposit: remote.deposit || 0,
-        pts: remote.pts || 0,
-        zone: remote.zone || '',
-        desc: remote.appt_desc || remote.desc || '',
-        type: remote.type || 'tattoo',
-        status: remote.status || 'pending'
-      };
-      const local = appointments.find(l => l.id && String(l.id) === String(remote.id));
-      if (local) {
-        Object.assign(local, mapped);
-      } else {
-        appointments.push(mapped);
-      }
-    });
+    const { data, error } = await db.from(APPOINTMENTS_TABLE).select('*').order('date', { ascending: true });
+    if (error) throw error;
+    const remoteList = (data || []).map(remote => ({
+      id: remote.id,
+      client: String(remote.client || ''),
+      date: String(remote.date || today()),
+      time: String(remote.time || ''),
+      dur: +remote.dur || 0,
+      price: +remote.price || 0,
+      deposit: +remote.deposit || 0,
+      pts: +remote.pts || 0,
+      zone: String(remote.zone || ''),
+      desc: String(remote.appt_desc || remote.desc || ''),
+      type: String(remote.type || 'tattoo'),
+      status: String(remote.status || 'pending')
+    }));
+    appointments = remoteList;
+    appointmentsInitialized = true;
     localStorage.setItem('xg_appointments', JSON.stringify(appointments));
+    if (document.getElementById('s-calendar')?.classList.contains('on')) renderCal();
+    if (document.getElementById('s-home')?.classList.contains('on')) renderHome();
+    return true;
   } catch (e) {
-    // table may not exist yet — localStorage fallback is fine
+    console.error('[Supabase] load appointments failed:', e);
+    return false;
   }
 }
 async function syncApptToSupabase(appt, idx) {
@@ -1634,21 +1767,47 @@ async function syncApptToSupabase(appt, idx) {
       status: String(appt.status || 'pending')
     };
     if (appt.id) {
-      await db.from('appointments').update(row).eq('id', appt.id);
+      const { error } = await db.from(APPOINTMENTS_TABLE).update(row).eq('id', appt.id);
+      if (error) throw error;
     } else {
-      const { data, error } = await db.from('appointments').insert(row).select();
-      if (!error && data && data[0]) {
+      const { data, error } = await db.from(APPOINTMENTS_TABLE).insert(row).select();
+      if (error) throw error;
+      if (data && data[0]) {
         appointments[idx].id = data[0].id;
         localStorage.setItem('xg_appointments', JSON.stringify(appointments));
       }
     }
-  } catch (e) { /* silent fail */ }
+    return true;
+  } catch (e) {
+    console.error('[Supabase] sync appointment failed:', e);
+    return false;
+  }
 }
 async function deleteApptFromSupabase(appt) {
-  if (!appt || !appt.id) return;
+  if (!appt || !appt.id) return true;
   try {
-    await db.from('appointments').delete().eq('id', appt.id);
-  } catch (e) { /* silent fail */ }
+    const { error } = await db.from(APPOINTMENTS_TABLE).delete().eq('id', appt.id);
+    if (error) throw error;
+    return true;
+  } catch (e) {
+    console.error('[Supabase] delete appointment failed:', e);
+    return false;
+  }
+}
+
+function setupApptSync() {
+  if (apptSyncTimer) clearInterval(apptSyncTimer);
+  apptSyncTimer = setInterval(() => { loadApptsFromSupabase(); }, 15000);
+
+  if (apptRealtimeChannel) {
+    try { db.removeChannel(apptRealtimeChannel); } catch {}
+  }
+  apptRealtimeChannel = db
+    .channel('appointments-live-v2')
+    .on('postgres_changes', { event: '*', schema: 'public', table: APPOINTMENTS_TABLE }, () => {
+      loadApptsFromSupabase();
+    })
+    .subscribe();
 }
 
 // ════════════════════════════════════════════════════
@@ -1838,7 +1997,7 @@ function _fallbackCopy(text) {
         <button onclick="navMore('pageeditor')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><span>Editor</span></button>
         <button onclick="navMore('agenda')" class="more-btn"><div class="more-ic" style="background:var(--blue2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><span>Disponibilidad</span></button>
         <button onclick="navMore('email')" class="more-btn"><div class="more-ic" style="background:var(--green2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div><span>Confirmar Cita</span></button>
-        <button onclick="navMore('flash'" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>Flash del Mes</span></button>
+        <button onclick="navMore('flash')" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>Flash del Mes</span></button>
       </div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Negocio & Personal</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
