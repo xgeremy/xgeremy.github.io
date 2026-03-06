@@ -1,5 +1,8 @@
 // Configuración
 const DATA_URL = 'data.json';
+const SUPABASE_URL = 'https://lmopbyirrhhpluuussjf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj';
+let supabaseClient = null;
 
 // Datos en caché
 let clientsData = [];
@@ -7,8 +10,33 @@ let currentUser = null;
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', () => {
-    loadDataFromJSON();
+    initializeData();
+    setInterval(() => refreshDataSilently(), 15000);
 });
+
+async function initializeData() {
+    await loadClientData();
+}
+
+async function refreshDataSilently() {
+    const hadUser = !!currentUser;
+    const currentEmail = hadUser ? currentUser.email : null;
+    await loadClientData();
+    if (hadUser && currentEmail) {
+        const updated = clientsData.find(u => u.email.toLowerCase() === currentEmail.toLowerCase());
+        if (updated) {
+            currentUser = updated;
+            updateDashboard();
+        }
+    }
+}
+
+function getSupabaseClient() {
+    if (supabaseClient) return supabaseClient;
+    if (!window.supabase || typeof window.supabase.createClient !== 'function') return null;
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return supabaseClient;
+}
 
 // Login
 function loginUser() {
@@ -34,7 +62,7 @@ function loginUser() {
             nombre: email.split('@')[0],
             email: email,
             puntos: 0,
-            tier: 'Bronze',
+            tier: 'Novato',
             ultimoTatuaje: '—',
             montoCLP: 0
         };
@@ -186,8 +214,48 @@ async function loadDataFromJSON() {
     checkLogin();
 }
 
+async function loadDataFromSupabase() {
+    const db = getSupabaseClient();
+    if (!db) return false;
+
+    try {
+        const { data, error } = await db
+            .from('clientes')
+            .select('nombre,email,puntos,tier,ultimoTatuaje,montoCLP')
+            .order('puntos', { ascending: false });
+
+        if (error) throw error;
+        if (!Array.isArray(data)) return false;
+
+        clientsData = data.map(row => ({
+            nombre: row.nombre || '—',
+            email: (row.email || '').toLowerCase(),
+            puntos: parseInt(row.puntos) || 0,
+            tier: row.tier || 'Novato',
+            ultimoTatuaje: row.ultimoTatuaje || '—',
+            montoCLP: parseInt(row.montoCLP) || 0
+        })).filter(user => user.email);
+
+        console.log(`✅ ${clientsData.length} clientes cargados desde Supabase`);
+        return true;
+    } catch (error) {
+        console.error('Error cargando clientes desde Supabase:', error);
+        return false;
+    }
+}
+
+async function loadClientData() {
+    const loadedFromSupabase = await loadDataFromSupabase();
+    if (!loadedFromSupabase) {
+        await loadDataFromJSON();
+        return;
+    }
+    checkLogin();
+}
+
 // Check si hay sesión
 function checkLogin() {
+    if (currentUser) return;
     const savedEmail = localStorage.getItem('xgeremy_user_email');
     if (savedEmail && clientsData.length > 0) {
         document.getElementById('emailInput').value = savedEmail;
