@@ -7,6 +7,7 @@ let supabaseClient = null;
 // Datos en cache
 let clientsData = [];
 let currentUser = null;
+const MEDALS = ['🥇', '🥈', '🥉'];
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', () => {
@@ -153,6 +154,7 @@ function updateTierBadge(tier) {
 // Leaderboard
 function updateLeaderboard() {
     const leaderboard = document.getElementById('leaderboard');
+    if (!leaderboard) return;
     
     // Ordenar clientes por puntos
     const sorted = [...clientsData]
@@ -164,12 +166,14 @@ function updateLeaderboard() {
         return;
     }
 
-    leaderboard.innerHTML = sorted.map((cliente, index) => {
+    try {
+      leaderboard.innerHTML = sorted.map((cliente, index) => {
         const rankClass = index === 0 ? 'rank1' : index === 1 ? 'rank2' : 'rank3';
-        const symbol = index === 0 ? 'ðŸ¥‡' : index === 1 ? 'ðŸ¥ˆ' : 'ðŸ¥‰';
+        const symbol = MEDALS[index] || (index + 1);
         
         // Anonimizar nombre (solo inicial y apellido)
-        const nameParts = cliente.nombre.trim().split(' ');
+        const baseName = String(cliente?.nombre || '').trim() || 'Cliente';
+        const nameParts = baseName.split(' ');
         const displayName = nameParts.length > 1 
             ? nameParts[0].charAt(0) + '. ' + nameParts[nameParts.length - 1]
             : nameParts[0];
@@ -178,17 +182,29 @@ function updateLeaderboard() {
             <div class="leaderboard-item">
                 <div class="leaderboard-rank ${rankClass}">${symbol}</div>
                 <div class="leaderboard-name">${displayName}</div>
-                <div class="leaderboard-points">${cliente.puntos} pts</div>
+                <div class="leaderboard-points">${parseInt(cliente.puntos || 0)} pts</div>
             </div>
         `;
-    }).join('');
+      }).join('');
+    } catch (e) {
+      console.error('Error renderizando leaderboard:', e);
+      leaderboard.innerHTML = '<div class="empty-state"><p>No se pudo cargar el leaderboard</p></div>';
+    }
 }
 
 // Cargar datos desde JSON
 async function loadDataFromJSON() {
+    const urls = [DATA_URL, '/puntos/data.json'];
     try {
-        const response = await fetch(DATA_URL);
-        const data = await response.json();
+        let data = null;
+        for (const u of urls) {
+            try {
+                const response = await fetch(u, { cache: 'no-store' });
+                if (!response.ok) continue;
+                const parsed = await response.json();
+                if (Array.isArray(parsed)) { data = parsed; break; }
+            } catch {}
+        }
 
         if (Array.isArray(data) && data.length > 0) {
             clientsData = data.map(row => ({
@@ -200,13 +216,13 @@ async function loadDataFromJSON() {
                 montoCLP: parseInt(row.montoCLP) || 0
             })).filter(user => user.email);
 
-            console.log(`[OK] ${clientsData.length} clientes cargados desde data.json`);
+            console.log(`[OK] ${clientsData.length} clientes cargados desde JSON`);
         } else {
-            console.log('[WARN] No hay datos en data.json');
+            console.log('[WARN] No hay datos en JSON');
             clientsData = [];
         }
     } catch (error) {
-        console.error('Error cargando data.json:', error);
+        console.error('Error cargando JSON:', error);
         clientsData = [];
     }
 
