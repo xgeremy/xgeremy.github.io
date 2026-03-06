@@ -1021,7 +1021,7 @@ let avData=Array(7).fill(0),invFilter='all',txFilterVal='month',goalSeg='monthly
 let calDate=new Date(),calView='month',calSelected=today();
 let apptSyncTimer=null, apptRealtimeChannel=null, appointmentsInitialized=false;
 let sharedSyncTimer=null;
-const APPOINTMENTS_TABLE='appointments_v2';
+let APPOINTMENTS_TABLE='appointments_v2';
 const SESSIONS_TABLE='sessions_v2';
 const HABITS_TABLE='habits_v2';
 const GOALS_TABLE='goals_v2';
@@ -1038,6 +1038,7 @@ function dayLabel(iso){return['Do','Lu','Ma','Mi','Ju','Vi','Sa'][new Date(iso).
 function dayLabelShort(iso){return['D','L','M','M','J','V','S'][new Date(iso).getDay()];}
 function fdate(iso){if(!iso)return'—';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`;}
 function fdateShort(iso){if(!iso)return'—';const[y,mo,d]=iso.split('-');const ms=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];return`${+d} ${ms[+mo-1]}`;}
+function apptKey(a){return (a&&a.id)?`id:${a.id}`:`k:${a?.client||''}|${a?.date||''}|${a?.time||''}|${a?.zone||''}`;}
 const APPT_COLORS={tattoo:'var(--blue)',consulta:'var(--purple)',retoque:'var(--teal)',diseno:'var(--orange)',blocked:'var(--ink4)',otros:'var(--red)'};
 const APPT_LABELS={tattoo:'Tatuaje',consulta:'Consulta',retoque:'Retoque',diseno:'Diseño',blocked:'Bloqueado',otros:'Otros'};
 const STATUS_LABELS={pending:'Pendiente',confirmed:'Confirmada',done:'Completada',cancelled:'Cancelada'};
@@ -1128,6 +1129,7 @@ async function persistTx(){
 // ── BOOT ──
 async function boot(){
   initTheme();
+  await resolveAppointmentsTable();
   try{
     const{data:cd,error:ce}=await db.from('clientes').select('*').order('puntos',{ascending:false});
     if(!ce&&cd&&cd.length)clients=cd;
@@ -1149,6 +1151,16 @@ async function boot(){
   setupSharedSync();
   const qn=localStorage.getItem('xg_qn');if(qn){const el=document.getElementById('qnote');if(el)el.value=qn;}
   loadLBC();renderPE();renderCfg();initNotion();renderHome();loadGC();
+}
+
+async function resolveAppointmentsTable(){
+  try{
+    const t1=await db.from('appointments_v2').select('id').limit(1);
+    if(!t1.error){APPOINTMENTS_TABLE='appointments_v2';return;}
+    const t2=await db.from('appointments').select('id').limit(1);
+    if(!t2.error){APPOINTMENTS_TABLE='appointments';return;}
+  }catch{}
+  APPOINTMENTS_TABLE='appointments_v2';
 }
 
 async function loadSharedFromSupabase(){
@@ -1723,6 +1735,7 @@ function openSessionFromAppt(apptIdx) {
 // ════════════════════════════════════════════════════
 async function loadApptsFromSupabase() {
   try {
+    const localBefore=Array.isArray(appointments)?appointments:[];
     const { data, error } = await db.from(APPOINTMENTS_TABLE).select('*').order('date', { ascending: true });
     if (error) throw error;
     const remoteList = (data || []).map(remote => ({
@@ -1739,7 +1752,10 @@ async function loadApptsFromSupabase() {
       type: String(remote.type || 'tattoo'),
       status: String(remote.status || 'pending')
     }));
-    appointments = remoteList;
+    // Keep locally created items if remote is temporarily behind/failing policy.
+    const remoteKeys=new Set(remoteList.map(apptKey));
+    const keepLocal=localBefore.filter(a=>!remoteKeys.has(apptKey(a)));
+    appointments = [...remoteList, ...keepLocal];
     appointmentsInitialized = true;
     localStorage.setItem('xg_appointments', JSON.stringify(appointments));
     if (document.getElementById('s-calendar')?.classList.contains('on')) renderCal();
