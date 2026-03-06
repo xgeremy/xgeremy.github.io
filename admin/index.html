@@ -1905,6 +1905,12 @@ function renderInventory(){
       filtered=invItems.filter(i=>invStatus(i)===st);
     } else filtered=invItems.filter(i=>(i.cat||'otro')===invFilter);
   }
+  filtered=[...filtered].sort((a,b)=>{
+    const al=(a.cat==='liquidos')?1:0;
+    const bl=(b.cat==='liquidos')?1:0;
+    if(al!==bl)return al-bl;
+    return String(a.name||'').localeCompare(String(b.name||''),'es',{sensitivity:'base'});
+  });
   const tb=document.getElementById('inv-tbody');if(!tb)return;
   tb.innerHTML=filtered.map(item=>{const ri=invItems.indexOf(item);return`<tr><td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div></td><td>${invStockCell(item,ri)}</td><td>${invBadge(item)}</td><td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td></tr>`;}).join('');
 }
