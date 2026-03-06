@@ -310,6 +310,11 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 .liq-ring{--pct:0;--sz:18px;width:var(--sz);height:var(--sz);border-radius:50%;background:
   conic-gradient(#3fd0a0 calc(var(--pct) * 1%), rgba(127,127,127,.22) 0);}
 .liq-ring::after{content:'';display:block;width:calc(var(--sz) - 5px);height:calc(var(--sz) - 5px);margin:2.5px;border-radius:50%;background:var(--bg2)}
+.pct-wrap{display:flex;align-items:center;gap:14px}
+.pct-v{width:34px;height:150px;display:flex;align-items:center;justify-content:center}
+.pct-v input[type=range]{-webkit-appearance:slider-vertical;appearance:slider-vertical;width:24px;height:140px;cursor:pointer}
+.pct-meta{display:flex;flex-direction:column;gap:6px}
+.pct-meta .pct-big{font-size:22px;font-weight:700}
 .inv-sub{font-size:12px;color:var(--ink3)}
 /* SESSIONS */
 .sess-item{padding:16px;border-bottom:1px solid var(--sep)}
@@ -1032,7 +1037,7 @@ html.ios-standalone textarea{font-size:16px !important}
     <div class="sht-head"><div class="sht-title" id="inv-sht-title">Nuevo ítem</div><button class="sht-close" onclick="closeSheet('inv-sht')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="sht-body">
       <div class="frow"><div class="fld"><div class="fld-lbl">Nombre *</div><input class="inp" id="im-name"></div><div class="fld"><div class="fld-lbl">Categoria</div><select class="inp" id="im-cat" onchange="onInvCatChange(this.value)"><option value="tintas">Tintas</option><option value="agujas">Agujas</option><option value="liquidos">Liquidos</option><option value="higiene">Higiene</option><option value="maquina">Maquina</option><option value="descartable">Descartable</option><option value="otro">Otro</option></select></div></div><div class="needle-sub" id="needle-sub"><div class="fld-lbl" style="margin-bottom:8px">Subcategoria de aguja</div><div class="needle-grid"><button type="button" class="needle-btn" id="nb-RM" onclick="selNeedle('RM')">RM</button><button type="button" class="needle-btn" id="nb-M1" onclick="selNeedle('M1')">M1</button><button type="button" class="needle-btn" id="nb-RS" onclick="selNeedle('RS')">RS</button><button type="button" class="needle-btn" id="nb-RL" onclick="selNeedle('RL')">RL</button></div><input type="hidden" id="im-needle" value=""></div>
-      <div class="needle-sub" id="liquid-sub"><div class="fld-lbl">Porcentaje restante</div><div class="frow"><div class="fld"><input class="inp" id="im-pct" type="number" min="0" max="100" value="100" oninput="updLiquidPct(this.value)"></div><div class="fld"><div class="liq-stock"><span class="liq-ring" id="im-pct-ring" style="--pct:100"></span><span id="im-pct-lbl">100%</span></div></div></div></div>
+      <div class="needle-sub" id="liquid-sub"><div class="fld-lbl">Porcentaje restante</div><div class="pct-wrap"><div class="pct-v"><input id="im-pct-bar" type="range" min="0" max="100" value="100" oninput="updLiquidPct(this.value)"></div><div class="pct-meta"><div class="liq-stock"><span class="liq-ring" id="im-pct-ring" style="--pct:100"></span><span class="pct-big" id="im-pct-lbl">100%</span></div><input class="inp" id="im-pct" type="number" min="0" max="100" value="100" oninput="updLiquidPct(this.value)" style="max-width:90px"></div></div></div>
       <div class="frow" id="inv-stock-row"><div class="fld"><div class="fld-lbl">Stock actual</div><div style="display:flex;align-items:center;gap:6px"><button type="button" class="pts-btn m" onclick="invEditAdjust(-1)">−</button><input class="inp" id="im-stock" type="number" value="0"><button type="button" class="pts-btn p" onclick="invEditAdjust(1)">+</button></div></div><div class="fld"><div class="fld-lbl">Stock minimo</div><input class="inp" id="im-min" type="number" value="1"></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Status</div><select class="inp" id="im-status"><option value="in_stock">In stock</option><option value="low_stock">Low stock</option><option value="out_of_stock">Out of stock</option><option value="ordered">Ordered</option></select></div><div class="fld"><div class="fld-lbl">Proveedor</div><input class="inp" id="im-prov"></div></div>
       <div class="fld"><div class="fld-lbl">Notas / Link</div><input class="inp" id="im-notes"></div>
@@ -1733,7 +1738,7 @@ function invCatLine(item){
   return `${base}${sub}${prov}`;
 }
 function invStockCell(item, ri){
-  if(item.cat==='liquidos'){
+  if(item.cat==='liquidos' || item.cat==='tintas'){
     const pct = Math.max(0, Math.min(100, +item.pct||0));
     return `<div class="liq-stock"><span class="liq-ring" style="--pct:${pct}"></span><strong>${pct}%</strong></div>`;
   }
@@ -1787,6 +1792,8 @@ function updLiquidPct(v){
   const pct=Math.max(0,Math.min(100,+v||0));
   const r=document.getElementById('im-pct-ring');if(r)r.style.setProperty('--pct',pct);
   const l=document.getElementById('im-pct-lbl');if(l)l.textContent=`${pct}%`;
+  const n=document.getElementById('im-pct');if(n&&String(n.value)!==String(pct))n.value=pct;
+  const b=document.getElementById('im-pct-bar');if(b&&String(b.value)!==String(pct))b.value=pct;
 }
 function editInvItem(idx){
   invEditIdx=idx;const item=invItems[idx];
@@ -1794,7 +1801,7 @@ function editInvItem(idx){
   document.getElementById('im-stock').value=item.stock||0;
   document.getElementById('im-min').value=item.min||1;
   document.getElementById('im-status').value=invStatus(item);
-  document.getElementById('im-pct').value=item.pct!=null?item.pct:(item.cat==='liquidos'?(+item.stock||0):100);
+  document.getElementById('im-pct').value=item.pct!=null?item.pct:((item.cat==='liquidos'||item.cat==='tintas')?(+item.stock||0):100);
   updLiquidPct(document.getElementById('im-pct').value);
   selectedNeedle = item.subcat || '';
   const ni = document.getElementById('im-needle'); if(ni) ni.value = selectedNeedle;
@@ -1811,8 +1818,8 @@ function saveInvItem(){
   if(!name){toast('Nombre requerido','err');return;}
   if(cat==='agujas' && !needle){toast('Selecciona subcategoria de aguja','err');return;}
   const pct=Math.max(0,Math.min(100,+document.getElementById('im-pct').value||0));
-  const stock=cat==='liquidos'?pct:(+document.getElementById('im-stock').value||0);
-  const min=cat==='liquidos'?20:(+document.getElementById('im-min').value||1);
+  const stock=(cat==='liquidos'||cat==='tintas')?pct:(+document.getElementById('im-stock').value||0);
+  const min=(cat==='liquidos'||cat==='tintas')?20:(+document.getElementById('im-min').value||1);
   const prev=invEditIdx>=0?invItems[invEditIdx]:null;
   const item={
     id:(prev&&prev.id)||Date.now(),
@@ -1820,7 +1827,7 @@ function saveInvItem(){
     cat,
     subcat:cat==='agujas'?needle:'',
     stock,
-    pct:cat==='liquidos'?pct:null,
+    pct:(cat==='liquidos'||cat==='tintas')?pct:null,
     min,
     status:document.getElementById('im-status').value||'in_stock',
     prov:(document.getElementById('im-prov').value||'').trim(),
@@ -1857,8 +1864,9 @@ function onInvCatChange(val) {
   const liquidSub = document.getElementById('liquid-sub');
   const stockRow = document.getElementById('inv-stock-row');
   if (needleSub) needleSub.classList.toggle('show', val === 'agujas');
-  if (liquidSub) liquidSub.classList.toggle('show', val === 'liquidos');
-  if (stockRow) stockRow.style.display = (val === 'liquidos') ? 'none' : 'grid';
+  const isPctCat = (val === 'liquidos' || val === 'tintas');
+  if (liquidSub) liquidSub.classList.toggle('show', isPctCat);
+  if (stockRow) stockRow.style.display = isPctCat ? 'none' : 'grid';
   if (val !== 'agujas') {
     selectedNeedle = '';
     document.querySelectorAll('.needle-btn').forEach(b => b.classList.remove('on'));
