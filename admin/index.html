@@ -24,6 +24,7 @@ if (window.navigator.standalone) {
   --bg:#F2F2F7;--bg2:#FFFFFF;--bg3:#F2F2F7;--bg4:#E5E5EA;--bg5:#D1D1D6;
   --sep:rgba(60,60,67,.12);--sep2:rgba(60,60,67,.22);
   --ink:#000;--ink2:rgba(60,60,67,.9);--ink3:rgba(60,60,67,.6);--ink4:rgba(60,60,67,.36);--ink5:rgba(60,60,67,.16);
+  --hero-bg:#111;--hero-fg:#fff;--hero-sub:rgba(255,255,255,.42);
   --blue:#007AFF;--blue2:rgba(0,122,255,.12);--blue3:rgba(0,122,255,.07);
   --green:#34C759;--green2:rgba(52,199,89,.12);
   --red:#FF3B30;--red2:rgba(255,59,48,.1);
@@ -44,6 +45,7 @@ if (window.navigator.standalone) {
   --bg:#000;--bg2:#1C1C1E;--bg3:#2C2C2E;--bg4:#3A3A3C;--bg5:#48484A;
   --sep:rgba(84,84,88,.5);--sep2:rgba(84,84,88,.75);
   --ink:#FFF;--ink2:rgba(235,235,245,.88);--ink3:rgba(235,235,245,.55);--ink4:rgba(235,235,245,.3);--ink5:rgba(235,235,245,.12);
+  --hero-bg:#101012;--hero-fg:#fff;--hero-sub:rgba(255,255,255,.5);
   --blue:#0A84FF;--blue2:rgba(10,132,255,.15);--blue3:rgba(10,132,255,.08);
   --green:#32D74B;--green2:rgba(50,215,75,.14);
   --red:#FF453A;--red2:rgba(255,69,58,.13);
@@ -142,10 +144,10 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 .ktile.hi .ktile-label,.ktile.hi .ktile-val,.ktile.hi .ktile-note{color:var(--bg)}
 .ktile.hi[data-theme="dark"]{background:var(--bg4)}
 /* HERO CARD */
-.hero{margin:0 16px 14px;border-radius:var(--r3);background:var(--ink);padding:24px 22px 20px;overflow:hidden;position:relative;transition:background .25s}
-.hero-label{font-size:11px;font-weight:500;color:rgba(255,255,255,.45);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
-.hero-val{font-size:42px;font-weight:200;letter-spacing:-.055em;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
-.hero-sub{font-size:13px;color:rgba(255,255,255,.4);margin-top:5px}
+.hero{margin:0 16px 14px;border-radius:var(--r3);background:var(--hero-bg);padding:24px 22px 20px;overflow:hidden;position:relative;transition:background .25s}
+.hero-label{font-size:11px;font-weight:500;color:var(--hero-sub);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.hero-val{font-size:42px;font-weight:200;letter-spacing:-.055em;color:var(--hero-fg);line-height:1;font-variant-numeric:tabular-nums}
+.hero-sub{font-size:13px;color:var(--hero-sub);margin-top:5px}
 .hero-stats{display:flex;gap:2px;margin-top:18px}
 .hstat{flex:1;background:rgba(255,255,255,.07);border-radius:10px;padding:11px 12px}
 .hstat-val{font-size:17px;font-weight:600;color:#fff;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
