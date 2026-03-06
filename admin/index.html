@@ -420,6 +420,24 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 .more-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
 .more-ic svg{width:18px;height:18px}
 
+
+.appt-type-otros{background:rgba(255,59,48,.1);border-left-color:var(--red)}
+.needle-sub{display:none;margin-top:10px}
+.needle-sub.show{display:block}
+.needle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.needle-btn{padding:8px 4px;border-radius:10px;border:1.5px solid var(--sep2);background:var(--bg3);font-size:12px;font-weight:600;color:var(--ink3);cursor:pointer;text-align:center;transition:all .15s}
+.needle-btn:hover{border-color:var(--blue);color:var(--blue)}
+.needle-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+/* EMAIL SCREEN */
+.email-preview{background:var(--bg2);border-radius:var(--r3);margin:0 16px 14px;overflow:hidden;border:1px solid var(--sep)}
+.email-from{padding:12px 16px;border-bottom:1px solid var(--sep);display:flex;align-items:center;gap:10px}
+.email-avatar{width:36px;height:36px;border-radius:50%;background:var(--ink);display:grid;place-items:center;font-size:14px;font-weight:700;color:var(--bg);flex-shrink:0}
+.email-meta{flex:1;min-width:0}
+.email-sender{font-size:14px;font-weight:600}
+.email-to{font-size:12px;color:var(--ink3)}
+.email-subject-bar{padding:10px 16px;border-bottom:1px solid var(--sep);font-size:13px;font-weight:600;color:var(--ink2)}
+.email-body-prev{padding:14px 16px;font-size:13px;line-height:1.8;color:var(--ink2);white-space:pre-wrap;max-height:320px;overflow-y:auto}
+
 </style>
 </head>
 <body>
@@ -447,6 +465,7 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
     <button class="nb" onclick="nav('pageeditor',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Editor</button>
     <button class="nb" onclick="nav('agenda',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>Disponibilidad</button>
     <button class="nb" onclick="nav('flash',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flash del Mes</button>
+    <button class="nb" onclick="nav('email',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>Confirmar Cita</button>
     <button class="nb" onclick="nav('seo',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>SEO</button>
     <div class="sd-sect">Negocio</div>
     <button class="nb" onclick="nav('habits',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>Hábitos</button>
@@ -539,6 +558,7 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
       <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block"></span>Retoque</span>
       <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--orange);display:inline-block"></span>Diseño</span>
       <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--ink4);display:inline-block"></span>Bloqueado</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>Otros</span>
     </div>
   </div>
   <!-- UPCOMING VIEW -->
@@ -601,7 +621,12 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 
 <!-- ══ SESSIONS ══ -->
 <div class="screen" id="s-sessions">
-  <div class="lth"><div class="lth-h"><div><div class="lth-title">Sesiones</div></div><button class="btn btn-p btn-sm" onclick="openSheet('session-sht')">Nueva</button></div></div>
+  <div class="lth"><div class="lth-h"><div><div class="lth-title">Sesiones</div><div class="lth-sub">Bitácora post-tatuaje</div></div><button class="btn btn-p btn-sm" onclick="openSheet('session-sht')">Nueva</button></div></div>
+  <!-- Linked appts quick picker -->
+  <div id="sess-appt-picker" style="display:none;margin:0 16px 12px">
+    <div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Vincular a cita completada</div>
+    <div id="sess-appt-list" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none"></div>
+  </div>
   <div class="kgrid">
     <div class="ktile"><div class="ktile-label">Sesiones</div><div class="ktile-val" id="tt-tot">0</div></div>
     <div class="ktile hi"><div class="ktile-label">Horas totales</div><div class="ktile-val" id="tt-hrs">0h</div></div>
@@ -796,6 +821,89 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
   </div>
 </div>
 
+
+<!-- ══ EMAIL ══ -->
+<div class="screen" id="s-email">
+  <div class="lth"><div class="lth-title">Confirmar Cita</div><div class="lth-sub">Genera y envía el email de confirmación</div></div>
+  
+  <!-- FORM -->
+  <div class="cg" style="padding:16px;margin:0 16px 14px">
+    <div class="fld">
+      <div class="fld-lbl">Cliente *</div>
+      <select class="inp" id="em-client" onchange="onEmailClientChange()">
+        <option value="">Seleccionar cliente...</option>
+      </select>
+    </div>
+    <div id="em-client-info" style="display:none;background:var(--blue3);border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid var(--blue2)">
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:3px">Cliente seleccionado</div>
+      <div style="font-size:15px;font-weight:600" id="em-ci-name">—</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:2px" id="em-ci-email">—</div>
+      <div style="display:flex;gap:12px;margin-top:8px">
+        <div><div style="font-size:11px;color:var(--ink4);text-transform:uppercase;letter-spacing:.04em">Puntos actuales</div><div style="font-size:16px;font-weight:700;color:var(--blue)" id="em-ci-pts">0</div></div>
+        <div><div style="font-size:11px;color:var(--ink4);text-transform:uppercase;letter-spacing:.04em">Tier</div><div style="font-size:16px;font-weight:700;color:var(--blue)" id="em-ci-tier">—</div></div>
+        <div><div style="font-size:11px;color:var(--ink4);text-transform:uppercase;letter-spacing:.04em">Puntos nuevos</div><div style="font-size:16px;font-weight:700;color:var(--green)" id="em-ci-newpts">+0</div></div>
+        <div><div style="font-size:11px;color:var(--ink4);text-transform:uppercase;letter-spacing:.04em">Tier nuevo</div><div style="font-size:16px;font-weight:700;color:var(--green)" id="em-ci-newtier">—</div></div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fld">
+        <div class="fld-lbl">Fecha de la cita</div>
+        <input class="inp" id="em-date" type="date" oninput="updateEmailPreview()">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Hora</div>
+        <input class="inp" id="em-time" type="time" value="10:00" oninput="updateEmailPreview()">
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fld">
+        <div class="fld-lbl">Monto (CLP)</div>
+        <input class="inp" id="em-amount" type="number" placeholder="80000" oninput="onEmailAmountChange()">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Zona / Estilo</div>
+        <input class="inp" id="em-zone" placeholder="Brazo · Blackwork" oninput="updateEmailPreview()">
+      </div>
+    </div>
+    <!-- DEPOSIT TOGGLE -->
+    <div style="background:var(--bg3);border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-size:15px;font-weight:600">Abono / Seña</div>
+          <div style="font-size:12px;color:var(--ink3);margin-top:2px" id="em-deposit-status-lbl">No recibido — se solicitará en el email</div>
+        </div>
+        <label class="tgl"><input type="checkbox" id="em-deposit-paid" onchange="onDepositChange()"><div class="tgl-track"></div></label>
+      </div>
+      <div id="em-deposit-amount-wrap" style="display:none">
+        <input class="inp" id="em-deposit-amount" type="number" placeholder="Monto de la seña (CLP)" oninput="updateEmailPreview()">
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL PREVIEW -->
+  <div style="padding:0 16px 8px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Vista previa del email</div></div>
+  <div class="email-preview">
+    <div class="email-from">
+      <div class="email-avatar">G</div>
+      <div class="email-meta">
+        <div class="email-sender">Geremy Monsalve · XGEREMY</div>
+        <div class="email-to">Para: <span id="em-prev-to">cliente@email.com</span></div>
+      </div>
+    </div>
+    <div class="email-subject-bar" id="em-prev-subj">Confirmación de tu sesión de tatuaje - XGEREMY</div>
+    <div class="email-body-prev" id="em-prev-body">Selecciona un cliente para generar el email...</div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div style="padding:0 16px 24px;display:flex;flex-direction:column;gap:8px">
+    <button class="btn btn-p btn-full" onclick="sendEmailGmail()" id="em-send-btn" style="gap:8px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Abrir en Gmail
+    </button>
+    <button class="btn btn-s btn-full" onclick="copyEmailBody()">Copiar texto del email</button>
+  </div>
+</div>
+
   </div><!-- /ca -->
 
   <!-- BOTTOM TAB BAR -->
@@ -817,7 +925,8 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
     <div class="sht-handle"></div>
     <div class="sht-head"><div class="sht-title" id="appt-sht-title">Nueva cita</div><button class="sht-close" onclick="closeSheet('appt-sht')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="sht-body">
-      <div class="frow"><div class="fld"><div class="fld-lbl">Cliente *</div><input class="inp" id="ap-client" placeholder="Nombre" list="ap-client-list"><datalist id="ap-client-list"></datalist></div><div class="fld"><div class="fld-lbl">Tipo</div><select class="inp" id="ap-type"><option value="tattoo">Tatuaje</option><option value="consulta">Consulta</option><option value="retoque">Retoque</option><option value="diseno">Diseño</option><option value="blocked">Bloqueo</option></select></div></div>
+      <div class="frow"><div class="fld"><div class="fld-lbl">Cliente *</div><input class="inp" id="ap-client" placeholder="Nombre" list="ap-client-list"><datalist id="ap-client-list"></datalist></div><div class="fld"><div class="fld-lbl">Tipo</div><select class="inp" id="ap-type"><option value="tattoo">Tatuaje</option><option value="consulta">Consulta</option><option value="retoque">Retoque</option><option value="diseno">Diseño</option><option value="blocked">Bloqueo</option>
+              <option value="otros">Otros (Clases, etc.)</option></select></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Fecha *</div><input class="inp" id="ap-date" type="date"></div><div class="fld"><div class="fld-lbl">Hora</div><input class="inp" id="ap-time" type="time" value="10:00"></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Duración (hrs)</div><input class="inp" id="ap-dur" type="number" step="0.5" min="0.5" placeholder="3"></div><div class="fld"><div class="fld-lbl">Precio (CLP)</div><input class="inp" id="ap-price" type="number" placeholder="80000"></div></div>
       <div class="fld"><div class="fld-lbl">Zona / Estilo</div><input class="inp" id="ap-zone" placeholder="Ej: Brazo · Blackwork"></div>
@@ -868,6 +977,13 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
     <div class="sht-handle"></div>
     <div class="sht-head"><div class="sht-title" id="sess-sht-title">Nueva sesión</div><button class="sht-close" onclick="closeSheet('session-sht')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="sht-body">
+      <!-- Link to calendar appointment -->
+      <div class="fld" id="sm-appt-link-wrap" style="margin-bottom:14px">
+        <div class="fld-lbl">Vincular a cita del calendario <span style="color:var(--ink4);font-weight:400">(opcional)</span></div>
+        <select class="inp" id="sm-appt-link" onchange="onSessApptLink()">
+          <option value="">Sin vincular</option>
+        </select>
+      </div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Cliente *</div><input class="inp" id="sm-client" list="sm-cl-list"><datalist id="sm-cl-list"></datalist></div><div class="fld"><div class="fld-lbl">Fecha</div><input class="inp" id="sm-date" type="date"></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Horas</div><input class="inp" id="sm-hours" type="number" step="0.5" min="0.5"></div><div class="fld"><div class="fld-lbl">Precio (CLP)</div><input class="inp" id="sm-price" type="number"></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Estilo</div><select class="inp" id="sm-style"><option>Blackwork</option><option>Dotwork</option><option>Fine Line</option><option>Tradicional</option><option>Realismo</option><option>Lettering</option><option>Geometría</option><option>Otro</option></select></div><div class="fld"><div class="fld-lbl">Zona</div><input class="inp" id="sm-zone"></div></div>
@@ -930,7 +1046,17 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
     <div class="sht-handle"></div>
     <div class="sht-head"><div class="sht-title" id="inv-sht-title">Nuevo ítem</div><button class="sht-close" onclick="closeSheet('inv-sht')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="sht-body">
-      <div class="frow"><div class="fld"><div class="fld-lbl">Nombre *</div><input class="inp" id="im-name"></div><div class="fld"><div class="fld-lbl">Categoría</div><select class="inp" id="im-cat"><option value="tintas">Tintas</option><option value="agujas">Agujas</option><option value="higiene">Higiene</option><option value="maquina">Máquina</option><option value="descartable">Descartable</option><option value="otro">Otro</option></select></div></div>
+      <div class="frow"><div class="fld"><div class="fld-lbl">Nombre *</div><input class="inp" id="im-name"></div><div class="fld"><div class="fld-lbl">Categoría</div><select class="inp" id="im-cat" onchange="onInvCatChange(this.value)"><option value="tintas">Tintas</option><option value="agujas">Agujas</option><option value="higiene">Higiene</option><option value="maquina">Máquina</option><option value="descartable">Descartable</option><option value="otro">Otro</option></select></div></div>
+      <div class="needle-sub" id="needle-sub">
+        <div class="fld-lbl" style="margin-bottom:8px">Tipo de aguja</div>
+        <div class="needle-grid">
+          <button class="needle-btn" id="nb-RM" onclick="selNeedle('RM')">RM</button>
+          <button class="needle-btn" id="nb-M1" onclick="selNeedle('M1')">M1</button>
+          <button class="needle-btn" id="nb-RS" onclick="selNeedle('RS')">RS</button>
+          <button class="needle-btn" id="nb-RL" onclick="selNeedle('RL')">RL</button>
+        </div>
+        <input type="hidden" id="im-needle" value="">
+      </div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Stock actual</div><input class="inp" id="im-stock" type="number" value="0"></div><div class="fld"><div class="fld-lbl">Stock mínimo</div><input class="inp" id="im-min" type="number" value="1"></div></div>
       <div class="frow"><div class="fld"><div class="fld-lbl">Unidad</div><input class="inp" id="im-unit" placeholder="unid, ml..."></div><div class="fld"><div class="fld-lbl">Proveedor</div><input class="inp" id="im-prov"></div></div>
       <div class="fld"><div class="fld-lbl">Notas / Link</div><input class="inp" id="im-notes"></div>
@@ -969,8 +1095,8 @@ function dayLabel(iso){return['Do','Lu','Ma','Mi','Ju','Vi','Sa'][new Date(iso).
 function dayLabelShort(iso){return['D','L','M','M','J','V','S'][new Date(iso).getDay()];}
 function fdate(iso){if(!iso)return'—';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`;}
 function fdateShort(iso){if(!iso)return'—';const[y,mo,d]=iso.split('-');const ms=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];return`${+d} ${ms[+mo-1]}`;}
-const APPT_COLORS={tattoo:'var(--blue)',consulta:'var(--purple)',retoque:'var(--teal)',diseno:'var(--orange)',blocked:'var(--ink4)'};
-const APPT_LABELS={tattoo:'Tatuaje',consulta:'Consulta',retoque:'Retoque',diseno:'Diseño',blocked:'Bloqueado'};
+const APPT_COLORS={tattoo:'var(--blue)',consulta:'var(--purple)',retoque:'var(--teal)',diseno:'var(--orange)',blocked:'var(--ink4)',otros:'var(--red)'};
+const APPT_LABELS={tattoo:'Tatuaje',consulta:'Consulta',retoque:'Retoque',diseno:'Diseño',blocked:'Bloqueado',otros:'Otros'};
 const STATUS_LABELS={pending:'Pendiente',confirmed:'Confirmada',done:'Completada',cancelled:'Cancelada'};
 const STATUS_BADGE={pending:'bdg-orange',confirmed:'bdg-blue',done:'bdg-green',cancelled:'bdg-red'};
 
@@ -1016,8 +1142,8 @@ function openApptSheet(){
 function toast(msg,type='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+(type==='err'?'err':'ok');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='toast',3000);}
 
 // ── NAV ──
-const TITLES={home:'Resumen',calendar:'Calendario',analytics:'Analíticas',crm:'Clientes',points:'Puntos & Tiers',leaderboard:'Leaderboard',sessions:'Sesiones',pageeditor:'Editor',agenda:'Disponibilidad',flash:'Flash del Mes',seo:'SEO',habits:'Hábitos',goals:'Objetivos',inventory:'Inventario',finance:'Finanzas',notes:'Notas',config:'Configuración'};
-const RENDERS={home:renderHome,calendar:renderCal,analytics:loadGC,crm:()=>renderCRM(clients),points:renderPoints,leaderboard:renderLB,sessions:renderSessions,pageeditor:renderPE,agenda:renderAv,flash:renderFlash,habits:renderHabits,goals:renderGoals,inventory:renderInventory,finance:renderFinance,notes:renderNotion,config:renderCfg};
+const TITLES={home:'Resumen',calendar:'Calendario',analytics:'Analíticas',crm:'Clientes',points:'Puntos & Tiers',leaderboard:'Leaderboard',sessions:'Sesiones',pageeditor:'Editor',agenda:'Disponibilidad',flash:'Flash del Mes',seo:'SEO',habits:'Hábitos',goals:'Objetivos',inventory:'Inventario',finance:'Finanzas',notes:'Notas',config:'Configuración',email:'Confirmar Cita'};
+const RENDERS={home:renderHome,email:renderEmailScreen,calendar:renderCal,analytics:loadGC,crm:()=>renderCRM(clients),points:renderPoints,leaderboard:renderLB,sessions:renderSessions,pageeditor:renderPE,agenda:renderAv,flash:renderFlash,habits:renderHabits,goals:renderGoals,inventory:renderInventory,finance:renderFinance,notes:renderNotion,config:renderCfg};
 function nav(id,el){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   const sc=document.getElementById('s-'+id);if(sc)sc.classList.add('on');
@@ -1059,6 +1185,21 @@ async function boot(){
   invItems=JSON.parse(localStorage.getItem('xg_inventory')||'[]');
   sessions=JSON.parse(localStorage.getItem('xg_sessions')||'[]');
   appointments=JSON.parse(localStorage.getItem('xg_appointments')||'[]');
+  await loadApptsFromSupabase();
+  // Load appointments from Supabase for cross-device sync
+  try{
+    const{data:ad,error:ae}=await db.from('appointments').select('*').order('date',{ascending:true});
+    if(!ae&&ad&&ad.length){
+      appointments=ad.map(a=>({...a}));
+      localStorage.setItem('xg_appointments',JSON.stringify(appointments));
+  // Sync to Supabase - cross device for cross-device access
+  try{
+    const row={client:a.client,date:a.date,time:a.time||'',dur:a.dur||0,price:a.price||0,deposit:a.deposit||0,pts:a.pts||0,zone:a.zone||'',desc:a.desc||'',type:a.type||'tattoo',status:a.status||'pending'};
+    if(apptEditIdx>=0&&appointments[apptEditIdx]&&appointments[apptEditIdx].id){await db.from('appointments').update(row).eq('id',appointments[apptEditIdx].id);}
+    else{const{data}=await db.from('appointments').insert(row).select();if(data&&data[0]){appointments[apptEditIdx>=0?apptEditIdx:appointments.length-1].id=data[0].id;localStorage.setItem('xg_appointments',JSON.stringify(appointments));}}
+  }catch{}
+    }
+  }catch{}
   const qn=localStorage.getItem('xg_qn');if(qn){const el=document.getElementById('qnote');if(el)el.value=qn;}
   loadLBC();renderPE();renderCfg();initNotion();renderHome();loadGC();
 }
@@ -1249,8 +1390,10 @@ async function saveAppt(){
 function deleteAppt(){
   if(apptEditIdx<0)return;
   if(!confirm('Eliminar cita?'))return;
+  const toDelete=appointments[apptEditIdx];
   appointments.splice(apptEditIdx,1);
   localStorage.setItem('xg_appointments',JSON.stringify(appointments));
+  await deleteApptFromSupabase(toDelete);
   closeSheet('appt-sht');renderCal();renderHome();toast('Cita eliminada');
 }
 function renderUpcoming(){
@@ -1289,7 +1432,52 @@ function tglLBV(email,show){let h=JSON.parse(localStorage.getItem('xg_lb_hidden'
 // ── SESSIONS ──
 function initStars(){document.querySelectorAll('#sm-stars .star').forEach(s=>{s.addEventListener('click',()=>setRating(+s.dataset.v));});}
 function setRating(v){curRating=v;document.querySelectorAll('#sm-stars .star').forEach(s=>{s.className='star '+(+s.dataset.v<=v?'on':'off');});const lbl=document.getElementById('sm-rat-lbl');if(lbl)lbl.textContent=v+'/5';}
+
+function openSessionFromAppt(apptIdx) {
+  const a = appointments[apptIdx];
+  if (!a) return;
+  sessEditIdx = -1;
+  ['sm-zone','sm-desc','sm-improve'].forEach(id => { const e = document.getElementById(id); if(e) e.value = ''; });
+  const clientEl = document.getElementById('sm-client');
+  const dateEl = document.getElementById('sm-date');
+  const priceEl = document.getElementById('sm-price');
+  const zoneEl = document.getElementById('sm-zone');
+  const snEl = document.getElementById('sm-sessnum');
+  if (clientEl) clientEl.value = a.client || '';
+  if (dateEl) dateEl.value = a.date || today();
+  if (priceEl) priceEl.value = a.price || '';
+  if (zoneEl) zoneEl.value = a.zone || '';
+  if (snEl) snEl.value = 1;
+  document.getElementById('sm-hours').value = a.dur || '';
+  document.getElementById('sm-pts').value = a.pts || 0;
+  populateSessApptLink(a.id || String(apptIdx));
+  const dl = document.getElementById('sm-cl-list');
+  if (dl) dl.innerHTML = clients.map(c => `<option value="${c.nombre}">`).join('');
+  setRating(3);
+  document.getElementById('sess-sht-title').textContent = 'Nueva bitácora · ' + a.client;
+  document.getElementById('sess-del-btn').style.display = 'none';
+  openSheet('session-sht');
+}
+
 function renderSessions(){
+  // Show completed appts quick picker
+  const picker = document.getElementById('sess-appt-picker');
+  const pickerList = document.getElementById('sess-appt-list');
+  const now = new Date(); now.setDate(now.getDate()-90);
+  const cutoff = now.toISOString().slice(0,10);
+  const recent = appointments.filter(a=>a.date>=cutoff&&a.type==='tattoo'&&a.status==='done').sort((a,b)=>b.date.localeCompare(a.date));
+  if(picker) picker.style.display = recent.length ? 'block' : 'none';
+  if(pickerList && recent.length) {
+    pickerList.innerHTML = recent.slice(0,8).map(a=>{
+      const ri=appointments.indexOf(a);
+      const hasSession=sessions.some(s=>s.apptId&&(String(s.apptId)===String(a.id)||String(s.apptId)===String(ri)));
+      return `<button onclick="openSessionFromAppt(${ri})" style="flex-shrink:0;background:${hasSession?'var(--green2)':'var(--blue2)'};border:1.5px solid ${hasSession?'var(--green)':'var(--blue)'};border-radius:12px;padding:10px 14px;cursor:pointer;text-align:left;min-width:150px;transition:all .15s">
+        <div style="font-size:12px;font-weight:700;color:${hasSession?'var(--green)':'var(--blue)'};">${fdate(a.date)}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink);margin-top:2px">${a.client}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:1px">${hasSession?'✓ Con bitácora':'+ Agregar bitácora'}</div>
+      </button>`;
+    }).join('');
+  }
   const q=(document.getElementById('sess-q')||{}).value||'';
   const filtered=sessions.filter(s=>!q||s.client.toLowerCase().includes(q.toLowerCase()));
   const totalH=sessions.reduce((s,ss)=>s+(+ss.hours||0),0);
@@ -1298,7 +1486,7 @@ function renderSessions(){
   [['tt-tot',sessions.length],['tt-hrs',totalH.toFixed(1)+'h'],['tt-avg',avgH.toFixed(1)+'h'],['tt-rat',avgR?avgR.toFixed(1)+'★':'—']].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
   const el=document.getElementById('sessions-list');if(!el)return;
   if(!filtered.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="empty-t">Sin sesiones</div></div>`;return;}
-  el.innerHTML=[...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(s=>{const ri=sessions.indexOf(s);const stars='★'.repeat(+s.rating||0)+'☆'.repeat(5-(+s.rating||0));return`<div class="sess-item"><div class="sess-head"><div><div class="sess-client">${s.client}</div><div class="sess-date">${fdate(s.date)} · Sesión #${s.sessnum||1}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="letter-spacing:-1px;color:var(--gold);font-size:14px">${stars}</span><button class="btn btn-s btn-xs" onclick="editSession(${ri})">Editar</button></div></div><div class="sess-tags">${[s.style&&`<span class="bdg bdg-neutral">${s.style}</span>`,s.zone&&`<span class="bdg bdg-blue">${s.zone}</span>`,s.hours&&`<span class="bdg bdg-green">${s.hours}h</span>`,s.price&&`<span class="bdg bdg-gold">${fclp(s.price)}</span>`].filter(Boolean).join('')}</div>${s.desc?`<div style="font-size:13px;color:var(--ink2)">${s.desc}</div>`:''} ${s.improve?`<div class="sess-notes"><span style="color:var(--orange);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em">Por mejorar: </span>${s.improve}</div>`:''}</div>`;}).join('');
+  el.innerHTML=[...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(s=>{const ri=sessions.indexOf(s);const stars='★'.repeat(+s.rating||0)+'☆'.repeat(5-(+s.rating||0));const linkedAppt=s.apptId?appointments.find(a=>a.id===s.apptId||String(appointments.indexOf(a))===String(s.apptId)):null;return`<div class="sess-item"><div class="sess-head"><div><div class="sess-client">${s.client}</div><div class="sess-date">${fdate(s.date)} · Sesión #${s.sessnum||1}${linkedAppt?` · <span style="color:var(--blue)">Vinculada al calendario</span>`:''}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="letter-spacing:-1px;color:var(--gold);font-size:14px">${stars}</span><button class="btn btn-s btn-xs" onclick="editSession(${ri})">Editar</button></div></div><div class="sess-tags">${[s.style&&`<span class="bdg bdg-neutral">${s.style}</span>`,s.zone&&`<span class="bdg bdg-blue">${s.zone}</span>`,s.hours&&`<span class="bdg bdg-green">${s.hours}h</span>`,s.price&&`<span class="bdg bdg-gold">${fclp(s.price)}</span>`].filter(Boolean).join('')}</div>${s.desc?`<div style="font-size:13px;color:var(--ink2)">${s.desc}</div>`:''} ${s.improve?`<div class="sess-notes"><span style="color:var(--orange);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em">Por mejorar: </span>${s.improve}</div>`:''}</div>`;}).join('');
 }
 function editSession(idx){sessEditIdx=idx;const s=sessions[idx];['sm-client','sm-zone','sm-desc','sm-improve'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=[s.client,s.zone,s.desc,s.improve][i]||'';});document.getElementById('sm-date').value=s.date||today();document.getElementById('sm-hours').value=s.hours||'';document.getElementById('sm-price').value=s.price||'';document.getElementById('sm-sessnum').value=s.sessnum||1;document.getElementById('sm-pts').value=s.pts||0;const ss=document.getElementById('sm-style');if(ss)ss.value=s.style||'Blackwork';setRating(+s.rating||3);document.getElementById('sess-sht-title').textContent='Editar sesión';document.getElementById('sess-del-btn').style.display='flex';const dl=document.getElementById('sm-cl-list');if(dl)dl.innerHTML=clients.map(c=>`<option value="${c.nombre}">`).join('');openSheet('session-sht');}
 async function saveSession(){const client=(document.getElementById('sm-client').value||'').trim();if(!client){toast('Cliente requerido','err');return;}const pts=+document.getElementById('sm-pts').value||0;const price=+document.getElementById('sm-price').value||0;const s={client,date:(document.getElementById('sm-date').value||today()),hours:+document.getElementById('sm-hours').value||0,price,style:document.getElementById('sm-style').value||'Blackwork',zone:(document.getElementById('sm-zone').value||'').trim(),sessnum:+document.getElementById('sm-sessnum').value||1,pts,desc:(document.getElementById('sm-desc').value||'').trim(),improve:(document.getElementById('sm-improve').value||'').trim(),rating:curRating};const isNew=sessEditIdx<0;if(sessEditIdx>=0)sessions[sessEditIdx]=s;else sessions.push(s);localStorage.setItem('xg_sessions',JSON.stringify(sessions));// Auto-sum points and income
@@ -1408,6 +1596,348 @@ function deleteInvItem(){if(invEditIdx<0)return;if(!confirm('Eliminar?'))return;
 function openMoreSheet(){openSheet('more-sht');}
 function navMore(id){closeSheet('more-sht');nav(id);}
 
+// ════════════════════════════════════════════════════════
+// NEEDLE SUBCATEGORY (inventory)
+// ════════════════════════════════════════════════════════
+let selectedNeedle = '';
+function onInvCatChange(val) {
+  const sub = document.getElementById('needle-sub');
+  if (sub) {
+    sub.classList.toggle('show', val === 'agujas');
+    if (val !== 'agujas') { selectedNeedle = ''; document.getElementById('im-needle').value = ''; document.querySelectorAll('.needle-btn').forEach(b => b.classList.remove('on')); }
+  }
+}
+function selNeedle(type) {
+  selectedNeedle = type;
+  document.getElementById('im-needle').value = type;
+  document.querySelectorAll('.needle-btn').forEach(b => b.classList.toggle('on', b.id === 'nb-' + type));
+}
+// Patch saveInvItem to include needle type in name
+const _origSaveInvItem = saveInvItem;
+window.saveInvItem = function() {
+  const cat = (document.getElementById('im-cat') || {}).value;
+  if (cat === 'agujas' && selectedNeedle) {
+    const nameEl = document.getElementById('im-name');
+    if (nameEl && nameEl.value && !nameEl.value.includes(selectedNeedle)) nameEl.value = nameEl.value + ' · ' + selectedNeedle;
+  }
+  _origSaveInvItem();
+};
+// Reset needle on sheet open
+const _origOpenSheet = window.openSheet;
+window.openSheet = function(id) {
+  if (id === 'inv-sht') {
+    selectedNeedle = '';
+    const sub = document.getElementById('needle-sub');
+    if (sub) sub.classList.remove('show');
+    document.querySelectorAll('.needle-btn').forEach(b => b.classList.remove('on'));
+    const ni = document.getElementById('im-needle');
+    if (ni) ni.value = '';
+  }
+  _origOpenSheet(id);
+};
+
+// ════════════════════════════════════════════════════════
+// SESSION ↔ CALENDAR LINK
+// ════════════════════════════════════════════════════════
+function populateSessApptLink(selectedId) {
+  const sel = document.getElementById('sm-appt-link');
+  if (!sel) return;
+  const now = new Date();
+  now.setDate(now.getDate() - 90);
+  const cutoff = now.toISOString().slice(0, 10);
+  const recent = appointments
+    .filter(a => a.date >= cutoff && a.type === 'tattoo' && a.status === 'done')
+    .sort((a, b) => b.date.localeCompare(a.date));
+  sel.innerHTML = '<option value="">Sin vincular</option>' +
+    recent.map((a, i) => {
+      const idx = appointments.indexOf(a);
+      const val = a.id || String(idx);
+      return `<option value="${val}" ${String(selectedId) === String(val) ? 'selected' : ''}>${fdate(a.date)} · ${a.client} · ${APPT_LABELS[a.type] || a.type}</option>`;
+    }).join('');
+}
+function onSessApptLink() {
+  const sel = document.getElementById('sm-appt-link');
+  if (!sel || !sel.value) return;
+  const appt = appointments.find(a => (a.id && String(a.id) === sel.value) || String(appointments.indexOf(a)) === sel.value);
+  if (!appt) return;
+  const clientEl = document.getElementById('sm-client');
+  const dateEl = document.getElementById('sm-date');
+  const priceEl = document.getElementById('sm-price');
+  const zoneEl = document.getElementById('sm-zone');
+  if (clientEl && appt.client) clientEl.value = appt.client;
+  if (dateEl && appt.date) dateEl.value = appt.date;
+  if (priceEl && appt.price) priceEl.value = appt.price;
+  if (zoneEl && appt.zone) zoneEl.value = appt.zone;
+}
+// Override openSheet for session to populate appt link
+const _openSheetB = window.openSheet;
+window.openSheet = function(id) {
+  _openSheetB(id);
+  if (id === 'session-sht') {
+    populateSessApptLink('');
+    const dl = document.getElementById('sm-cl-list');
+    if (dl) dl.innerHTML = clients.map(c => `<option value="${c.nombre}">`).join('');
+  }
+};
+// Override saveSession to store apptId
+const _origSaveSession = saveSession;
+window.saveSession = async function() {
+  const apptSel = document.getElementById('sm-appt-link');
+  const apptId = apptSel ? apptSel.value : '';
+  // We need to inject apptId into the session object BEFORE original save
+  // So we temporarily patch sessions array
+  const origPush = sessions.push.bind(sessions);
+  const patchPush = function(item) {
+    item.apptId = apptId || '';
+    return origPush(item);
+  };
+  sessions.push = patchPush;
+  await _origSaveSession();
+  sessions.push = origPush;
+};
+
+// ════════════════════════════════════════════════════════
+// EMAIL CONFIRMATION SCREEN
+// ════════════════════════════════════════════════════════
+function renderEmailScreen() {
+  // Populate client selector
+  const sel = document.getElementById('em-client');
+  if (sel) {
+    sel.innerHTML = '<option value="">Seleccionar cliente...</option>' +
+      clients.map((c, i) => `<option value="${i}">${c.nombre} · ${c.email}</option>`).join('');
+  }
+  // Set today's date
+  const dt = document.getElementById('em-date');
+  if (dt && !dt.value) dt.value = today();
+  updateEmailPreview();
+}
+
+function onEmailClientChange() {
+  const sel = document.getElementById('em-client');
+  const info = document.getElementById('em-client-info');
+  if (!sel || !sel.value) { if (info) info.style.display = 'none'; updateEmailPreview(); return; }
+  const c = clients[+sel.value];
+  if (!c) return;
+  if (info) info.style.display = 'block';
+  const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setTxt('em-ci-name', c.nombre);
+  setTxt('em-ci-email', c.email);
+  setTxt('em-ci-pts', c.puntos || 0);
+  setTxt('em-ci-tier', getTier(+c.puntos || 0));
+  onEmailAmountChange();
+  updateEmailPreview();
+}
+
+function onEmailAmountChange() {
+  const sel = document.getElementById('em-client');
+  if (!sel || !sel.value) return;
+  const c = clients[+sel.value];
+  if (!c) return;
+  const amount = +(document.getElementById('em-amount') || {}).value || 0;
+  const newPts = Math.floor(amount / 10000);
+  const totalPts = (+c.puntos || 0) + newPts;
+  const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setTxt('em-ci-newpts', '+' + newPts);
+  setTxt('em-ci-newtier', getTier(totalPts));
+  updateEmailPreview();
+}
+
+function onDepositChange() {
+  const paid = document.getElementById('em-deposit-paid');
+  const wrap = document.getElementById('em-deposit-amount-wrap');
+  const lbl = document.getElementById('em-deposit-status-lbl');
+  const isPaid = paid && paid.checked;
+  if (wrap) wrap.style.display = isPaid ? 'block' : 'none';
+  if (lbl) lbl.textContent = isPaid ? 'Recibido — monto de la seña:' : 'No recibido — se solicitará en el email';
+  updateEmailPreview();
+}
+
+function buildEmailBody(toClient) {
+  const sel = document.getElementById('em-client');
+  if (!sel || !sel.value) return toClient ? 'Selecciona un cliente para generar el email...' : '';
+  const c = clients[+sel.value];
+  if (!c) return '';
+  const amount = +(document.getElementById('em-amount') || {}).value || 0;
+  const newPts = Math.floor(amount / 10000);
+  const totalPts = (+c.puntos || 0) + newPts;
+  const tier = getTier(totalPts);
+  const dateRaw = (document.getElementById('em-date') || {}).value || today();
+  const time = (document.getElementById('em-time') || {}).value || '10:00';
+  const zone = (document.getElementById('em-zone') || {}).value || '';
+  const depositPaid = document.getElementById('em-deposit-paid') && document.getElementById('em-deposit-paid').checked;
+  const depositAmount = +(document.getElementById('em-deposit-amount') || {}).value || 0;
+  // Format date nicely
+  const [yr, mo, dd] = dateRaw.split('-');
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const dateFmt = `${+dd} de ${months[+mo-1]} de ${yr}`;
+
+  const depositSection = depositPaid
+    ? `Tu seña de ${fclp(depositAmount)} ha sido recibida correctamente. El saldo restante de ${fclp(Math.max(0, amount - depositAmount))} se cancela el día de la sesión.`
+    : `Para confirmar tu cita, te solicito una seña de $20.000 CLP mediante transferencia bancaria. Datos de pago: Banco BCI · RUT: 21.180.889-3 · Nombre: Geremy Monsalve · Email: geremymons@gmail.com. Una vez enviada, envíame el comprobante por WhatsApp.`;
+
+  if (toClient) {
+    return `Hola ${c.nombre.split(' ')[0]},
+
+Tu sesión de tatuaje ha sido confirmada exitosamente en mi calendario.
+
+DETALLES DE TU CITA:
+
+📅 Fecha: ${dateFmt}
+⏰ Hora: ${time}${zone ? `\n🎨 Zona / Estilo: ${zone}` : ''}${amount ? `\n💰 Monto: ${fclp(amount)}` : ''}
+
+ABONO / SEÑA:
+
+${depositSection}
+
+PRÓXIMOS PASOS:
+
+1. Revisa las recomendaciones de cuidado pre y post-tatuaje:
+   www.xgeremy.work/cuidados
+
+2. Asegúrate de:
+   - Estar bien descansado/a
+   - Comer algo ligero antes del procedimiento
+   - Usar ropa cómoda que permita acceso a la zona a tatuar
+
+SOBRE TU PROGRAMA DE PUNTOS:
+
+¡Buenas noticias! Ahora formas parte de nuestro sistema de fidelización.
+
+Cada tatuaje que te hagas genera puntos que puedes canjear por premios especiales:
+
+• 1 punto = $1.000 CLP en crédito
+• 150 puntos = Premio especial exclusivo
+• Gana puntos extra con misiones secundarias (redes sociales, referidos, etc.)
+
+INFORMACIÓN DE TU CUENTA:
+
+📊 Puntos acumulados: ${totalPts} puntos
+🎖️ Tier actual: ${tier}
+🔗 Accede a tu dashboard: www.xgeremy.work/puntos
+   (Ingresa con tu email: ${c.email})
+
+Si necesitas reprogramar o tienes dudas, contáctame antes de tu cita.
+
+Para cualquier consulta:
+WhatsApp: +56 9 3766 9973
+Email: geremymons@gmail.com
+
+Saludos,
+Geremy Monsalve
+XGEREMY™
+Be Different.`;
+  } else {
+    // Email to Geremy
+    return `NUEVA RESERVA REGISTRADA
+
+👤 Cliente: ${c.nombre}
+📧 Email: ${c.email}
+📅 Fecha: ${dateFmt}
+⏰ Hora: ${time}${zone ? `\n🎨 Zona: ${zone}` : ''}${amount ? `\n💰 Monto: ${fclp(amount)}` : ''}
+⭐ Puntos: +${newPts}
+🎖️ Tier: ${tier}
+${depositPaid ? `💵 Seña recibida: ${fclp(depositAmount)}` : '⚠️ Seña pendiente'}
+
+✅ Email enviado al cliente`;
+  }
+}
+
+function updateEmailPreview() {
+  const sel = document.getElementById('em-client');
+  const toEl = document.getElementById('em-prev-to');
+  const bodyEl = document.getElementById('em-prev-body');
+  const subjEl = document.getElementById('em-prev-subj');
+  if (!sel || !sel.value) {
+    if (toEl) toEl.textContent = 'cliente@email.com';
+    if (bodyEl) bodyEl.textContent = 'Selecciona un cliente para generar el email...';
+    return;
+  }
+  const c = clients[+sel.value];
+  if (!c) return;
+  if (toEl) toEl.textContent = c.email;
+  if (subjEl) subjEl.textContent = `Confirmación de tu sesión de tatuaje - XGEREMY`;
+  if (bodyEl) bodyEl.textContent = buildEmailBody(true);
+}
+
+function sendEmailGmail() {
+  const sel = document.getElementById('em-client');
+  if (!sel || !sel.value) { toast('Selecciona un cliente', 'err'); return; }
+  const c = clients[+sel.value];
+  if (!c || !c.email) { toast('El cliente no tiene email registrado', 'err'); return; }
+  const body = buildEmailBody(true);
+  const subject = 'Confirmación de tu sesión de tatuaje - XGEREMY';
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(c.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(gmailUrl, '_blank');
+  toast('Abriendo Gmail...');
+}
+
+function copyEmailBody() {
+  const body = buildEmailBody(true);
+  if (!body || body.includes('Selecciona')) { toast('Genera el email primero', 'err'); return; }
+  navigator.clipboard.writeText(body).then(() => toast('Texto copiado')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = body; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('Texto copiado');
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// SUPABASE APPOINTMENTS TABLE - graceful create attempt
+// ════════════════════════════════════════════════════════
+async function syncApptToSupabase(appt, idx) {
+  try {
+    const row = {
+      client: String(appt.client || ''),
+      date: String(appt.date || today()),
+      time: String(appt.time || ''),
+      dur: +appt.dur || 0,
+      price: +appt.price || 0,
+      deposit: +appt.deposit || 0,
+      pts: +appt.pts || 0,
+      zone: String(appt.zone || ''),
+      appt_desc: String(appt.desc || ''),
+      type: String(appt.type || 'tattoo'),
+      status: String(appt.status || 'pending')
+    };
+    if (appt.id) {
+      await db.from('appointments').update(row).eq('id', appt.id);
+    } else {
+      const { data, error } = await db.from('appointments').insert(row).select();
+      if (!error && data && data[0]) {
+        appointments[idx].id = data[0].id;
+        localStorage.setItem('xg_appointments', JSON.stringify(appointments));
+      }
+    }
+  } catch(e) {
+    // Table may not exist yet — save to localStorage only, that's fine
+  }
+}
+async function deleteApptFromSupabase(appt) {
+  try { if (appt && appt.id) await db.from('appointments').delete().eq('id', appt.id); } catch {}
+}
+async function loadApptsFromSupabase() {
+  try {
+    const { data, error } = await db.from('appointments').select('*').order('date', { ascending: true });
+    if (!error && data && data.length) {
+      // Merge Supabase data with local - Supabase wins for cross-device
+      const localIds = new Set(appointments.filter(a => a.id).map(a => String(a.id)));
+      const remoteIds = new Set(data.map(a => String(a.id)));
+      // Add any remote appts not in local
+      data.forEach(a => {
+        const local = appointments.find(l => l.id && String(l.id) === String(a.id));
+        if (local) {
+          // Update local with remote
+          Object.assign(local, { client: a.client, date: a.date, time: a.time, dur: a.dur, price: a.price, deposit: a.deposit, pts: a.pts, zone: a.zone, desc: a.appt_desc, type: a.type, status: a.status });
+        } else {
+          appointments.push({ id: a.id, client: a.client, date: a.date, time: a.time, dur: a.dur, price: a.price, deposit: a.deposit, pts: a.pts, zone: a.zone, desc: a.appt_desc, type: a.type, status: a.status });
+        }
+      });
+      localStorage.setItem('xg_appointments', JSON.stringify(appointments));
+    }
+  } catch(e) { /* table doesn't exist yet */ }
+}
+
 function logout(){sessionStorage.removeItem('xg_admin_sess');location.href='/admin/login.html';}
 document.addEventListener('DOMContentLoaded',()=>{initStars();const nb=document.getElementById('nbody');if(nb)nb.addEventListener('input',saveCurPage);});
 boot();
@@ -1438,6 +1968,7 @@ boot();
         <button onclick="navMore('pageeditor')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><span>Editor</span></button>
         <button onclick="navMore('agenda')" class="more-btn"><div class="more-ic" style="background:var(--blue2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><span>Disponibilidad</span></button>
         <button onclick="navMore('flash')" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>Flash del Mes</span></button>
+        <button onclick="navMore('email')" class="more-btn"><div class="more-ic" style="background:var(--green2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div><span>Confirmar Cita</span></button>
       </div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Negocio & Personal</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
