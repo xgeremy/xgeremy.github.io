@@ -1132,7 +1132,7 @@ let editClientIdx=-1,sessEditIdx=-1,invEditIdx=-1,goalEditIdx=-1,apptEditIdx=-1;
 let curRating=3,npages=[],curPg=0,svTimer=null,toastTimer=null;
 let avData=Array(7).fill(0),invFilter='all',txFilterVal='month',goalSeg='monthly';
 let adsPct=Math.max(0,Math.min(100,+(localStorage.getItem('xg_ads_pct')||15)));
-let adsOpen=((localStorage.getItem('xg_ads_open')||'1')==='1');
+let adsOpen=((localStorage.getItem('xg_ads_open')||'0')==='1');
 let calDate=new Date(),calView='month',calSelected=today();
 let apptSyncTimer=null, apptRealtimeChannel=null, appointmentsInitialized=false;
 let sharedSyncTimer=null;
@@ -1833,6 +1833,7 @@ function invFilterKey(item){
 }
 function invFilterLabel(key){
   if(key==='all') return 'Todos';
+  if(key==='status') return 'Status';
   return key.charAt(0).toUpperCase()+key.slice(1);
 }
 function invStatus(item){
@@ -1864,19 +1865,27 @@ function renderInventory(){
   const cats=[...new Set(invItems.map(i=>i.cat||'otro'))];
   [['inv-tot',invItems.length],['inv-low',low],['inv-empty',empty],['inv-cats',cats.length]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
   const cf=document.getElementById('inv-chips');
-  if(cf)cf.innerHTML=['all',...cats].map(c=>{
-    const on = invFilter===c || (c==='agujas' && String(invFilter||'').startsWith('agujas:'));
+  const chips=['all',...cats,'status'].filter((v,i,a)=>a.indexOf(v)===i);
+  if(cf)cf.innerHTML=chips.map(c=>{
+    const on = invFilter===c || (c==='agujas' && String(invFilter||'').startsWith('agujas:')) || (c==='status' && String(invFilter||'').startsWith('status:'));
     return `<button class="inv-chip ${on?'on':''}" onclick="setInvFilter('${c}')">${invFilterLabel(c)}</button>`;
   }).join('');
 
   const isNeedleScope = invFilter==='agujas' || String(invFilter||'').startsWith('agujas:');
+  const isStatusScope = invFilter==='status' || String(invFilter||'').startsWith('status:');
   const needleTypes=[...new Set(invItems.filter(i=>i.cat==='agujas'&&i.subcat).map(i=>i.subcat))];
+  const statusTypes=['in_stock','low_stock','out_of_stock'];
   const sub=document.getElementById('inv-subchips');
   if(sub){
     if(isNeedleScope && needleTypes.length){
       sub.style.display='flex';
       sub.innerHTML=[`<button class="inv-subchip ${invFilter==='agujas'?'on':''}" onclick="setInvFilter('agujas')">Todas</button>`,
         ...needleTypes.map(t=>`<button class="inv-subchip ${invFilter===`agujas:${t}`?'on':''}" onclick="setInvFilter('agujas:${t}')">${t}</button>`)
+      ].join('');
+    } else if(isStatusScope){
+      sub.style.display='flex';
+      sub.innerHTML=[`<button class="inv-subchip ${invFilter==='status'?'on':''}" onclick="setInvFilter('status')">Todos</button>`,
+        ...statusTypes.map(s=>`<button class="inv-subchip ${invFilter===`status:${s}`?'on':''}" onclick="setInvFilter('status:${s}')">${(INV_STATUS[s]||{}).label||s}</button>`)
       ].join('');
     } else {
       sub.style.display='none';
@@ -1890,6 +1899,10 @@ function renderInventory(){
     else if(String(invFilter).startsWith('agujas:')){
       const t=String(invFilter).split(':')[1]||'';
       filtered=invItems.filter(i=>i.cat==='agujas' && i.subcat===t);
+    } else if(invFilter==='status') filtered=invItems;
+    else if(String(invFilter).startsWith('status:')){
+      const st=String(invFilter).split(':')[1]||'';
+      filtered=invItems.filter(i=>invStatus(i)===st);
     } else filtered=invItems.filter(i=>(i.cat||'otro')===invFilter);
   }
   const tb=document.getElementById('inv-tbody');if(!tb)return;
