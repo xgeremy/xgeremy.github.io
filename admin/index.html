@@ -852,6 +852,7 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
   </div>
   <div style="padding:0 16px 32px;display:flex;flex-direction:column;gap:8px">
     <button class="btn btn-p btn-full" onclick="sendEmailGmail()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Abrir en Gmail</button>
+    <button class="btn btn-s btn-full" onclick="sendEmailMailto()">Abrir en Mail (respaldo)</button>
     <button class="btn btn-s btn-full" onclick="copyEmailBody()">Copiar texto del email</button>
   </div>
 </div>
@@ -1985,6 +1986,18 @@ function sendEmailGmail() {
     return;
   }
   window.location.href = mailtoUrl;
+  toast('Abriendo app de correo...');
+}
+function sendEmailMailto() {
+  const sel = document.getElementById('em-client');
+  if (!sel || !sel.value) { toast('Selecciona un cliente', 'err'); return; }
+  const c = clients[+sel.value];
+  if (!c || !c.email) { toast('Cliente sin email registrado', 'err'); return; }
+  const body = buildEmailBody();
+  const subject = 'ConfirmaciÃ³n de tu sesiÃ³n de tatuaje - XGEREMY';
+  const su = encodeURIComponent(subject);
+  const bo = encodeURIComponent(body);
+  window.location.href = `mailto:${c.email}?subject=${su}&body=${bo}`;
   toast('Abriendo app de correo...');
 }
 function copyEmailBody() {
