@@ -1,10 +1,10 @@
-// Configuración
+﻿// Configuracion
 const DATA_URL = 'data.json';
 const SUPABASE_URL = 'https://lmopbyirrhhpluuussjf.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj';
 let supabaseClient = null;
 
-// Datos en caché
+// Datos en cache
 let clientsData = [];
 let currentUser = null;
 
@@ -44,7 +44,7 @@ function loginUser() {
     const errorMsg = document.getElementById('errorMessage');
 
     if (!email || !isValidEmail(email)) {
-        errorMsg.textContent = 'Por favor ingresa un email válido';
+        errorMsg.textContent = 'Por favor ingresa un email valido';
         return;
     }
 
@@ -63,7 +63,7 @@ function loginUser() {
             email: email,
             puntos: 0,
             tier: 'Novato',
-            ultimoTatuaje: '—',
+            ultimoTatuaje: '-',
             montoCLP: 0
         };
     } else {
@@ -111,7 +111,7 @@ function updateDashboard() {
 
     // Progress Info
     document.getElementById('currentTierProgress').textContent = `${pointsEarned} / ${pointsForNextTier} puntos`;
-    document.getElementById('nextMilestone').textContent = `Próximo tier: ${nextTierInfo.tier}`;
+    document.getElementById('nextMilestone').textContent = `Proximo tier: ${nextTierInfo.tier}`;
 
     // CLP Needed (opcional, cambiar si lo deseas)
     document.getElementById('clpRemaining').textContent = `${pointsToGoal} puntos para ${nextTierInfo.tier}`;
@@ -120,7 +120,7 @@ function updateDashboard() {
     updateLeaderboard();
 }
 
-// Get tier según puntos
+// Get tier segun puntos
 function getTier(points) {
     points = parseInt(points) || 0;
     if (points >= 101) return 'Oro';
@@ -166,7 +166,7 @@ function updateLeaderboard() {
 
     leaderboard.innerHTML = sorted.map((cliente, index) => {
         const rankClass = index === 0 ? 'rank1' : index === 1 ? 'rank2' : 'rank3';
-        const symbol = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+        const symbol = index === 0 ? 'ðŸ¥‡' : index === 1 ? 'ðŸ¥ˆ' : 'ðŸ¥‰';
         
         // Anonimizar nombre (solo inicial y apellido)
         const nameParts = cliente.nombre.trim().split(' ');
@@ -192,17 +192,17 @@ async function loadDataFromJSON() {
 
         if (Array.isArray(data) && data.length > 0) {
             clientsData = data.map(row => ({
-                nombre: row.nombre || '—',
+                nombre: row.nombre || '-',
                 email: (row.email || '').toLowerCase(),
                 puntos: parseInt(row.puntos) || 0,
                 tier: row.tier || 'Bronze',
-                ultimoTatuaje: row.ultimoTatuaje || '—',
+                ultimoTatuaje: row.ultimoTatuaje || '-',
                 montoCLP: parseInt(row.montoCLP) || 0
             })).filter(user => user.email);
 
-            console.log(`✅ ${clientsData.length} clientes cargados desde data.json`);
+            console.log(`[OK] ${clientsData.length} clientes cargados desde data.json`);
         } else {
-            console.log('⚠️ No hay datos en data.json');
+            console.log('[WARN] No hay datos en data.json');
             clientsData = [];
         }
     } catch (error) {
@@ -210,7 +210,7 @@ async function loadDataFromJSON() {
         clientsData = [];
     }
 
-    // Verificar login después de cargar datos
+    // Verificar login despues de cargar datos
     checkLogin();
 }
 
@@ -228,15 +228,15 @@ async function loadDataFromSupabase() {
         if (!Array.isArray(data)) return false;
 
         clientsData = data.map(row => ({
-            nombre: row.nombre || '—',
+            nombre: row.nombre || '-',
             email: (row.email || '').toLowerCase(),
             puntos: parseInt(row.puntos) || 0,
             tier: row.tier || 'Novato',
-            ultimoTatuaje: row.ultimoTatuaje || '—',
+            ultimoTatuaje: row.ultimoTatuaje || '-',
             montoCLP: parseInt(row.montoCLP) || 0
         })).filter(user => user.email);
 
-        console.log(`✅ ${clientsData.length} clientes cargados desde Supabase`);
+        console.log(`[OK] ${clientsData.length} clientes cargados desde Supabase`);
         return true;
     } catch (error) {
         console.error('Error cargando clientes desde Supabase:', error);
@@ -253,7 +253,7 @@ async function loadClientData() {
     checkLogin();
 }
 
-// Check si hay sesión
+// Check si hay sesion
 function checkLogin() {
     if (currentUser) return;
     const savedEmail = localStorage.getItem('xgeremy_user_email');
@@ -287,3 +287,4 @@ function showSuccessMessage(msg) {
         msgEl.style.display = 'none';
     }, 3000);
 }
+
