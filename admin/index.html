@@ -89,7 +89,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 /* SCREEN AREA */
 .sw{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
 /* TOPBAR */
-.topbar{height:var(--topbh);padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-bottom:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
+.topbar{height:calc(var(--topbh) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 20px 0;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-bottom:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
 .tb-title{font-size:17px;font-weight:600;letter-spacing:-.025em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px}
 .tb-right{display:flex;align-items:center;gap:6px}
 .icon-btn{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:none;cursor:pointer;display:grid;place-items:center;color:var(--ink2);transition:all .15s;flex-shrink:0}
