@@ -27,8 +27,8 @@ async function refreshDataSilently() {
         const updated = clientsData.find(u => u.email.toLowerCase() === currentEmail.toLowerCase());
         if (updated) {
             currentUser = updated;
-            updateDashboard();
         }
+        updateDashboard();
     }
 }
 
@@ -241,7 +241,7 @@ async function loadDataFromSupabase() {
             .order('puntos', { ascending: false });
 
         if (error) throw error;
-        if (!Array.isArray(data)) return false;
+        if (!Array.isArray(data) || data.length === 0) return false;
 
         clientsData = data.map(row => ({
             nombre: row.nombre || '-',
@@ -266,6 +266,7 @@ async function loadClientData() {
         await loadDataFromJSON();
         return;
     }
+    if (currentUser) updateDashboard();
     checkLogin();
 }
 
