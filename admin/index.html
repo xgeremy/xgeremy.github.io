@@ -54,7 +54,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 ::selection{background:var(--blue2)}
 ::-webkit-scrollbar{width:0;height:0}
 /* SHELL */
-.app{display:flex;height:100vh;background:var(--bg)}
+.app{display:flex;min-height:100vh;height:100vh;height:100dvh;background:var(--bg)}
 /* SIDEBAR DESKTOP */
 .sdbar{width:var(--sdw);flex-shrink:0;background:var(--bg2);border-right:1px solid var(--sep);display:flex;flex-direction:column;height:100vh;transition:background .25s,border-color .25s}
 .sdbar-head{padding:22px 18px 14px;border-bottom:1px solid var(--sep)}
@@ -102,7 +102,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--i
 .screen.on{display:block;animation:sIn .2s var(--ease)}
 @keyframes sIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* BOTTOM TAB BAR */
-.tabbar{height:var(--tabh);padding:0 4px;padding-bottom:env(safe-area-inset-bottom,18px);display:flex;align-items:flex-start;justify-content:space-around;background:var(--bg2);border-top:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
+.tabbar{height:calc(var(--tabh) + env(safe-area-inset-bottom,0px));padding:0 4px calc(env(safe-area-inset-bottom,0px) + 2px);display:flex;align-items:flex-start;justify-content:space-around;background:var(--bg2);border-top:1px solid var(--sep);flex-shrink:0;transition:background .25s,border-color .25s}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 2px 0;cursor:pointer;border:none;background:none;color:var(--ink4);transition:color .15s;min-width:0}
 .tab.on{color:var(--blue)}
 .tab svg{width:23px;height:23px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--spring)}
@@ -410,8 +410,10 @@ textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
 .upcoming-mm{font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.04em}
 /* MOBILE */
 @media(max-width:640px){
+  :root{--tabh:68px}
   .sdbar{display:none}
   .tabbar{display:flex}
+  .tab{padding:8px 2px 0;gap:2px}
   .tb-title{font-size:15px}
   .tab-lbl{font-size:9px}
   .quick-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
