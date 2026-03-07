@@ -540,6 +540,74 @@ html.ios-standalone textarea{font-size:16px !important}
 .sc-add-check{display:flex;gap:6px;margin-top:6px}
 .sc-add-check input{flex:1}
 .sc-add-check button{padding:10px 14px;border-radius:12px;background:var(--bg3);border:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2)}
+
+/* ── NEEDLE CONSUMPTION IN SESSION ────────────────── */
+.sess-needle-add{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.sess-needle-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border-radius:12px;margin-bottom:5px;font-size:13px;border:1px solid var(--sep)}
+.sess-needle-name{flex:1;font-weight:500;color:var(--ink)}
+.sess-needle-qty{color:var(--blue);font-weight:700;font-size:14px}
+.sess-needle-rm{background:none;border:none;cursor:pointer;color:var(--ink4);font-size:18px;padding:0 4px;line-height:1;transition:color .15s}
+.sess-needle-rm:hover{color:var(--red)}
+
+/* ── MONTHLY PROJECTION BAR ────────────────────────── */
+.proj-card{padding:14px 16px;margin-bottom:0;border-radius:0}
+.proj-bar-wrap{margin:10px 0 6px}
+.proj-bar-track{height:10px;border-radius:99px;background:var(--bg3);overflow:visible;position:relative}
+.proj-bar-done{height:100%;border-radius:99px;background:var(--green);position:absolute;left:0;top:0;transition:width .6s var(--spring)}
+.proj-bar-proj{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue) 0%,var(--teal) 100%);opacity:.65;position:absolute;top:0;transition:width .6s var(--spring),left .6s var(--spring)}
+.proj-goal-line{position:absolute;top:-4px;width:2px;height:18px;background:var(--ink3);border-radius:99px;transform:translateX(-1px)}
+.proj-semaforo{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.proj-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);margin-top:4px}
+.proj-goal-inp{background:none;border:none;border-bottom:1px solid var(--sep2);width:80px;font-size:12px;font-family:var(--font);color:var(--ink2);text-align:right;padding:1px 2px;cursor:text}
+.proj-goal-inp:focus{outline:none;border-bottom-color:var(--blue)}
+
+/* ── WEEKLY SUMMARY CARD ───────────────────────────── */
+#home-week-sum{margin:0 16px 14px;border-radius:20px;background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1.5px solid var(--sep2);padding:16px;display:none}
+.wsum-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink4);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.wsum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wsum-tile{background:var(--bg2);border-radius:14px;padding:10px 13px}
+.wsum-tile-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink4);margin-bottom:3px}
+.wsum-tile-val{font-size:20px;font-weight:700;color:var(--ink);line-height:1.1}
+.wsum-tile-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+
+/* ── SOCIAL PUBLICATION CALENDAR ───────────────────── */
+.soc-tab-bar{display:flex;gap:6px;padding:0 16px 12px}
+.soc-tab{flex:1;padding:9px 0;border-radius:12px;font-size:13px;font-weight:600;border:none;cursor:pointer;background:var(--bg3);color:var(--ink3);transition:all .15s}
+.soc-tab.on{background:var(--blue);color:#fff}
+.soc-cal-wrap{padding:0 16px 32px}
+.soc-cal-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
+.soc-cal-hdr-d{text-align:center;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--ink4)}
+.soc-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.soc-cal-day{border-radius:10px;background:var(--bg2);display:flex;flex-direction:column;padding:4px 3px;min-height:52px;cursor:pointer;border:1.5px solid transparent;transition:border-color .15s}
+.soc-cal-day.today{border-color:var(--blue)}
+.soc-cal-day.gap-day{background:rgba(255,59,48,.07);border-color:rgba(255,59,48,.15)}
+.soc-cal-day.other-m{opacity:.35}
+.soc-cal-dn{font-size:11px;font-weight:600;color:var(--ink3);text-align:center;line-height:1.3}
+.soc-cal-day.today .soc-cal-dn{color:var(--blue)}
+.soc-cal-chip{border-radius:4px;font-size:8px;font-weight:700;padding:1px 4px;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:100%}
+.cal-dot-soc{background:var(--purple) !important}
+
+/* ── CORRELATION ───────────────────────────────────── */
+.corr-wrap{padding:0 16px 20px}
+.corr-legend{display:flex;gap:14px;margin-bottom:10px;font-size:11px;color:var(--ink3)}
+.corr-leg-item{display:flex;align-items:center;gap:5px}
+.corr-leg-dot{width:8px;height:8px;border-radius:50%}
+.corr-rows{display:flex;flex-direction:column;gap:8px}
+.corr-row{display:flex;align-items:center;gap:10px}
+.corr-wk{font-size:11px;color:var(--ink4);width:60px;flex-shrink:0;font-weight:600}
+.corr-bars{flex:1;display:flex;flex-direction:column;gap:3px}
+.corr-bar{height:7px;border-radius:99px;min-width:3px;transition:width .5s var(--spring)}
+.corr-b-appt{background:var(--blue)}
+.corr-b-post{background:var(--purple)}
+.corr-vals{font-size:10px;color:var(--ink4);white-space:nowrap}
+.corr-insight{background:var(--purple2);border-radius:14px;padding:10px 13px;font-size:12px;color:var(--purple);margin-top:10px;font-weight:500}
+
+/* ── INVENTORY CONSUMPTION DISPLAY ─────────────────── */
+.inv-cons{font-size:10px;color:var(--ink4);margin-top:3px;display:flex;align-items:center;gap:5px}
+.inv-cons-warn{color:var(--red) !important;font-weight:600}
+.inv-reorder-card{background:rgba(255,59,48,.07);border:1px solid rgba(255,59,48,.18);border-radius:14px;padding:12px 14px;margin:0 0 10px}
+.inv-reorder-title{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.inv-reorder-item{font-size:13px;color:var(--ink2);padding:3px 0;display:flex;align-items:center;gap:7px}
 </style>
 </head>
 <body>
@@ -620,6 +688,10 @@ html.ios-standalone textarea{font-size:16px !important}
       <button onclick="nav('finance');showTxForm()" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--green2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Ingreso</span></button>
       <button onclick="openSheet('session-sht')" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--orng2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Sesión</span></button>
     </div>
+  </div>
+  <div id="home-week-sum">
+    <div class="wsum-title">📊 Resumen semana pasada</div>
+    <div class="wsum-grid" id="wsum-grid"></div>
   </div>
   <div style="padding:0 16px 8px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Próximas citas</div><div id="home-upcoming" class="cg"></div></div>
   <div style="padding:8px 16px 8px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Top clientes</div><div class="cg" id="home-top-clients"></div></div>
@@ -854,6 +926,29 @@ html.ios-standalone textarea{font-size:16px !important}
       <div class="hstat"><div class="hstat-val" id="fn-out">$0</div><div class="hstat-lbl">Gastos</div></div>
     </div>
   </div>
+  <div class="cg proj-card" id="fn-proj-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink2)">Proyección del mes</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink3)">
+        Meta: $<input class="proj-goal-inp" id="fn-goal-inp" type="number" placeholder="0" oninput="saveProjGoal(this.value)" title="Editar meta mensual">
+      </div>
+    </div>
+    <div class="proj-bar-wrap">
+      <div class="proj-bar-track" id="fn-proj-track" style="height:12px">
+        <div class="proj-bar-done" id="fn-proj-done" style="width:0%"></div>
+        <div class="proj-bar-proj" id="fn-proj-proj" style="width:0%;left:0%"></div>
+        <div class="proj-goal-line" id="fn-proj-gline" style="left:100%"></div>
+      </div>
+    </div>
+    <div class="proj-row">
+      <div class="proj-semaforo" id="fn-semaforo" style="background:var(--ink4)"></div>
+      <span id="fn-proj-label">Cargando...</span>
+    </div>
+    <div class="proj-row" style="margin-top:6px;gap:14px">
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:4px"></span>Real: <strong id="fn-proj-real">$0</strong></span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--blue);opacity:.65;margin-right:4px"></span>Proyectado: <strong id="fn-proj-est">$0</strong></span>
+    </div>
+  </div>
   <div class="cg fin-ads" id="fin-ads-box">
     <button class="fin-ads-toggle" type="button" onclick="toggleAdsPanel()">
       <div class="fin-ads-head">
@@ -978,6 +1073,47 @@ html.ios-standalone textarea{font-size:16px !important}
 <!-- ══ REDES BOARD ══ -->
 <div class="screen" id="s-social">
   <div class="lth"><div class="lth-h"><div><div class="lth-title">Redes</div><div class="lth-sub">Tablero de contenido</div></div><button class="btn btn-p btn-sm" onclick="openSocialCard(-1,'todo')">+ Tarjeta</button></div></div>
+  <div class="soc-tab-bar">
+    <button class="soc-tab on" id="soc-tab-kanban" onclick="setSocialTab('kanban')">Tablero</button>
+    <button class="soc-tab" id="soc-tab-cal" onclick="setSocialTab('cal')">Calendario</button>
+    <button class="soc-tab" id="soc-tab-corr" onclick="setSocialTab('corr')">Correlación</button>
+  </div>
+  <div id="soc-cal-view" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 10px">
+      <button onclick="socCalPrev()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink2);padding:4px 8px">‹</button>
+      <div id="soc-cal-month-lbl" style="font-size:15px;font-weight:700;color:var(--ink)"></div>
+      <button onclick="socCalNext()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink2);padding:4px 8px">›</button>
+    </div>
+    <div class="soc-cal-wrap">
+      <div class="soc-cal-hdr">
+        <div class="soc-cal-hdr-d">L</div><div class="soc-cal-hdr-d">M</div><div class="soc-cal-hdr-d">X</div>
+        <div class="soc-cal-hdr-d">J</div><div class="soc-cal-hdr-d">V</div><div class="soc-cal-hdr-d">S</div>
+        <div class="soc-cal-hdr-d">D</div>
+      </div>
+      <div class="soc-cal-grid" id="soc-cal-grid"></div>
+    </div>
+    <div style="padding:0 16px 10px;font-size:12px;color:var(--ink4)">
+      <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(255,59,48,.2);margin-right:4px;vertical-align:middle"></span>Días sin contenido programado
+    </div>
+    <div style="padding:0 16px 20px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink4);margin-bottom:8px">Sin fecha asignada</div>
+      <div id="soc-undated" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+  </div>
+  <div id="soc-corr-view" style="display:none">
+    <div style="padding:0 16px 8px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:2px">Publicaciones vs Citas agendadas</div>
+      <div style="font-size:12px;color:var(--ink4);margin-bottom:12px">Últimas 8 semanas</div>
+    </div>
+    <div class="corr-wrap">
+      <div class="corr-legend">
+        <div class="corr-leg-item"><div class="corr-leg-dot" style="background:var(--blue)"></div>Citas</div>
+        <div class="corr-leg-item"><div class="corr-leg-dot" style="background:var(--purple)"></div>Publicaciones</div>
+      </div>
+      <div class="corr-rows" id="corr-rows"></div>
+      <div id="corr-insight"></div>
+    </div>
+  </div>
   <div class="board" id="social-board">
     <div class="board-col col-cancelado" id="col-cancelado">
       <div class="board-col-head">
@@ -1100,6 +1236,15 @@ html.ios-standalone textarea{font-size:16px !important}
       <div class="frow"><div class="fld"><div class="fld-lbl">Sesión N°</div><input class="inp" id="sm-sessnum" type="number" min="1" value="1"></div><div class="fld"><div class="fld-lbl">Puntos a sumar</div><input class="inp" id="sm-pts" type="number" placeholder="0" min="0"></div></div>
       <div class="fld"><div class="fld-lbl">Descripción del diseño</div><textarea class="inp" id="sm-desc"></textarea></div>
       <div class="fld"><div class="fld-lbl">Por mejorar</div><textarea class="inp" id="sm-improve"></textarea></div>
+      <div class="fld">
+        <div class="fld-lbl">Agujas utilizadas <span style="font-weight:400;color:var(--ink4)">(opcional)</span></div>
+        <div class="sess-needle-add">
+          <select class="inp" id="sm-needle-sel" style="flex:1;min-width:0"></select>
+          <input class="inp" id="sm-needle-qty" type="number" min="1" value="1" style="width:64px">
+          <button onclick="addSessNeedle()" style="padding:10px 14px;border-radius:12px;background:var(--blue);color:#fff;border:none;font-size:16px;font-weight:700;cursor:pointer;flex-shrink:0">+</button>
+        </div>
+        <div id="sm-needle-list"></div>
+      </div>
       <div class="fld"><div class="fld-lbl">Rating personal</div>
         <div class="star-row" id="sm-stars" style="margin-top:8px">
           <span class="star on" data-v="1">★</span><span class="star on" data-v="2">★</span><span class="star on" data-v="3">★</span><span class="star off" data-v="4">★</span><span class="star off" data-v="5">★</span>
@@ -1172,6 +1317,9 @@ html.ios-standalone textarea{font-size:16px !important}
 
 <div class="toast" id="toast"></div>
 <script>
+
+
+
 
 
 
@@ -1544,6 +1692,7 @@ function renderHome(){
   const tco={Novato:0,Bronce:0,Plata:0,Oro:0};clients.forEach(c=>tco[getTier(+c.puntos||0)]++);
   const tot=clients.length||1;const tdel=document.getElementById('home-tiers');
   if(tdel)tdel.innerHTML=Object.entries(tco).map(([k,v])=>`<div class="prog-row"><div class="prog-lbl">${k}</div><div class="prog-track"><div class="prog-fill" style="width:${Math.round(v/tot*100)}%"></div></div><div class="prog-val">${v}</div></div>`).join('');
+  renderWeeklySummary();
 }
 function saveQN(){localStorage.setItem('xg_qn',(document.getElementById('qnote')||{}).value||'');}
 
@@ -1592,9 +1741,10 @@ function renderCal(){
     const isToday=iso===td;
     const isSel=iso===calSelected;
     const dots=dayAppts.slice(0,4).map(a=>`<div class="cal-dot" style="background:${APPT_COLORS[a.type]||'var(--blue)'}"></div>`).join('');
+    const socDots=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado').slice(0,2).map(()=>'<div class="cal-dot cal-dot-soc"></div>').join('');
     html+=`<div class="cal-day${isOther?' other-month':''}${isToday?' today':''}${isSel?' selected':''}" onclick="selectCalDay('${iso}')">
       <div class="cal-dn">${d}</div>
-      ${dots?`<div class="cal-dots">${dots}</div>`:''}
+      ${(dots||socDots)?`<div class="cal-dots">${dots}${socDots}</div>`:''}
     </div>`;
   }
   grid.innerHTML=html;
@@ -1837,6 +1987,7 @@ function renderFinance(){
   [['fn-net',fclp(net)],['fn-in',fclp(In)],['fn-out',fclp(Out)]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
   applyAdsPanel();
   renderAdsPlan(net);
+  renderMonthlyProjection();
   const el=document.getElementById('tx-list');if(!el)return;
   if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="empty-t">Sin movimientos</div></div>`;return;}
   const sorted=[...data].sort((a,b)=>txStamp(b)-txStamp(a));
@@ -2051,7 +2202,35 @@ function renderInventory(){
     return String(a.name||'').localeCompare(String(b.name||''),'es',{sensitivity:'base'});
   });
   const tb=document.getElementById('inv-tbody');if(!tb)return;
-  tb.innerHTML=filtered.map(item=>{const ri=invItems.indexOf(item);return`<tr><td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div></td><td>${invStockCell(item,ri)}</td><td>${invBadge(item)}</td><td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td></tr>`;}).join('');
+  tb.innerHTML=filtered.map(item=>{
+    const ri=invItems.indexOf(item);
+    const cons=getItemConsumption(item);
+    const reorder=getReorderAlert(item);
+    const consHtml=cons>0
+      ?`<div class="inv-cons ${reorder&&reorder<14?'inv-cons-warn':''}">
+          ${reorder&&reorder<14
+            ?`⚠ ~${reorder}d hasta mínimo · ${cons.toFixed(1)}/sem`
+            :`~${cons.toFixed(1)} por semana`
+          }
+        </div>`:'';
+    return`<tr>
+      <td><div style="font-weight:500">${item.name}</div><div class="inv-sub">${invCatLine(item)}</div>${consHtml}</td>
+      <td>${invStockCell(item,ri)}</td>
+      <td>${invBadge(item)}</td>
+      <td><button class="btn btn-s btn-xs" onclick="editInvItem(${ri})">Editar</button></td>
+    </tr>`;
+  }).join('');
+  // Reorder alert banner
+  const urgentItems=invItems.filter(i=>{ const d=getReorderAlert(i); return d!==null&&d<14; });
+  let banner=document.getElementById('inv-reorder-banner');
+  if(!banner){ banner=document.createElement('div'); banner.id='inv-reorder-banner'; tb.closest('.cg').before(banner); }
+  if(urgentItems.length){
+    banner.className='inv-reorder-card';
+    banner.innerHTML='<div class="inv-reorder-title">⚠ Reposición urgente</div>'+
+      urgentItems.map(i=>{const d=getReorderAlert(i);const cons=getItemConsumption(i);
+        return`<div class="inv-reorder-item">· <strong>${i.name}</strong> — quedan ${i.stock} uds · ~${d} días al mínimo (${cons.toFixed(1)}/sem)</div>`;
+      }).join('');
+  } else { banner.innerHTML=''; banner.className=''; }
 }
 function setInvFilter(f){invFilter=f;renderInventory();}
 function invEditAdjust(delta){
@@ -2529,6 +2708,16 @@ function saveSocialLS() {
 }
 
 function renderSocial() {
+  // ensure kanban visible by default if no tab active
+  const board=document.getElementById('social-board');
+  const calV=document.getElementById('soc-cal-view');
+  const corrV=document.getElementById('soc-corr-view');
+  const activeTab=window._socialTab||'kanban';
+  if(board) board.style.display=activeTab==='kanban'?'flex':'none';
+  if(calV) calV.style.display=activeTab==='cal'?'block':'none';
+  if(corrV) corrV.style.display=activeTab==='corr'?'block':'none';
+  if(activeTab==='cal'){renderSocialCal();return;}
+  if(activeTab==='corr'){renderCorrelation();return;}
   SOCIAL_COLS.forEach(col => {
     const cards = socialCards.filter(c => c.status === col);
     const cnt = document.getElementById('cnt-' + col);
@@ -2568,7 +2757,7 @@ function escHtml(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function openSocialCard(idx, defaultCol) {
+function openSocialCard(idx, defaultCol, opts) {
   socialEditIdx = idx;
   socialDefaultCol = defaultCol || 'todo';
   const card = idx >= 0 ? socialCards[idx] : null;
@@ -2591,6 +2780,7 @@ function openSocialCard(idx, defaultCol) {
 
   renderSCChecklist();
   openSheet('social-sht');
+  if(opts&&opts.date){const sd=document.getElementById('sc-date');if(sd&&!sd.value)sd.value=opts.date;}
 }
 
 function renderSCChecklist() {
@@ -2657,6 +2847,378 @@ function moveSocialCard(idx, dir) {
   saveSocialLS();
   renderSocial();
   toast('→ ' + SOCIAL_COL_LABEL[newCol]);
+}
+
+
+
+
+// ══════════════════════════════════════════════════════════
+// NEEDLE CONSUMPTION IN SESSION
+// ══════════════════════════════════════════════════════════
+let sessNeedleList = [];
+
+function populateSessNeedleSel() {
+  const sel = document.getElementById('sm-needle-sel');
+  if (!sel) return;
+  const needles = (invItems||[]).filter(i => i.cat === 'agujas');
+  if (!needles.length) {
+    sel.innerHTML = '<option value="">Sin agujas en inventario</option>';
+    return;
+  }
+  sel.innerHTML = '<option value="">Seleccionar aguja...</option>' +
+    needles.map(n => `<option value="${n.name}">${n.name}${n.subcat?' ('+n.subcat+')':''} · ${n.stock} disponibles</option>`).join('');
+}
+
+function addSessNeedle() {
+  const sel = document.getElementById('sm-needle-sel');
+  const qty = +document.getElementById('sm-needle-qty').value || 1;
+  if (!sel || !sel.value) { toast('Elige una aguja', 'err'); return; }
+  const existing = sessNeedleList.find(n => n.name === sel.value);
+  if (existing) { existing.qty += qty; }
+  else { sessNeedleList.push({ name: sel.value, qty }); }
+  sel.value = '';
+  document.getElementById('sm-needle-qty').value = 1;
+  renderSessNeedles();
+}
+
+function removeSessNeedle(idx) {
+  sessNeedleList.splice(idx, 1);
+  renderSessNeedles();
+}
+
+function renderSessNeedles() {
+  const el = document.getElementById('sm-needle-list');
+  if (!el) return;
+  if (!sessNeedleList.length) { el.innerHTML = ''; return; }
+  el.innerHTML = sessNeedleList.map((n, i) =>
+    `<div class="sess-needle-item">
+      <span class="sess-needle-name">${n.name}</span>
+      <span class="sess-needle-qty">×${n.qty}</span>
+      <button class="sess-needle-rm" onclick="removeSessNeedle(${i})" title="Quitar">×</button>
+    </div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// INVENTORY CONSUMPTION & REORDER
+// ══════════════════════════════════════════════════════════
+function getItemConsumption(item) {
+  // weekly avg from session needle records
+  const sessWithNeedles = (sessions||[]).filter(s => s.needles && s.needles.length);
+  if (!sessWithNeedles.length) return 0;
+  const total = sessWithNeedles.reduce((sum, s) => {
+    return sum + (s.needles||[]).filter(n => n.name === item.name).reduce((a, n) => a + (+n.qty||0), 0);
+  }, 0);
+  if (!total) return 0;
+  // weeks spanned
+  const dates = sessWithNeedles.map(s => new Date(s.date).getTime()).filter(Number.isFinite);
+  if (!dates.length) return 0;
+  const oldest = Math.min(...dates);
+  const weeksSpan = Math.max(1, (Date.now() - oldest) / (7 * 24 * 3600 * 1000));
+  return total / weeksSpan;
+}
+
+function getReorderAlert(item) {
+  const cons = getItemConsumption(item);
+  if (!cons) return null;
+  const surplus = (+item.stock||0) - (+item.min||0);
+  if (surplus <= 0) return 0;
+  return Math.round(surplus / cons * 7);
+}
+
+// ══════════════════════════════════════════════════════════
+// MONTHLY PROJECTION (FINANCE)
+// ══════════════════════════════════════════════════════════
+function saveProjGoal(v) {
+  localStorage.setItem('xg_monthly_goal', String(+v || 0));
+  renderMonthlyProjection();
+}
+
+function renderMonthlyProjection() {
+  const wrap = document.getElementById('fn-proj-wrap'); if (!wrap) return;
+  const n = new Date(), mo = n.getMonth(), yr = n.getFullYear();
+  const todayStr = today();
+
+  // Real income this month
+  const real = (txList||[])
+    .filter(t => t.type==='in' && new Date(t.date).getMonth()===mo && new Date(t.date).getFullYear()===yr)
+    .reduce((s,t) => s+(+t.amount||0), 0);
+
+  // Projected: pending appts this month with price
+  const projected = (appointments||[])
+    .filter(a => {
+      const d = new Date(a.date);
+      return d.getMonth()===mo && d.getFullYear()===yr && a.date >= todayStr && a.status!=='cancelled' && +a.price>0;
+    })
+    .reduce((s,a) => s+(+a.price||0), 0);
+
+  const total = real + projected;
+  const goal = +localStorage.getItem('xg_monthly_goal') || 0;
+
+  // Goal input
+  const goalInp = document.getElementById('fn-goal-inp');
+  if (goalInp && !goalInp.matches(':focus')) goalInp.value = goal || '';
+
+  if (!goal) {
+    // No goal set — just show totals without bar
+    const lbl = document.getElementById('fn-proj-label');
+    if (lbl) lbl.innerHTML = `Real <strong>${fclp(real)}</strong> + pendiente <strong>${fclp(projected)}</strong> = <strong>${fclp(total)}</strong> · Define una meta para ver el semáforo`;
+    const sem = document.getElementById('fn-semaforo');
+    if (sem) sem.style.background = 'var(--ink4)';
+    ['fn-proj-done','fn-proj-proj'].forEach(id => { const e=document.getElementById(id); if(e) e.style.width='0%'; });
+    const re = document.getElementById('fn-proj-real'); if(re) re.textContent = fclp(real);
+    const es = document.getElementById('fn-proj-est'); if(es) es.textContent = fclp(projected);
+    return;
+  }
+
+  const realPct = Math.min(100, Math.round(real / goal * 100));
+  const projPct = Math.min(100 - realPct, Math.round(projected / goal * 100));
+  const totalPct = realPct + projPct;
+
+  // Traffic light
+  let semColor, semMsg;
+  if (totalPct >= 100) { semColor = 'var(--green)'; semMsg = '✓ Meta alcanzada o superada'; }
+  else if (totalPct >= 70) { semColor = 'var(--gold)'; semMsg = `${totalPct}% de la meta · Faltan ${fclp(goal - total)}`; }
+  else { semColor = 'var(--red)'; semMsg = `${totalPct}% de la meta · Faltan ${fclp(goal - total)}`; }
+
+  const donEl = document.getElementById('fn-proj-done'); if(donEl) donEl.style.width = realPct+'%';
+  const proEl = document.getElementById('fn-proj-proj'); if(proEl){ proEl.style.left = realPct+'%'; proEl.style.width = projPct+'%'; }
+  const glEl  = document.getElementById('fn-proj-gline'); if(glEl) glEl.style.left = '100%';
+  const sem   = document.getElementById('fn-semaforo'); if(sem) sem.style.background = semColor;
+  const lbl   = document.getElementById('fn-proj-label'); if(lbl) lbl.innerHTML = semMsg;
+  const re    = document.getElementById('fn-proj-real'); if(re) re.textContent = fclp(real);
+  const es    = document.getElementById('fn-proj-est'); if(es) es.textContent = fclp(projected);
+}
+
+// ══════════════════════════════════════════════════════════
+// WEEKLY SUMMARY (HOME)
+// ══════════════════════════════════════════════════════════
+function renderWeeklySummary() {
+  const card = document.getElementById('home-week-sum');
+  if (!card) return;
+
+  const n = new Date();
+  // Show every day but calculate last week
+  const dayOfWeek = n.getDay(); // 0=Sun,1=Mon...6=Sat
+  // Last Monday
+  const lastMon = new Date(n);
+  lastMon.setDate(n.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1) - 7);
+  lastMon.setHours(0,0,0,0);
+  const lastSun = new Date(lastMon); lastSun.setDate(lastMon.getDate() + 6); lastSun.setHours(23,59,59,999);
+
+  const iso = d => d.toISOString().slice(0,10);
+  const lwStart = iso(lastMon), lwEnd = iso(lastSun);
+
+  // If no data at all, skip
+  if (!txList.length && !sessions.length && !habits.length) { card.style.display='none'; return; }
+
+  // Income last week
+  const weekIncome = (txList||[])
+    .filter(t => t.type==='in' && t.date >= lwStart && t.date <= lwEnd)
+    .reduce((s,t) => s+(+t.amount||0), 0);
+
+  // Sessions last week
+  const weekSess = (sessions||[]).filter(s => s.date >= lwStart && s.date <= lwEnd).length;
+
+  // Habits compliance last week
+  let habDone=0, habTotal=0;
+  const weekDates=[];
+  for(let i=0;i<7;i++){ const d=new Date(lastMon); d.setDate(lastMon.getDate()+i); weekDates.push(iso(d)); }
+  habits.forEach(h => { weekDates.forEach(d => { habTotal++; if(h.log&&h.log[d]) habDone++; }); });
+  const habPct = habTotal ? Math.round(habDone/habTotal*100) : null;
+
+  // Low inventory items
+  const lowItems = (invItems||[]).filter(i => invStatus(i)!=='in_stock');
+
+  const tiles = [
+    { label:'Ingresos sem.',  val: fclp(weekIncome), sub: `semana ${lwStart.slice(5)}` },
+    { label:'Sesiones',       val: weekSess,          sub: weekSess===1?'sesión':'sesiones' },
+    habPct!==null ? { label:'Hábitos',   val: habPct+'%',     sub: `${habDone}/${habTotal} completados` }
+                  : { label:'Hábitos',   val:'—',             sub:'sin datos' },
+    { label:'Inventario bajo', val: lowItems.length,  sub: lowItems.length ? lowItems.slice(0,2).map(i=>i.name).join(', ') : 'todo ok ✓' },
+  ];
+
+  card.style.display = 'block';
+  const grid = document.getElementById('wsum-grid');
+  if (grid) grid.innerHTML = tiles.map(t =>
+    `<div class="wsum-tile">
+      <div class="wsum-tile-lbl">${t.label}</div>
+      <div class="wsum-tile-val">${t.val}</div>
+      <div class="wsum-tile-sub">${t.sub}</div>
+    </div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// SOCIAL PUBLICATION CALENDAR
+// ══════════════════════════════════════════════════════════
+let _socialTab = 'kanban';
+let _socCalDate = new Date();
+window._socialTab = _socialTab;
+
+function setSocialTab(tab) {
+  _socialTab = tab;
+  window._socialTab = tab;
+  ['kanban','cal','corr'].forEach(t => {
+    const btn = document.getElementById('soc-tab-'+t);
+    if (btn) btn.classList.toggle('on', t===tab);
+  });
+  const board = document.getElementById('social-board');
+  const calV  = document.getElementById('soc-cal-view');
+  const corrV = document.getElementById('soc-corr-view');
+  if (board) board.style.display = tab==='kanban' ? 'flex' : 'none';
+  if (calV)  calV.style.display  = tab==='cal'    ? 'block': 'none';
+  if (corrV) corrV.style.display = tab==='corr'   ? 'block': 'none';
+  if (tab==='cal')  renderSocialCal();
+  if (tab==='corr') renderCorrelation();
+}
+
+function socCalPrev() { _socCalDate.setMonth(_socCalDate.getMonth()-1); renderSocialCal(); }
+function socCalNext() { _socCalDate.setMonth(_socCalDate.getMonth()+1); renderSocialCal(); }
+
+const PLAT_COLORS = { ig:'#e1306c', tt:'#000', yt:'#ff0000', tw:'#1d9bf0', fb:'#1877f2', ot:'var(--ink3)' };
+const PLAT_BGLTS  = { ig:'rgba(225,48,108,.18)', tt:'rgba(0,0,0,.1)', yt:'rgba(255,0,0,.12)',
+                      tw:'rgba(29,155,240,.15)', fb:'rgba(24,119,242,.15)', ot:'var(--bg3)' };
+
+function renderSocialCal() {
+  const grid = document.getElementById('soc-cal-grid');
+  const lbl  = document.getElementById('soc-cal-month-lbl');
+  const undated = document.getElementById('soc-undated');
+  if (!grid) return;
+
+  const yr = _socCalDate.getFullYear(), mo = _socCalDate.getMonth();
+  if (lbl) lbl.textContent = new Date(yr, mo, 1).toLocaleDateString('es-CL',{month:'long',year:'numeric'}).replace(/^\w/,c=>c.toUpperCase());
+
+  const firstDay = new Date(yr, mo, 1).getDay(); // 0=Sun
+  const offset = firstDay === 0 ? 6 : firstDay - 1; // Mon-first offset
+  const daysInMonth = new Date(yr, mo+1, 0).getDate();
+  const daysInPrev  = new Date(yr, mo, 0).getDate();
+  const td = today();
+
+  // Detect working days in month (Mon-Fri that are in this month)
+  const workingDays = [];
+  for (let d=1; d<=daysInMonth; d++) {
+    const dow = new Date(yr,mo,d).getDay();
+    if (dow>=1 && dow<=5) workingDays.push(`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
+  }
+
+  // Cards by date
+  const cardsByDate = {};
+  (socialCards||[]).forEach(c => {
+    if (c.date && c.status !== 'cancelado') {
+      if (!cardsByDate[c.date]) cardsByDate[c.date] = [];
+      cardsByDate[c.date].push(c);
+    }
+  });
+
+  const scheduledDays = new Set(Object.keys(cardsByDate));
+  // Gap days = working days with no content scheduled
+  const gapDays = new Set(workingDays.filter(d => !scheduledDays.has(d) && d >= td));
+
+  let html = '';
+  for (let i=0; i<42; i++) {
+    let d, curMo=mo, curYr=yr, isOther=false;
+    if (i < offset) { d=daysInPrev-offset+i+1; curMo=mo-1; if(curMo<0){curMo=11;curYr--;} isOther=true; }
+    else if (i >= offset+daysInMonth) { d=i-offset-daysInMonth+1; curMo=mo+1; if(curMo>11){curMo=0;curYr++;} isOther=true; }
+    else { d = i-offset+1; }
+    const iso = `${curYr}-${String(curMo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = iso === td;
+    const isGap   = gapDays.has(iso);
+    const dayCards = (cardsByDate[iso]||[]).slice(0,3);
+    const chips = dayCards.map(c =>
+      `<div class="soc-cal-chip" style="background:${PLAT_BGLTS[c.plat]||PLAT_BGLTS.ot};color:${PLAT_COLORS[c.plat]||'var(--ink3)'}" onclick="openSocialCard(${socialCards.indexOf(c)})">${c.title.slice(0,12)}</div>`
+    ).join('');
+    html += `<div class="soc-cal-day${isOther?' other-m':''}${isToday?' today':''}${isGap?' gap-day':''}" onclick="if(!event.target.closest('.soc-cal-chip'))openSocialCard(-1,'todo',{ date:'${iso}' })">
+      <div class="soc-cal-dn">${d}</div>
+      ${chips}
+    </div>`;
+  }
+  grid.innerHTML = html;
+
+  // Undated cards
+  const undatedCards = (socialCards||[]).filter(c => !c.date && c.status!=='cancelado');
+  if (undated) undated.innerHTML = undatedCards.length
+    ? undatedCards.map(c =>
+        `<div style="padding:5px 10px;background:${PLAT_BGLTS[c.plat]||'var(--bg3)'};border-radius:10px;font-size:12px;font-weight:600;color:${PLAT_COLORS[c.plat]||'var(--ink3)'};cursor:pointer" onclick="openSocialCard(${socialCards.indexOf(c)})">${c.title}</div>`
+      ).join('')
+    : '<div style="font-size:12px;color:var(--ink4)">Todas las tarjetas tienen fecha ✓</div>';
+}
+
+
+
+// ══════════════════════════════════════════════════════════
+// CORRELATION: CITAS VS PUBLICACIONES
+// ══════════════════════════════════════════════════════════
+function renderCorrelation() {
+  const el = document.getElementById('corr-rows');
+  const insEl = document.getElementById('corr-insight');
+  if (!el) return;
+
+  const WEEK_MS = 7 * 24 * 3600 * 1000;
+  const now = Date.now();
+
+  // Build 8-week buckets (Mon-Sun)
+  const weeks = [];
+  for (let i=7; i>=0; i--) {
+    const wStart = new Date(now - i * WEEK_MS);
+    wStart.setDate(wStart.getDate() - (wStart.getDay()===0?6:wStart.getDay()-1));
+    wStart.setHours(0,0,0,0);
+    const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate()+6); wEnd.setHours(23,59,59,999);
+    const wStartISO = wStart.toISOString().slice(0,10);
+    const wEndISO   = wEnd.toISOString().slice(0,10);
+
+    const apptCount = (appointments||[]).filter(a =>
+      a.date >= wStartISO && a.date <= wEndISO && a.status !== 'cancelled'
+    ).length;
+
+    const postCount = (socialCards||[]).filter(c =>
+      c.date && c.date >= wStartISO && c.date <= wEndISO && c.status === 'done'
+    ).length;
+
+    const lbl = wStart.toLocaleDateString('es-CL',{day:'numeric',month:'short'}).replace('.','');
+    weeks.push({ lbl, apptCount, postCount, wStartISO });
+  }
+
+  const maxAppt = Math.max(1, ...weeks.map(w => w.apptCount));
+  const maxPost = Math.max(1, ...weeks.map(w => w.postCount));
+
+  el.innerHTML = weeks.map(w => {
+    const apptW = Math.round(w.apptCount / maxAppt * 100);
+    const postW = Math.round(w.postCount / maxPost * 100);
+    return `<div class="corr-row">
+      <div class="corr-wk">${w.lbl}</div>
+      <div class="corr-bars">
+        <div class="corr-bar corr-b-appt" style="width:${apptW}%" title="${w.apptCount} citas"></div>
+        <div class="corr-bar corr-b-post" style="width:${postW}%" title="${w.postCount} posts"></div>
+      </div>
+      <div class="corr-vals">${w.apptCount}c · ${w.postCount}p</div>
+    </div>`;
+  }).join('');
+
+  // Simple insight: correlation
+  const pairs = weeks.filter(w => w.postCount > 0 || w.apptCount > 0);
+  const highPost = pairs.filter(w => w.postCount >= 2);
+  const avgApptHighPost = highPost.length
+    ? Math.round(highPost.reduce((s,w)=>s+w.apptCount,0)/highPost.length*10)/10 : 0;
+  const lowPost  = pairs.filter(w => w.postCount < 2);
+  const avgApptLowPost  = lowPost.length
+    ? Math.round(lowPost.reduce((s,w)=>s+w.apptCount,0)/lowPost.length*10)/10 : 0;
+
+  let insight = '';
+  if (highPost.length >= 2 && lowPost.length >= 2) {
+    if (avgApptHighPost > avgApptLowPost) {
+      insight = `📈 Semanas con 2+ posts → ${avgApptHighPost} citas en promedio vs ${avgApptLowPost} en semanas sin posts. Publicar más parece correlacionarse con más citas.`;
+    } else if (avgApptHighPost < avgApptLowPost) {
+      insight = `📊 Sin correlación clara aún — las citas no varían mucho con las publicaciones. Puede que el canal principal sea el boca a boca.`;
+    } else {
+      insight = `📊 Correlación neutra — ambas variables se mueven de forma similar.`;
+    }
+  } else {
+    insight = `📊 Necesitas más semanas con publicaciones marcadas como "Done" para ver la correlación.`;
+  }
+
+  if (insEl) insEl.innerHTML = insight
+    ? `<div class="corr-insight">${insight}</div>` : '';
 }
 
 
