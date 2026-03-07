@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -10,14 +10,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://lmopbyirrhhpluuussjf.supabase.co https://xgeremy.goatcounter.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <title>Studio OS</title>
 <meta name="robots" content="noindex,nofollow,noarchive">
-<script>
-if (window.navigator.standalone) {
-  document.documentElement.classList.add('ios-standalone');
-}
-if (/iPhone/i.test(navigator.userAgent || '') && window.screen && ((screen.width===414 && screen.height===896) || (screen.width===896 && screen.height===414))) {
-  document.documentElement.classList.add('iphone11');
-}
-</script>
+
 <link rel="apple-touch-icon" sizes="180x180" href="/admin/apple-touch-icon.png">
 <link rel="manifest" href="/admin/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1091,6 +1084,14 @@ html.ios-standalone textarea{font-size:16px !important}
 <div class="toast" id="toast"></div>
 <script>
 
+// ── iOS / PWA DETECTION ──
+if (window.navigator.standalone) {
+  document.documentElement.classList.add('ios-standalone');
+}
+if (/iPhone/i.test(navigator.userAgent || '') && window.screen && ((screen.width===414 && screen.height===896) || (screen.width===896 && screen.height===414))) {
+  document.documentElement.classList.add('iphone11');
+}
+
 // ── AUTH ──
 const ADMIN_EMAIL='geremymons@gmail.com';
 const ADMIN_UID='ac0023c2-9fc1-4f01-8e77-792cf8e34456';
@@ -1158,7 +1159,7 @@ function fdateShort(iso){if(!iso)return'—';const[y,mo,d]=iso.split('-');const 
 function safeText(v,max=300){return String(v??'').replace(/[\u0000-\u001F\u007F]/g,'').replace(/[<>]/g,'').trim().slice(0,max);}
 function safeEmail(v){const e=String(v||'').trim().toLowerCase();return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:'';}
 function sanitizeState(){
-  clients=(clients||[]).map(c=>({...c,nombre:safeText(c.nombre,120),email:safeEmail(c.email),telefono:safeText(c.telefono,40),ultimoTatuaje:safeText(c.ultimoTatuaje,160),notas:safeText(c.notas,800)})).filter(c=>!!c.email);
+  clients=(clients||[]).map(c=>({...c,nombre:safeText(c.nombre,120),email:safeEmail(c.email),telefono:safeText(c.telefono,40),ultimoTatuaje:safeText(c.ultimoTatuaje,160),notas:safeText(c.notas,800)}));
   txList=(txList||[]).map(t=>({...t,desc:safeText(t.desc,180),cat:safeText(t.cat,80),client:safeText(t.client,120)}));
   habits=(habits||[]).map(h=>({...h,name:safeText(h.name,80),cat:safeText(h.cat,30)}));
   goals=(goals||[]).map(g=>({...g,title:safeText(g.title,120),desc:safeText(g.desc,300),type:safeText(g.type,20)}));
