@@ -492,6 +492,54 @@ html.ios-standalone textarea{font-size:16px !important}
 .needle-btn:hover{border-color:var(--blue);color:var(--blue)}
 .needle-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .appt-type-otros{background:var(--red2);border-left-color:var(--red)}
+
+/* ── SOCIAL BOARD ─────────────────────────────────────────── */
+.board{display:flex;gap:10px;padding:0 16px 32px;overflow-x:auto;align-items:flex-start;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.board::-webkit-scrollbar{display:none}
+.board-col{flex-shrink:0;width:260px;background:var(--bg2);border-radius:18px;overflow:hidden;border:1px solid var(--sep)}
+.board-col-head{padding:13px 14px 11px;border-bottom:1px solid var(--sep);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.board-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.board-col-count{font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:99px;background:var(--bg3);color:var(--ink3);display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+.board-cards{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:80px}
+.board-card{background:var(--bg3);border-radius:12px;padding:12px 13px;cursor:pointer;border:1.5px solid transparent;transition:all .15s;position:relative}
+.board-card:hover{border-color:var(--sep2);background:var(--bg2)}
+.board-card:active{transform:scale(.97)}
+.bc-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:4px}
+.bc-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.bc-plat{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}
+.bc-fmt{font-size:11px;color:var(--ink3)}
+.bc-date{font-size:11px;color:var(--ink4);margin-left:auto}
+.bc-check{font-size:11px;color:var(--ink3);margin-top:5px}
+.bc-check .done{text-decoration:line-through;color:var(--ink4)}
+.bc-move{display:flex;gap:4px;margin-top:8px;justify-content:flex-end}
+.bc-mv-btn{background:var(--bg2);border:1px solid var(--sep2);border-radius:8px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--ink3);transition:all .12s}
+.bc-mv-btn:hover{background:var(--bg3);color:var(--ink)}
+.board-add{width:100%;padding:10px;background:none;border:none;cursor:pointer;font-size:13px;color:var(--ink4);font-family:var(--font);transition:color .15s;display:flex;align-items:center;justify-content:center;gap:5px;border-top:1px solid var(--sep)}
+.board-add:hover{color:var(--blue)}
+/* column accent colours */
+.col-cancelado .board-col-title{color:var(--ink4)}
+.col-emergencia .board-col-title{color:var(--red)}
+.col-todo .board-col-title{color:var(--orange)}
+.col-doing .board-col-title{color:var(--blue)}
+.col-done .board-col-title{color:var(--green)}
+.col-emergencia .board-col-head{border-bottom-color:rgba(255,59,48,.25)}
+.col-doing .board-col-head{border-bottom-color:rgba(0,122,255,.2)}
+.col-done .board-col-head{border-bottom-color:rgba(52,199,89,.2)}
+/* platform pill colours */
+.plat-ig{background:rgba(175,82,222,.14);color:var(--purple)}
+.plat-tt{background:rgba(0,0,0,.08);color:var(--ink2)}
+.plat-yt{background:rgba(255,59,48,.1);color:var(--red)}
+.plat-tw{background:rgba(0,122,255,.1);color:var(--blue)}
+.plat-fb{background:rgba(0,122,255,.1);color:var(--blue)}
+.plat-ot{background:var(--bg3);color:var(--ink3)}
+/* card sheet */
+.sc-checklist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.sc-check-item{display:flex;align-items:center;gap:8px;font-size:14px}
+.sc-check-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
+.sc-check-item span.done{text-decoration:line-through;color:var(--ink4)}
+.sc-add-check{display:flex;gap:6px;margin-top:6px}
+.sc-add-check input{flex:1}
+.sc-add-check button{padding:10px 14px;border-radius:12px;background:var(--bg3);border:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2)}
 </style>
 </head>
 <body>
@@ -519,7 +567,8 @@ html.ios-standalone textarea{font-size:16px !important}
     <div class="sd-sect">Sitio</div>
     <button class="nb" onclick="nav('pageeditor',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Editor</button>
     <button class="nb" onclick="nav('agenda',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>Disponibilidad</button>
-    <button class="nb" onclick="nav('flash',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flash del Mes</button>
+    <button class="nb" <button class="nb" onclick="nav('social',this)"><span class="nb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.7 5.5 4.4 9 4.5-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.7z"/></svg></span>Redes</button>
+    onclick="nav('flash',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flash del Mes</button>
     <button class="nb" onclick="nav('seo',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>SEO</button>
     <div class="sd-sect">Negocio</div>
     <button class="nb" onclick="nav('habits',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>Hábitos</button>
@@ -932,6 +981,53 @@ html.ios-standalone textarea{font-size:16px !important}
     <button class="btn btn-s btn-full" onclick="copyEmailBody()">Copiar texto del email</button>
   </div>
 </div>
+
+<!-- ══ REDES BOARD ══ -->
+<div class="screen" id="s-social">
+  <div class="lth"><div class="lth-h"><div><div class="lth-title">Redes</div><div class="lth-sub">Tablero de contenido</div></div><button class="btn btn-p btn-sm" onclick="openSocialCard(-1,'todo')">+ Tarjeta</button></div></div>
+  <div class="board" id="social-board">
+    <div class="board-col col-cancelado" id="col-cancelado">
+      <div class="board-col-head">
+        <span class="board-col-title">Cancelado</span>
+        <span class="board-col-count" id="cnt-cancelado">0</span>
+      </div>
+      <div class="board-cards" id="cards-cancelado"></div>
+      <button class="board-add" onclick="openSocialCard(-1,'cancelado')">＋ Agregar</button>
+    </div>
+    <div class="board-col col-emergencia" id="col-emergencia">
+      <div class="board-col-head">
+        <span class="board-col-title">Emergencia ⚡</span>
+        <span class="board-col-count" id="cnt-emergencia">0</span>
+      </div>
+      <div class="board-cards" id="cards-emergencia"></div>
+      <button class="board-add" onclick="openSocialCard(-1,'emergencia')">＋ Agregar</button>
+    </div>
+    <div class="board-col col-todo" id="col-todo">
+      <div class="board-col-head">
+        <span class="board-col-title">To do</span>
+        <span class="board-col-count" id="cnt-todo">0</span>
+      </div>
+      <div class="board-cards" id="cards-todo"></div>
+      <button class="board-add" onclick="openSocialCard(-1,'todo')">＋ Agregar</button>
+    </div>
+    <div class="board-col col-doing" id="col-doing">
+      <div class="board-col-head">
+        <span class="board-col-title">Doing</span>
+        <span class="board-col-count" id="cnt-doing">0</span>
+      </div>
+      <div class="board-cards" id="cards-doing"></div>
+      <button class="board-add" onclick="openSocialCard(-1,'doing')">＋ Agregar</button>
+    </div>
+    <div class="board-col col-done" id="col-done">
+      <div class="board-col-head">
+        <span class="board-col-title">Done ✓</span>
+        <span class="board-col-count" id="cnt-done">0</span>
+      </div>
+      <div class="board-cards" id="cards-done"></div>
+      <button class="board-add" onclick="openSocialCard(-1,'done')">＋ Agregar</button>
+    </div>
+  </div>
+</div>
   </div><!-- /ca -->
 
   <!-- BOTTOM TAB BAR -->
@@ -1083,6 +1179,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 <div class="toast" id="toast"></div>
 <script>
+
 
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
@@ -1246,8 +1343,8 @@ function openApptSheet(){
 function toast(msg,type='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+(type==='err'?'err':'ok');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='toast',3000);}
 
 // ── NAV ──
-const TITLES={home:'Resumen',calendar:'Calendario',analytics:'Analíticas',crm:'Clientes',points:'Puntos & Tiers',leaderboard:'Leaderboard',sessions:'Sesiones',pageeditor:'Editor',agenda:'Disponibilidad',flash:'Flash del Mes',seo:'SEO',habits:'Hábitos',goals:'Objetivos',inventory:'Inventario',finance:'Finanzas',notes:'Notas',config:'Configuración',email:'Confirmar Cita'};
-const RENDERS={home:renderHome,email:renderEmailScreen,calendar:renderCal,analytics:loadGC,crm:()=>renderCRM(clients),points:renderPoints,leaderboard:renderLB,sessions:renderSessions,pageeditor:renderPE,agenda:renderAv,flash:renderFlash,habits:renderHabits,goals:renderGoals,inventory:renderInventory,finance:renderFinance,notes:renderNotion,config:renderCfg};
+const TITLES={home:'Resumen',calendar:'Calendario',analytics:'Analíticas',crm:'Clientes',points:'Puntos & Tiers',leaderboard:'Leaderboard',sessions:'Sesiones',pageeditor:'Editor',agenda:'Disponibilidad',flash:'Flash del Mes',seo:'SEO',habits:'Hábitos',goals:'Objetivos',inventory:'Inventario',finance:'Finanzas',notes:'Notas',config:'Configuración',email:'Confirmar Cita',social:'Redes'};
+const RENDERS={home:renderHome,social:renderSocial,email:renderEmailScreen,calendar:renderCal,analytics:loadGC,crm:()=>renderCRM(clients),points:renderPoints,leaderboard:renderLB,sessions:renderSessions,pageeditor:renderPE,agenda:renderAv,flash:renderFlash,habits:renderHabits,goals:renderGoals,inventory:renderInventory,finance:renderFinance,notes:renderNotion,config:renderCfg};
 function nav(id,el){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   const sc=document.getElementById('s-'+id);if(sc)sc.classList.add('on');
@@ -2380,6 +2477,155 @@ function _fallbackCopy(text) {
   document.body.removeChild(ta);
 }
 
+
+// ════════════════════════════════════════════════════════════
+// SOCIAL BOARD
+// ════════════════════════════════════════════════════════════
+const SOCIAL_COLS = ['cancelado','emergencia','todo','doing','done'];
+const SOCIAL_COL_LABEL = {cancelado:'Cancelado',emergencia:'Emergencia',todo:'To do',doing:'Doing',done:'Done'};
+const SOCIAL_PLAT_LABEL = {ig:'Instagram',tt:'TikTok',yt:'YouTube',tw:'Twitter/X',fb:'Facebook',ot:'Otra'};
+const SOCIAL_PLAT_CLS   = {ig:'plat-ig',tt:'plat-tt',yt:'plat-yt',tw:'plat-tw',fb:'plat-fb',ot:'plat-ot'};
+
+let socialCards = JSON.parse(localStorage.getItem('xg_social_board_v1') || '[]');
+let socialEditIdx = -1;
+let socialDefaultCol = 'todo';
+let scCheckItems = []; // [{text,done}]
+
+function saveSocialLS() {
+  localStorage.setItem('xg_social_board_v1', JSON.stringify(socialCards));
+}
+
+function renderSocial() {
+  SOCIAL_COLS.forEach(col => {
+    const cards = socialCards.filter(c => c.status === col);
+    const cnt = document.getElementById('cnt-' + col);
+    if (cnt) cnt.textContent = cards.length;
+    const el = document.getElementById('cards-' + col);
+    if (!el) return;
+    el.innerHTML = cards.map(card => {
+      const idx = socialCards.indexOf(card);
+      const platCls = SOCIAL_PLAT_CLS[card.plat] || 'plat-ot';
+      const platLbl = SOCIAL_PLAT_LABEL[card.plat] || card.plat;
+      const colIdx  = SOCIAL_COLS.indexOf(col);
+      const canLeft  = colIdx > 0;
+      const canRight = colIdx < SOCIAL_COLS.length - 1;
+      const checks = (card.checklist || []);
+      const doneCount = checks.filter(c => c.done).length;
+      const checkHtml = checks.length
+        ? `<div class="bc-check">☑ ${doneCount}/${checks.length} completados</div>`
+        : '';
+      return `<div class="board-card" onclick="openSocialCard(${idx})">
+        <div class="bc-title">${escHtml(card.title)}</div>
+        <div class="bc-meta">
+          <span class="bc-plat ${platCls}">${platLbl}</span>
+          <span class="bc-fmt">${escHtml(card.fmt||'')}</span>
+          ${card.date ? `<span class="bc-date">${fdate(card.date)}</span>` : ''}
+        </div>
+        ${checkHtml}
+        <div class="bc-move">
+          ${canLeft  ? `<button class="bc-mv-btn" onclick="event.stopPropagation();moveSocialCard(${idx},-1)">← ${SOCIAL_COL_LABEL[SOCIAL_COLS[colIdx-1]]}</button>` : ''}
+          ${canRight ? `<button class="bc-mv-btn" onclick="event.stopPropagation();moveSocialCard(${idx},1)">${SOCIAL_COL_LABEL[SOCIAL_COLS[colIdx+1]]} →</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function openSocialCard(idx, defaultCol) {
+  socialEditIdx = idx;
+  socialDefaultCol = defaultCol || 'todo';
+  const card = idx >= 0 ? socialCards[idx] : null;
+  scCheckItems = card ? JSON.parse(JSON.stringify(card.checklist || [])) : [];
+
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.value = v || ''; };
+  set('sc-title',  card ? card.title  : '');
+  set('sc-status', card ? card.status : socialDefaultCol);
+  set('sc-plat',   card ? card.plat   : 'ig');
+  set('sc-fmt',    card ? card.fmt    : 'Reel');
+  set('sc-date',   card ? card.date   : '');
+  set('sc-idea',   card ? card.idea   : '');
+  set('sc-script', card ? card.script : '');
+  set('sc-check-inp', '');
+
+  const titleEl = document.getElementById('sc-sht-title');
+  if (titleEl) titleEl.textContent = card ? 'Editar tarjeta' : 'Nueva tarjeta';
+  const delBtn = document.getElementById('sc-del-btn');
+  if (delBtn) delBtn.style.display = idx >= 0 ? 'block' : 'none';
+
+  renderSCChecklist();
+  openSheet('social-sht');
+}
+
+function renderSCChecklist() {
+  const el = document.getElementById('sc-checklist');
+  if (!el) return;
+  el.innerHTML = scCheckItems.map((item, i) =>
+    `<label class="sc-check-item">
+      <input type="checkbox" ${item.done?'checked':''} onchange="scCheckItems[${i}].done=this.checked;renderSCChecklist()">
+      <span class="${item.done?'done':''}">${escHtml(item.text)}</span>
+      <button onclick="scCheckItems.splice(${i},1);renderSCChecklist()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--ink4);font-size:16px;padding:0 4px" title="Quitar">×</button>
+    </label>`
+  ).join('');
+}
+
+function addSocialCheckItem() {
+  const inp = document.getElementById('sc-check-inp');
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text) return;
+  scCheckItems.push({ text, done: false });
+  inp.value = '';
+  renderSCChecklist();
+}
+
+function saveSocialCard() {
+  const title = (document.getElementById('sc-title').value || '').trim();
+  if (!title) { toast('Título requerido', 'err'); return; }
+  const get = id => (document.getElementById(id) || {}).value || '';
+  const card = {
+    id: socialEditIdx >= 0 ? socialCards[socialEditIdx].id : Date.now(),
+    title,
+    status: get('sc-status') || 'todo',
+    plat:   get('sc-plat')   || 'ig',
+    fmt:    get('sc-fmt')    || 'Reel',
+    date:   get('sc-date'),
+    idea:   get('sc-idea'),
+    script: get('sc-script'),
+    checklist: scCheckItems.slice()
+  };
+  if (socialEditIdx >= 0) socialCards[socialEditIdx] = card;
+  else socialCards.push(card);
+  saveSocialLS();
+  closeSheet('social-sht');
+  renderSocial();
+  toast(socialEditIdx >= 0 ? 'Tarjeta actualizada' : 'Tarjeta creada');
+}
+
+function deleteSocialCard() {
+  if (socialEditIdx < 0) return;
+  socialCards.splice(socialEditIdx, 1);
+  saveSocialLS();
+  closeSheet('social-sht');
+  renderSocial();
+  toast('Tarjeta eliminada');
+}
+
+function moveSocialCard(idx, dir) {
+  const card = socialCards[idx];
+  if (!card) return;
+  const colIdx = SOCIAL_COLS.indexOf(card.status);
+  const newCol = SOCIAL_COLS[colIdx + dir];
+  if (!newCol) return;
+  card.status = newCol;
+  saveSocialLS();
+  renderSocial();
+  toast('→ ' + SOCIAL_COL_LABEL[newCol]);
+}
+
 </script>
 
 <!-- ══ MORE SHEET (mobile) ══ -->
@@ -2418,12 +2664,79 @@ function _fallbackCopy(text) {
         <button onclick="navMore('config')" class="more-btn"><div class="more-ic" style="background:var(--bg4)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><span>Config</span></button>
       </div>
     </div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Contenido</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+      <button onclick="navMore('social')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.7 5.5 4.4 9 4.5-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.7z"/></svg></div><span>Redes</span></button>
+    </div>
     <div style="padding:8px 14px 14px;border-top:1px solid var(--sep);margin-top:4px">
       <button onclick="logout()" class="btn btn-d btn-full btn-sm">Cerrar sesión</button>
     </div>
   </div>
 </div>
 
+
+<!-- ══ SOCIAL CARD SHEET ══ -->
+<div class="sovl" id="social-sht">
+  <div class="sht" style="max-height:94vh">
+    <div class="sht-handle"></div>
+    <div class="sht-head">
+      <div class="sht-title" id="sc-sht-title">Nueva tarjeta</div>
+      <button class="sht-close" onclick="closeSheet('social-sht')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="sht-body">
+      <div class="fld"><div class="fld-lbl">Título *</div><input class="inp" id="sc-title" placeholder="Idea de contenido..."></div>
+      <div class="frow">
+        <div class="fld"><div class="fld-lbl">Estado</div>
+          <select class="inp" id="sc-status">
+            <option value="todo">To do</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+            <option value="emergencia">Emergencia</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        <div class="fld"><div class="fld-lbl">Plataforma</div>
+          <select class="inp" id="sc-plat">
+            <option value="ig">Instagram</option>
+            <option value="tt">TikTok</option>
+            <option value="yt">YouTube</option>
+            <option value="tw">Twitter/X</option>
+            <option value="fb">Facebook</option>
+            <option value="ot">Otra</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fld"><div class="fld-lbl">Formato</div>
+          <select class="inp" id="sc-fmt">
+            <option value="Reel">Reel</option>
+            <option value="Post">Post</option>
+            <option value="Story">Story</option>
+            <option value="Video">Video</option>
+            <option value="Carrusel">Carrusel</option>
+            <option value="Live">Live</option>
+            <option value="Thread">Thread</option>
+          </select>
+        </div>
+        <div class="fld"><div class="fld-lbl">Fecha</div><input class="inp" id="sc-date" type="date"></div>
+      </div>
+      <div class="fld"><div class="fld-lbl">Idea / Objetivo</div><textarea class="inp" id="sc-idea" rows="2" placeholder="¿Qué quieres transmitir?"></textarea></div>
+      <div class="fld"><div class="fld-lbl">Guion / Script</div><textarea class="inp" id="sc-script" rows="4" placeholder="Guion o puntos clave..."></textarea></div>
+      <div class="fld">
+        <div class="fld-lbl">Checklist</div>
+        <div class="sc-checklist" id="sc-checklist"></div>
+        <div class="sc-add-check">
+          <input class="inp" id="sc-check-inp" placeholder="Agregar ítem..." onkeydown="if(event.key==='Enter')addSocialCheckItem()">
+          <button onclick="addSocialCheckItem()">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="sht-foot">
+      <button class="btn btn-p btn-full" onclick="saveSocialCard()">Guardar</button>
+      <button class="btn btn-d btn-full" id="sc-del-btn" onclick="deleteSocialCard()" style="display:none">Eliminar tarjeta</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 
