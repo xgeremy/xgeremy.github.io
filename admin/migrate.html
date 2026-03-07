@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Studio OS · Migración de datos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#F2F2F7;--bg2:#fff;--ink:#000;--ink2:rgba(60,60,67,.9);--ink3:rgba(60,60,67,.6);--ink4:rgba(60,60,67,.36);--sep:rgba(60,60,67,.12);--blue:#007AFF;--green:#34C759;--red:#FF3B30;--orange:#FF9500;--font:'DM Sans',-apple-system,sans-serif;--r:14px}
+[data-theme=dark]{--bg:#000;--bg2:#1C1C1E;--ink:#fff;--ink2:rgba(235,235,245,.88);--ink3:rgba(235,235,245,.55);--ink4:rgba(235,235,245,.3);--sep:rgba(84,84,88,.5)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:15px}
+body{display:flex;flex-direction:column;align-items:center;padding:32px 16px 64px}
+.card{background:var(--bg2);border-radius:20px;padding:28px 24px;width:100%;max-width:540px;margin-bottom:16px;border:1px solid var(--sep)}
+h1{font-size:22px;font-weight:700;letter-spacing:-.04em;margin-bottom:4px}
+.sub{font-size:13px;color:var(--ink3);margin-bottom:20px}
+.field{margin-bottom:14px}
+label{display:block;font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+input{width:100%;background:var(--bg);border:1.5px solid transparent;border-radius:12px;padding:12px 14px;font-family:var(--font);font-size:15px;color:var(--ink);outline:none;transition:all .15s}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,122,255,.12)}
+input::placeholder{color:var(--ink4)}
+input[type=password]{letter-spacing:.08em}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:14px;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px}
+.btn:active{transform:scale(.97);opacity:.85}
+.btn-p{background:var(--blue);color:#fff}
+.btn-p:hover{filter:brightness(1.08)}
+.btn-p:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-s{background:var(--bg);color:var(--ink2)}
+.log{background:var(--bg);border-radius:14px;padding:14px;font-size:12px;font-family:monospace;line-height:1.7;max-height:320px;overflow-y:auto;white-space:pre-wrap;border:1px solid var(--sep)}
+.log-line{display:block}
+.ok{color:var(--green)}
+.err{color:var(--red)}
+.warn{color:var(--orange)}
+.info{color:var(--blue)}
+.sep{border:none;border-top:1px solid var(--sep);margin:20px 0}
+.step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--sep)}
+.step:last-child{border:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--bg);border:1.5px solid var(--sep);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink3);flex-shrink:0}
+.step-num.done{background:var(--green);border-color:var(--green);color:#fff}
+.step-num.run{background:var(--blue);border-color:var(--blue);color:#fff}
+.step-num.err{background:var(--red);border-color:var(--red);color:#fff}
+.step-text{font-size:13px;color:var(--ink2)}
+.step-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-blue{background:rgba(0,122,255,.12);color:var(--blue)}
+.badge-green{background:rgba(52,199,89,.12);color:var(--green)}
+.badge-red{background:rgba(255,59,48,.1);color:var(--red)}
+.progress{height:4px;background:var(--sep);border-radius:99px;overflow:hidden;margin:16px 0}
+.progress-fill{height:100%;background:var(--blue);border-radius:99px;transition:width .4s ease}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🔄 Migración Studio OS</h1>
+  <p class="sub">Sube todos los datos de este dispositivo a Supabase para sincronizar con todos tus dispositivos.</p>
+
+  <div id="login-section">
+    <div class="field">
+      <label>Email admin</label>
+      <input type="email" id="email-in" value="geremymons@gmail.com" placeholder="tu@email.com">
+    </div>
+    <div class="field">
+      <label>Contraseña Supabase</label>
+      <input type="password" id="pass-in" placeholder="Tu contraseña de admin">
+    </div>
+    <button class="btn btn-p" id="login-btn" onclick="doLogin()">Iniciar sesión y migrar</button>
+  </div>
+
+  <div id="migrate-section" style="display:none">
+    <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+    <div id="steps">
+      <div class="step" id="s-auth"><div class="step-num done" id="sn-auth">✓</div><div><div class="step-text">Autenticado en Supabase</div></div></div>
+      <div class="step" id="s-clients"><div class="step-num" id="sn-clients">2</div><div><div class="step-text">Clientes &amp; transacciones</div><div class="step-sub" id="ss-clients">Esperando...</div></div></div>
+      <div class="step" id="s-appts"><div class="step-num" id="sn-appts">3</div><div><div class="step-text">Citas (appointments_v2)</div><div class="step-sub" id="ss-appts">Esperando...</div></div></div>
+      <div class="step" id="s-sessions"><div class="step-num" id="sn-sessions">4</div><div><div class="step-text">Sesiones / Bitácora</div><div class="step-sub" id="ss-sessions">Esperando...</div></div></div>
+      <div class="step" id="s-habits"><div class="step-num" id="sn-habits">5</div><div><div class="step-text">Hábitos</div><div class="step-sub" id="ss-habits">Esperando...</div></div></div>
+      <div class="step" id="s-goals"><div class="step-num" id="sn-goals">6</div><div><div class="step-text">Objetivos</div><div class="step-sub" id="ss-goals">Esperando...</div></div></div>
+      <div class="step" id="s-inv"><div class="step-num" id="sn-inv">7</div><div><div class="step-text">Inventario</div><div class="step-sub" id="ss-inv">Esperando...</div></div></div>
+      <div class="step" id="s-notes"><div class="step-num" id="sn-notes">8</div><div><div class="step-text">Notas (Notion)</div><div class="step-sub" id="ss-notes">Esperando...</div></div></div>
+    </div>
+    <div id="done-msg" style="display:none;margin-top:20px;text-align:center">
+      <div style="font-size:32px;margin-bottom:8px">🎉</div>
+      <div style="font-size:17px;font-weight:700">Migración completa</div>
+      <div style="font-size:13px;color:var(--ink3);margin-top:4px">Todos tus datos están ahora en Supabase y se sincronizarán entre dispositivos.</div>
+      <a href="/admin/" class="btn btn-p" style="margin-top:16px;text-decoration:none">Ir al admin →</a>
+    </div>
+  </div>
+
+  <hr class="sep">
+  <div class="log" id="log">Esperando inicio de sesión...<br></div>
+</div>
+
+<div class="card">
+  <h1 style="font-size:16px">⚠️ Antes de migrar</h1>
+  <p style="font-size:13px;color:var(--ink2);margin-top:8px;line-height:1.7">
+    1. Asegúrate de haber ejecutado el SQL de <strong>migration.sql</strong> en Supabase > SQL Editor.<br>
+    2. Esta herramienta lee tu localStorage (datos de <em>este</em> dispositivo) y los sube a Supabase.<br>
+    3. Después de migrar, abre el admin en cualquier dispositivo — cargará desde Supabase automáticamente.
+  </p>
+</div>
+
+<script>
+const SB_URL = 'https://lmopbyirrhhpluuussjf.supabase.co';
+const SB_KEY = 'sb_publishable_NZ8C6r-jsGeT77QUbMYzsA_rY_Dd1nj';
+const db = supabase.createClient(SB_URL, SB_KEY);
+
+const APPTS_TABLE   = 'appointments_v2';
+const SESSIONS_TABLE= 'sessions_v2';
+const HABITS_TABLE  = 'habits_v2';
+const GOALS_TABLE   = 'goals_v2';
+const INV_TABLE     = 'inventory_v2';
+const NOTION_TABLE  = 'notion_pages_v2';
+
+let logEl;
+function log(msg, cls='') {
+  if (!logEl) logEl = document.getElementById('log');
+  const s = document.createElement('span');
+  s.className = 'log-line' + (cls ? ' ' + cls : '');
+  s.textContent = msg;
+  logEl.appendChild(s);
+  logEl.appendChild(document.createTextNode('\n'));
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function setStep(id, state, sub) {
+  const num = document.getElementById('sn-' + id);
+  if (num) { num.className = 'step-num ' + state; if (state==='done') num.textContent='✓'; if (state==='err') num.textContent='✗'; }
+  const ss = document.getElementById('ss-' + id);
+  if (ss && sub) ss.textContent = sub;
+}
+
+function setProgress(pct) {
+  const el = document.getElementById('prog');
+  if (el) el.style.width = pct + '%';
+}
+
+function parseLS(key, fallback=[]) {
+  try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch { return fallback; }
+}
+
+async function doLogin() {
+  const email = document.getElementById('email-in').value.trim();
+  const pass  = document.getElementById('pass-in').value;
+  const btn   = document.getElementById('login-btn');
+  if (!email || !pass) { log('⚠ Email y contraseña requeridos', 'warn'); return; }
+  btn.disabled = true;
+  btn.textContent = 'Iniciando sesión...';
+  log('🔐 Autenticando con Supabase...', 'info');
+  try {
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+    if (error) throw error;
+    log('✓ Sesión iniciada: ' + data.user.email, 'ok');
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('migrate-section').style.display = 'block';
+    setStep('auth', 'done');
+    setProgress(12);
+    await runMigration();
+  } catch(e) {
+    log('✗ Error de autenticación: ' + e.message, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Iniciar sesión y migrar';
+  }
+}
+
+async function upsertBatch(table, rows, onConflict='id') {
+  if (!rows.length) return { ok: 0, err: 0 };
+  const { error } = await db.from(table).upsert(rows, { onConflict });
+  if (error) throw error;
+  return { ok: rows.length, err: 0 };
+}
+
+async function runMigration() {
+  const steps = [
+    ['clients',   migrateClients],
+    ['appts',     migrateAppts],
+    ['sessions',  migrateSessions],
+    ['habits',    migrateHabits],
+    ['goals',     migrateGoals],
+    ['inv',       migrateInventory],
+    ['notes',     migrateNotion],
+  ];
+  const total = steps.length;
+  for (let i = 0; i < steps.length; i++) {
+    const [id, fn] = steps[i];
+    setStep(id, 'run', 'Migrando...');
+    try {
+      const result = await fn();
+      setStep(id, 'done', result);
+      setProgress(12 + Math.round((i + 1) / total * 88));
+    } catch(e) {
+      setStep(id, 'err', e.message);
+      log('✗ Error en ' + id + ': ' + e.message, 'err');
+    }
+    await new Promise(r => setTimeout(r, 200));
+  }
+  document.getElementById('done-msg').style.display = 'block';
+  log('\n🎉 Migración completa. Abre el admin en cualquier dispositivo.', 'ok');
+}
+
+async function migrateClients() {
+  const clients = parseLS('xg_clients');
+  const txs     = parseLS('xg_txs');
+  log('👥 Clientes: ' + clients.length + ' | Transacciones: ' + txs.length, 'info');
+
+  if (clients.length) {
+    const rows = clients.map(c => ({
+      nombre: String(c.nombre||''), email: String(c.email||''),
+      telefono: String(c.telefono||''), puntos: +c.puntos||0,
+      montoCLP: +c.montoCLP||0, ultimoTatuaje: String(c.ultimoTatuaje||''),
+      notas: String(c.notas||''), tier: String(c.tier||'Bronce'),
+      instagram: String(c.instagram||'')
+    }));
+    const { error } = await db.from('clientes').upsert(rows, { onConflict: 'email' });
+    if (error) throw error;
+    log('  ✓ ' + clients.length + ' clientes subidos', 'ok');
+  }
+
+  if (txs.length) {
+    const rows = txs.map(t => ({
+      tipo: String(t.type||'out'), monto: +t.amount||0,
+      descripcion: String(t.desc||''), fecha: String(t.date||''),
+      categoria: String(t.cat||''), cliente: String(t.client||'')
+    }));
+    const { error } = await db.from('transacciones').upsert(rows, { onConflict: 'descripcion,fecha' });
+    if (error) { log('  ⚠ Txs: ' + error.message + ' (continuando)', 'warn'); }
+    else log('  ✓ ' + txs.length + ' transacciones subidas', 'ok');
+  }
+  return clients.length + ' clientes, ' + txs.length + ' transacciones';
+}
+
+async function migrateAppts() {
+  const appts = parseLS('xg_appointments');
+  log('📅 Citas: ' + appts.length, 'info');
+  if (!appts.length) return '0 citas (localStorage vacío)';
+  const rows = appts.map(a => ({
+    id: a.id ? +a.id : Date.now() + Math.random() * 1000 | 0,
+    client: String(a.client||''), date: String(a.date||''),
+    time: String(a.time||''), dur: +a.dur||0,
+    price: +a.price||0, deposit: +a.deposit||0, pts: +a.pts||0,
+    zone: String(a.zone||''), appt_desc: String(a.desc||''),
+    type: String(a.type||'tattoo'), status: String(a.status||'pending')
+  }));
+  await upsertBatch(APPTS_TABLE, rows);
+  log('  ✓ ' + rows.length + ' citas subidas', 'ok');
+  return rows.length + ' citas';
+}
+
+async function migrateSessions() {
+  const sessions = parseLS('xg_sessions');
+  log('📓 Sesiones: ' + sessions.length, 'info');
+  if (!sessions.length) return '0 sesiones (localStorage vacío)';
+  const rows = sessions.map(s => ({
+    id: s.id ? +s.id : Date.now() + Math.random() * 1000 | 0,
+    client: String(s.client||''), date: String(s.date||''),
+    hours: +s.hours||0, price: +s.price||0,
+    style: String(s.style||'Blackwork'), zone: String(s.zone||''),
+    sessnum: +s.sessnum||1, pts: +s.pts||0,
+    session_desc: String(s.desc||''), improve: String(s.improve||''),
+    rating: +s.rating||3, appt_id: s.apptId ? +s.apptId : null
+  }));
+  await upsertBatch(SESSIONS_TABLE, rows);
+  log('  ✓ ' + rows.length + ' sesiones subidas', 'ok');
+  return rows.length + ' sesiones';
+}
+
+async function migrateHabits() {
+  const habits = parseLS('xg_habits');
+  log('✅ Hábitos: ' + habits.length, 'info');
+  if (!habits.length) return '0 hábitos';
+  const rows = habits.map(h => ({
+    id: h.id ? +h.id : Date.now() + Math.random() * 1000 | 0,
+    habit_key: String(h.habit_key || ('hab-' + h.id)),
+    name: String(h.name||''), cat: String(h.cat||'salud'),
+    log_json: h.log || {}
+  }));
+  await upsertBatch(HABITS_TABLE, rows);
+  log('  ✓ ' + rows.length + ' hábitos subidos', 'ok');
+  return rows.length + ' hábitos';
+}
+
+async function migrateGoals() {
+  const goals = parseLS('xg_goals');
+  log('🎯 Objetivos: ' + goals.length, 'info');
+  if (!goals.length) return '0 objetivos';
+  const rows = goals.map(g => ({
+    id: g.id ? +g.id : Date.now() + Math.random() * 1000 | 0,
+    title: String(g.title||''), goal_desc: String(g.desc||''),
+    pct: +g.pct||0, due: String(g.due||''),
+    goal_type: String(g.type||'monthly')
+  }));
+  await upsertBatch(GOALS_TABLE, rows);
+  log('  ✓ ' + rows.length + ' objetivos subidos', 'ok');
+  return rows.length + ' objetivos';
+}
+
+async function migrateInventory() {
+  const items = parseLS('xg_inventory');
+  log('📦 Inventario: ' + items.length, 'info');
+  if (!items.length) return '0 ítems';
+  const rows = items.map(item => ({
+    id: item.id ? +item.id : Date.now() + Math.random() * 1000 | 0,
+    name: String(item.name||''),
+    cat: (item.cat==='agujas' && item.subcat) ? 'agujas:' + item.subcat : String(item.cat||'otro'),
+    stock: +item.stock||0, min: +item.min||1,
+    unit: String(item.status||''), prov: String(item.prov||''),
+    notes: String(item.notes||'')
+  }));
+  await upsertBatch(INV_TABLE, rows);
+  log('  ✓ ' + rows.length + ' ítems subidos', 'ok');
+  return rows.length + ' ítems';
+}
+
+async function migrateNotion() {
+  const pages = parseLS('xg_notion');
+  log('📝 Notas: ' + pages.length, 'info');
+  if (!pages.length) return '0 páginas';
+  const rows = pages.map(p => ({
+    id: p.id ? +p.id : Date.now() + Math.random() * 1000 | 0,
+    page_key: String(p.page_key || ('page-' + p.id)),
+    title: String(p.title||'Sin título'),
+    content_html: String(p.content||'')
+  }));
+  await upsertBatch(NOTION_TABLE, rows);
+  log('  ✓ ' + rows.length + ' páginas subidas', 'ok');
+  return rows.length + ' páginas';
+}
+
+// Auto dark mode
+if (localStorage.getItem('xg_theme') === 'dark') document.documentElement.setAttribute('data-theme','dark');
+</script>
+</body>
+</html>
