@@ -1267,6 +1267,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -1686,11 +1687,10 @@ function renderCal(){
     const isSel=iso===calSelected;
     const dots=dayAppts.slice(0,4).map(a=>`<div class="cal-dot" style="background:${APPT_COLORS[a.type]||'var(--blue)'}"></div>`).join('');
     const socCards=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado');
-    const SOC_PLAT_CAL={ig:'#c13584',tt:'#555',yt:'#cc0000',tw:'#1a8cd8',fb:'#1877f2',ot:'#6e6e73'};
-    const socChips=socCards.slice(0,2).map(c=>`<div style="margin-top:2px;border-radius:4px;font-size:8px;font-weight:700;padding:1px 4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;background:${SOC_PLAT_CAL[c.plat]||'#6e6e73'}22;color:${SOC_PLAT_CAL[c.plat]||'#6e6e73'};border:1px solid ${SOC_PLAT_CAL[c.plat]||'#6e6e73'}44">${c.title.slice(0,10)}</div>`).join('');
+    const socDots=socCards.slice(0,3).map(()=>'<div class="cal-dot" style="background:#c13584"></div>').join('');
     html+=`<div class="cal-day${isOther?' other-month':''}${isToday?' today':''}${isSel?' selected':''}" onclick="selectCalDay('${iso}')">
       <div class="cal-dn">${d}</div>
-      ${dots?`<div class="cal-dots">${dots}</div>`:''}${socChips}
+      ${(dots||socDots)?`<div class="cal-dots">${dots}${socDots}</div>`:''}
     </div>`;
   }
   grid.innerHTML=html;
@@ -1705,15 +1705,19 @@ function renderDayPanel(iso){
   const d=new Date(iso+'T12:00:00');
   title.textContent=d.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'}).replace(/^\w/,c=>c.toUpperCase());
   const dayAppts=appointments.filter(a=>a.date===iso).sort((a,b)=>(a.time||'00:00').localeCompare(b.time||'00:00'));
-  count.textContent=dayAppts.length?`${dayAppts.length} cita${dayAppts.length>1?'s':''}`:iso>=today()?'Sin citas · Haz click para agregar':'Sin citas';
+  const SOC_PLAT_COL={ig:'#c13584',tt:'#666',yt:'#cc0000',tw:'#1a8cd8',fb:'#1877f2',ot:'#8e8e93'};
+  const PLAT_FULL={ig:'Instagram',tt:'TikTok',yt:'YouTube',tw:'Twitter/X',fb:'Facebook',ot:'Otra'};
+  const SOC_FMT_ICON={Reel:'🎬',Post:'📷',Story:'⭕',Video:'▶️',Carrusel:'🗂',Live:'🔴',Thread:'🧵'};
+  const daySocCards=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado');
+  const total=dayAppts.length+daySocCards.length;
+  count.textContent=total
+    ? `${dayAppts.length?dayAppts.length+' cita'+(dayAppts.length>1?'s':''):''}${dayAppts.length&&daySocCards.length?' · ':''}${daySocCards.length?daySocCards.length+' post'+(daySocCards.length>1?'s':''):''}`
+    : iso>=today()?'Sin eventos · Haz click para agregar':'Sin eventos';
   if(!appts_el)return;
-  if(!dayAppts.length){
-    appts_el.innerHTML=`<div class="appt-empty" onclick="openApptSheetForDate('${iso}')" style="cursor:pointer">Toca para agregar una cita</div>`;
-    return;
-  }
-  appts_el.innerHTML=dayAppts.map((a,i)=>{
+  let html='';
+  // Appointment cards
+  html+=dayAppts.map(a=>{
     const ri=appointments.indexOf(a);
-    const totalAppts=dayAppts.length;
     return`<div class="appt appt-type-${a.type}" onclick="editAppt(${ri})">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
         <div class="appt-client">${a.client}</div>
@@ -1732,29 +1736,26 @@ function renderDayPanel(iso){
       ${a.desc?`<div style="font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.5">${a.desc}</div>`:''}
     </div>`;
   }).join('');
-  // Social cards for this day
-  const SOC_PLAT_CAL2={ig:'#c13584',tt:'#555',yt:'#cc0000',tw:'#1a8cd8',fb:'#1877f2',ot:'#6e6e73'};
-  const PLAT_FULL={ig:'Instagram',tt:'TikTok',yt:'YouTube',tw:'Twitter/X',fb:'Facebook',ot:'Otra'};
-  const SOC_FMT_ICON={Reel:'🎬',Post:'📷',Story:'⭕',Video:'▶️',Carrusel:'🗂',Live:'🔴',Thread:'🧵'};
-  const daySocCards=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado');
-  if(daySocCards.length){
-    appts_el.innerHTML+=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#c13584;margin:12px 0 6px;padding-top:10px;border-top:1px solid var(--sep)">📱 Contenido Redes (${daySocCards.length})</div>`;
-    appts_el.innerHTML+=daySocCards.map(c=>{
-      const col=SOC_PLAT_CAL2[c.plat]||'#6e6e73';
-      const statusLabel={todo:'Por hacer',doing:'En progreso',done:'Publicado',cancelado:'Cancelado',emergencia:'Urgente'}[c.status]||c.status;
-      return`<div style="border-radius:14px;padding:11px 13px;margin-bottom:6px;background:${col}14;border:1.5px solid ${col}33;cursor:pointer" onclick="nav('social');openSocialCard(${socialCards.indexOf(c)})">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px">
-          <div style="font-size:14px;font-weight:600;color:var(--ink)">${c.title}</div>
-          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:${col}22;color:${col}">${statusLabel}</span>
-        </div>
-        <div style="font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center">
-          <span style="color:${col};font-weight:600">${PLAT_FULL[c.plat]||c.plat}</span>
-          <span>${SOC_FMT_ICON[c.fmt]||''} ${c.fmt||''}</span>
-          ${c.idea?`<span style="color:var(--ink4)">${c.idea.slice(0,30)}${c.idea.length>30?'…':''}</span>`:''}
-        </div>
-      </div>`;
-    }).join('');
-  }
+  // Social cards — styled as events (same visual weight as appts)
+  html+=daySocCards.map(c=>{
+    const col=SOC_PLAT_COL[c.plat]||'#8e8e93';
+    const statusLabel={todo:'Por hacer',doing:'En progreso',done:'Publicado',emergencia:'Urgente'}[c.status]||c.status;
+    const ri=socialCards.indexOf(c);
+    return`<div class="appt" style="border-left:3px solid ${col};cursor:pointer" onclick="nav('social');setTimeout(()=>openSocialCard(${ri}),120)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div class="appt-client" style="color:${col}">${SOC_FMT_ICON[c.fmt]||'📱'} ${c.title}</div>
+        <span class="bdg" style="background:${col}22;color:${col};font-size:10px">${statusLabel}</span>
+      </div>
+      <div class="appt-detail">
+        <span style="color:${col};font-weight:600">${PLAT_FULL[c.plat]||c.plat}</span>
+        ${c.fmt?`<span>${c.fmt}</span>`:''}
+        ${c.idea?`<span style="color:var(--ink4)">${c.idea.slice(0,35)}${c.idea.length>35?'…':''}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  // Empty state with add button
+  if(!html) html=`<div class="appt-empty" onclick="openApptSheetForDate('${iso}')" style="cursor:pointer">Toca para agregar una cita</div>`;
+  appts_el.innerHTML=html;
 }
 function openApptSheetForDate(iso){
   apptEditIdx=-1;
@@ -3203,6 +3204,7 @@ function toggleProjCard() {
   if (caret) { caret.style.transform = open ? '' : 'rotate(90deg)'; }
   if (body.style.display !== 'none') renderMonthlyProjection();
 }
+
 
 
 </script>
