@@ -1269,6 +1269,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -1484,7 +1485,7 @@ async function boot(){
   setupApptSync();
   setupSharedSync();
   const qn=localStorage.getItem('xg_qn');if(qn){const el=document.getElementById('qnote');if(el)el.value=safeText(qn,500);}
-  loadLBC();renderPE();renderCfg();initNotion();renderHome();loadGC();
+  await autoCompleteAppts();loadLBC();renderPE();renderCfg();initNotion();renderHome();loadGC();
 }
 
 async function resolveAppointmentsTable(){
@@ -2916,11 +2917,14 @@ function renderMonthlyProjection() {
     .filter(t => t.type==='in' && new Date(t.date).getMonth()===mo && new Date(t.date).getFullYear()===yr)
     .reduce((s,t) => s+(+t.amount||0), 0);
 
-  // Projected: pending appts this month with price
+  // Projected: only pending/confirmed (not done/cancelled) future appts this month
   const projected = (appointments||[])
     .filter(a => {
       const d = new Date(a.date);
-      return d.getMonth()===mo && d.getFullYear()===yr && a.date >= todayStr && a.status!=='cancelled' && +a.price>0;
+      const isFuture = a.date > todayStr || (a.date === todayStr && (a.time||'23:59') > new Date().toTimeString().slice(0,5));
+      return d.getMonth()===mo && d.getFullYear()===yr
+        && (a.status==='pending' || a.status==='confirmed')
+        && isFuture && +a.price>0;
     })
     .reduce((s,a) => s+(+a.price||0), 0);
 
@@ -3267,6 +3271,67 @@ async function loadSocialFromSupabase() {
     }
     return true;
   } catch(e) { console.error('[Social load]', e); return false; }
+}
+
+
+// ── AUTO-COMPLETE PAST APPOINTMENTS ────────────────────────
+async function autoCompleteAppts() {
+  const now = new Date();
+  const todayStr = today();
+  const nowTime = now.toTimeString().slice(0,5); // "HH:MM"
+  let changed = false;
+
+  for (let i = 0; i < appointments.length; i++) {
+    const a = appointments[i];
+    if (a.status === 'done' || a.status === 'cancelled') continue;
+    // Past date, OR same date but time+duration has passed
+    const isPastDate = a.date < todayStr;
+    const isTodayPast = a.date === todayStr && (() => {
+      if (!a.time) return false; // no time set — don't auto-complete same day
+      const endHour = a.time.split(':');
+      const startMin = +endHour[0]*60 + +endHour[1];
+      const durMin = (+a.dur || 1) * 60;
+      const endMin = startMin + durMin;
+      const endTime = String(Math.floor(endMin/60)).padStart(2,'0') + ':' + String(endMin%60).padStart(2,'0');
+      return nowTime >= endTime;
+    })();
+
+    if (!isPastDate && !isTodayPast) continue;
+
+    // Mark done
+    appointments[i] = {...a, status:'done'};
+    changed = true;
+
+    // Add transaction if not already present
+    const alreadyTx = txList.some(t =>
+      t.type==='in' && t.client===a.client && t.date===a.date && +t.amount===(+a.price||0) && (t.desc||'').includes(a.client)
+    );
+    if (+a.price > 0 && !alreadyTx) {
+      txList.push({type:'in', amount:+a.price, desc:`Tatuaje · ${a.client}`, date:a.date, cat:'Tatuaje', client:a.client});
+      await persistTx();
+    }
+    // Add points if not already
+    if (+a.pts > 0) {
+      const cli = clients.find(c => c.nombre.toLowerCase() === a.client.toLowerCase());
+      if (cli) {
+        const alreadyPts = cli._autoCompletedAppts && cli._autoCompletedAppts.includes(a.id);
+        if (!alreadyPts) {
+          cli.puntos = (+cli.puntos||0) + (+a.pts||0);
+          cli.tier = getTier(cli.puntos);
+          if (!cli._autoCompletedAppts) cli._autoCompletedAppts = [];
+          cli._autoCompletedAppts.push(a.id);
+        }
+      }
+    }
+    // Sync to Supabase
+    await syncApptToSupabase(appointments[i], i);
+  }
+
+  if (changed) {
+    localStorage.setItem('xg_appointments', JSON.stringify(appointments));
+    await persistClients();
+    console.log('[autoComplete] Updated past appointments to done');
+  }
 }
 
 </script>
