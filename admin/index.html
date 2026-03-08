@@ -1271,6 +1271,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -3276,7 +3277,7 @@ async function loadSocialFromSupabase() {
 
 
 // ── AUTO-COMPLETE PAST APPOINTMENTS ────────────────────────
-async async function autoCompleteAppts() {
+async function autoCompleteAppts() {
   const now = new Date();
   const todayStr = today();
   const nowTime = now.toTimeString().slice(0,5); // "HH:MM"
@@ -3332,6 +3333,7 @@ async async function autoCompleteAppts() {
     console.log('[autoComplete] Updated past appointments to done');
   }
 }
+
 
 
 </script>
