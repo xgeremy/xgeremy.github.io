@@ -1268,6 +1268,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -1329,6 +1330,7 @@ const HABITS_TABLE='habits_v2';
 const GOALS_TABLE='goals_v2';
 const INVENTORY_TABLE='inventory_v2';
 const NOTION_TABLE='notion_pages_v2';
+const SOCIAL_TABLE='social_cards_v2';
 
 // ── UTILS ──
 function today(){return new Date().toISOString().slice(0,10);}
@@ -1497,13 +1499,18 @@ async function resolveAppointmentsTable(){
 
 async function loadSharedFromSupabase(){
   try{
-    const [sd,hd,gd,idt,nd]=await Promise.all([
+    const [sd,hd,gd,idt,nd,scD]=await Promise.all([
       db.from(SESSIONS_TABLE).select('*').order('date',{ascending:false}),
       db.from(HABITS_TABLE).select('*').order('id',{ascending:true}),
       db.from(GOALS_TABLE).select('*').order('id',{ascending:true}),
       db.from(INVENTORY_TABLE).select('*').order('id',{ascending:true}),
       db.from(NOTION_TABLE).select('*').order('id',{ascending:true}),
+      db.from(SOCIAL_TABLE).select('*').order('id',{ascending:true}),
     ]);
+        if(!scD.error&&Array.isArray(scD.data)){
+      socialCards=scD.data.map(r=>({id:r.id,title:r.title||'',status:r.status||'todo',plat:r.plat||'ig',fmt:r.fmt||'Reel',date:r.card_date||'',idea:r.idea||'',script:r.script_text||'',checklist:r.checklist_json||[]}));
+      localStorage.setItem('xg_social_board_v1',JSON.stringify(socialCards));
+    }
     if(!sd.error&&Array.isArray(sd.data)){
       sessions=sd.data.map(r=>({id:r.id,client:r.client,date:r.date,hours:+r.hours||0,price:+r.price||0,style:r.style||'Blackwork',zone:r.zone||'',sessnum:+r.sessnum||1,pts:+r.pts||0,desc:r.session_desc||'',improve:r.improve||'',rating:+r.rating||3,apptId:r.appt_id||''}));
       localStorage.setItem('xg_sessions',JSON.stringify(sessions));
@@ -1741,7 +1748,7 @@ function renderDayPanel(iso){
     const col=SOC_PLAT_COL[c.plat]||'#8e8e93';
     const statusLabel={todo:'Por hacer',doing:'En progreso',done:'Publicado',emergencia:'Urgente'}[c.status]||c.status;
     const ri=socialCards.indexOf(c);
-    return`<div class="appt" style="border-left:3px solid ${col};cursor:pointer" onclick="nav('social');setTimeout(()=>openSocialCard(${ri}),120)">
+    return`<div class="appt" style="background:${col}14;border-left:3px solid ${col};cursor:pointer" onclick="nav('social');setTimeout(()=>openSocialCard(${ri}),120)">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
         <div class="appt-client" style="color:${col}">${SOC_FMT_ICON[c.fmt]||'📱'} ${c.title}</div>
         <span class="bdg" style="background:${col}22;color:${col};font-size:10px">${statusLabel}</span>
@@ -2784,6 +2791,7 @@ function saveSocialCard() {
   if (socialEditIdx >= 0) socialCards[socialEditIdx] = card;
   else socialCards.push(card);
   saveSocialLS();
+  upsertSocialToSupabase(card);
   closeSheet('social-sht');
   renderSocial();
   toast(socialEditIdx >= 0 ? 'Tarjeta actualizada' : 'Tarjeta creada');
@@ -2791,8 +2799,10 @@ function saveSocialCard() {
 
 function deleteSocialCard() {
   if (socialEditIdx < 0) return;
+  const deletedId = socialCards[socialEditIdx].id;
   socialCards.splice(socialEditIdx, 1);
   saveSocialLS();
+  deleteSocialFromSupabase(deletedId);
   closeSheet('social-sht');
   renderSocial();
   toast('Tarjeta eliminada');
@@ -2806,6 +2816,7 @@ function moveSocialCard(idx, dir) {
   if (!newCol) return;
   card.status = newCol;
   saveSocialLS();
+  upsertSocialToSupabase(card);
   renderSocial();
   toast('→ ' + SOCIAL_COL_LABEL[newCol]);
 }
@@ -3206,6 +3217,57 @@ function toggleProjCard() {
 }
 
 
+
+
+// ── SOCIAL CARDS SUPABASE SYNC ─────────────────────────────
+async function upsertSocialToSupabase(card) {
+  try {
+    const row = {
+      id: card.id,
+      title: String(card.title||''),
+      status: String(card.status||'todo'),
+      plat: String(card.plat||'ig'),
+      fmt: String(card.fmt||'Reel'),
+      card_date: card.date||null,
+      idea: String(card.idea||''),
+      script_text: String(card.script||''),
+      checklist_json: card.checklist||[]
+    };
+    const {error} = await db.from(SOCIAL_TABLE).upsert(row, {onConflict:'id'});
+    if (error) console.error('[Social upsert]', error);
+    return !error;
+  } catch(e) { console.error('[Social upsert]', e); return false; }
+}
+
+async function deleteSocialFromSupabase(id) {
+  try {
+    const {error} = await db.from(SOCIAL_TABLE).delete().eq('id', id);
+    if (error) console.error('[Social delete]', error);
+    return !error;
+  } catch(e) { console.error('[Social delete]', e); return false; }
+}
+
+async function loadSocialFromSupabase() {
+  try {
+    const {data, error} = await db.from(SOCIAL_TABLE).select('*').order('id', {ascending:true});
+    if (error) { console.error('[Social load]', error); return false; }
+    if (Array.isArray(data)) {
+      socialCards = data.map(r => ({
+        id: r.id,
+        title: r.title||'',
+        status: r.status||'todo',
+        plat: r.plat||'ig',
+        fmt: r.fmt||'Reel',
+        date: r.card_date||'',
+        idea: r.idea||'',
+        script: r.script_text||'',
+        checklist: r.checklist_json||[]
+      }));
+      localStorage.setItem('xg_social_board_v1', JSON.stringify(socialCards));
+    }
+    return true;
+  } catch(e) { console.error('[Social load]', e); return false; }
+}
 
 </script>
 
