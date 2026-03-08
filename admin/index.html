@@ -635,7 +635,7 @@ html.ios-standalone textarea{font-size:16px !important}
     <div class="sd-sect">Sitio</div>
     <button class="nb" onclick="nav('pageeditor',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Editor</button>
     <button class="nb" onclick="nav('agenda',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>Disponibilidad</button>
-    onclick="nav('flash',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flash del Mes</button>
+    <button class="nb" onclick="nav('flash',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flash del Mes</button>
     <button class="nb" onclick="nav('seo',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>SEO</button>
     <div class="sd-sect">Negocio</div>
     <button class="nb" onclick="nav('social',this)"><span class="nb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>Redes</button>
@@ -1270,6 +1270,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -1818,7 +1819,7 @@ async function saveAppt(){
       await persistClients();
     }
     if(price>0){
-      txList.push({type:'in',amount:price,desc:`Tatuaje · ${client}`,date,cat:'Tatuaje',client});
+      txList.push({type:'in',amount:price,desc:`Tatuaje · ${client}`,date,cat:'Tatuaje',client,apptId:a.id});
       await persistTx();
     }
     if(pts>0||price>0)toast(`Cita completada: +${pts}pts · ${price?fclp(price):''}`);
@@ -3275,7 +3276,7 @@ async function loadSocialFromSupabase() {
 
 
 // ── AUTO-COMPLETE PAST APPOINTMENTS ────────────────────────
-async function autoCompleteAppts() {
+async async function autoCompleteAppts() {
   const now = new Date();
   const todayStr = today();
   const nowTime = now.toTimeString().slice(0,5); // "HH:MM"
@@ -3302,12 +3303,10 @@ async function autoCompleteAppts() {
     appointments[i] = {...a, status:'done'};
     changed = true;
 
-    // Add transaction if not already present
-    const alreadyTx = txList.some(t =>
-      t.type==='in' && t.client===a.client && t.date===a.date && +t.amount===(+a.price||0) && (t.desc||'').includes(a.client)
-    );
+    // Add transaction if not already present (check by apptId tag)
+    const alreadyTx = txList.some(t => t.apptId && String(t.apptId)===String(a.id));
     if (+a.price > 0 && !alreadyTx) {
-      txList.push({type:'in', amount:+a.price, desc:`Tatuaje · ${a.client}`, date:a.date, cat:'Tatuaje', client:a.client});
+      txList.push({type:'in', amount:+a.price, desc:`Tatuaje · ${a.client}`, date:a.date, cat:'Tatuaje', client:a.client, apptId:a.id});
       await persistTx();
     }
     // Add points if not already
@@ -3333,6 +3332,7 @@ async function autoCompleteAppts() {
     console.log('[autoComplete] Updated past appointments to done');
   }
 }
+
 
 </script>
 
