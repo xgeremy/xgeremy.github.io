@@ -1272,6 +1272,7 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -2402,10 +2403,8 @@ async function loadApptsFromSupabase() {
       type: String(remote.type || 'tattoo'),
       status: String(remote.status || 'pending')
     }));
-    // Keep locally created items if remote is temporarily behind/failing policy.
-    const remoteKeys=new Set(remoteList.map(apptKey));
-    const keepLocal=localBefore.filter(a=>!remoteKeys.has(apptKey(a)));
-    appointments = [...remoteList, ...keepLocal];
+    // Remote is the source of truth — no local merge that causes duplicates
+    appointments = remoteList;
     appointmentsInitialized = true;
     localStorage.setItem('xg_appointments', JSON.stringify(appointments));
     if (document.getElementById('s-calendar')?.classList.contains('on')) renderCal();
@@ -3333,6 +3332,7 @@ async function autoCompleteAppts() {
     console.log('[autoComplete] Updated past appointments to done');
   }
 }
+
 
 
 
