@@ -643,7 +643,7 @@ html.ios-standalone textarea{font-size:16px !important}
     <button class="nb" onclick="nav('goals',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>Objetivos</button>
     <button class="nb" onclick="nav('inventory',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>Inventario</button>
     <button class="nb" onclick="nav('finance',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Finanzas</button>
-    <button class="nb" onclick="nav('notes',this)"><span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Notas</button>
+    
   </div>
   <div class="sd-foot">
     <button class="theme-row" onclick="toggleTheme()"><svg id="th-icon-sd" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><span id="th-lbl-sd">Modo oscuro</span></button>
@@ -689,9 +689,14 @@ html.ios-standalone textarea{font-size:16px !important}
       <button onclick="openSheet('session-sht')" class="quick-btn"><div style="width:40px;height:40px;border-radius:12px;background:var(--orng2);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span style="font-size:11px;font-weight:500;color:var(--ink2);text-align:center;line-height:1.3">Sesión</span></button>
     </div>
   </div>
-  <div id="home-week-sum">
-    <div class="wsum-title">📊 Resumen semana pasada</div>
-    <div class="wsum-grid" id="wsum-grid"></div>
+  <div id="home-week-sum" style="display:none">
+    <div onclick="toggleWeekSum()" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:0 0 0 0">
+      <div class="wsum-title" style="margin-bottom:0">📊 Resumen semana pasada</div>
+      <span id="wsum-caret" style="font-size:18px;color:var(--ink4);transition:transform .2s;display:inline-block">›</span>
+    </div>
+    <div id="wsum-body" style="display:none;margin-top:12px">
+      <div class="wsum-grid" id="wsum-grid"></div>
+    </div>
   </div>
   <div style="padding:0 16px 8px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Próximas citas</div><div id="home-upcoming" class="cg"></div></div>
   <div style="padding:8px 16px 8px"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Top clientes</div><div class="cg" id="home-top-clients"></div></div>
@@ -926,27 +931,30 @@ html.ios-standalone textarea{font-size:16px !important}
       <div class="hstat"><div class="hstat-val" id="fn-out">$0</div><div class="hstat-lbl">Gastos</div></div>
     </div>
   </div>
-  <div class="cg proj-card" id="fn-proj-wrap">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink2)">Proyección del mes</div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink3)">
-        Meta: $<input class="proj-goal-inp" id="fn-goal-inp" type="number" placeholder="0" oninput="saveProjGoal(this.value)" title="Editar meta mensual">
+  <div class="cg" style="padding:0;overflow:hidden" id="fn-proj-wrap">
+    <button onclick="toggleProjCard()" style="width:100%;background:none;border:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-family:var(--font);text-align:left">
+      <span style="font-size:13px;font-weight:700;color:var(--ink2)">Proyección del mes</span>
+      <span id="proj-caret" style="font-size:18px;color:var(--ink4);transition:transform .2s;display:inline-block">›</span>
+    </button>
+    <div id="fn-proj-body" style="display:none;padding:0 16px 16px">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink3);margin-bottom:10px">
+        Meta mensual: $<input class="proj-goal-inp" id="fn-goal-inp" type="number" placeholder="0" oninput="saveProjGoal(this.value)" title="Editar meta mensual">
       </div>
-    </div>
-    <div class="proj-bar-wrap">
-      <div class="proj-bar-track" id="fn-proj-track" style="height:12px">
-        <div class="proj-bar-done" id="fn-proj-done" style="width:0%"></div>
-        <div class="proj-bar-proj" id="fn-proj-proj" style="width:0%;left:0%"></div>
-        <div class="proj-goal-line" id="fn-proj-gline" style="left:100%"></div>
+      <div class="proj-bar-wrap">
+        <div class="proj-bar-track" id="fn-proj-track" style="height:12px">
+          <div class="proj-bar-done" id="fn-proj-done" style="width:0%"></div>
+          <div class="proj-bar-proj" id="fn-proj-proj" style="width:0%;left:0%"></div>
+          <div class="proj-goal-line" id="fn-proj-gline" style="left:100%"></div>
+        </div>
       </div>
-    </div>
-    <div class="proj-row">
-      <div class="proj-semaforo" id="fn-semaforo" style="background:var(--ink4)"></div>
-      <span id="fn-proj-label">Cargando...</span>
-    </div>
-    <div class="proj-row" style="margin-top:6px;gap:14px">
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:4px"></span>Real: <strong id="fn-proj-real">$0</strong></span>
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--blue);opacity:.65;margin-right:4px"></span>Proyectado: <strong id="fn-proj-est">$0</strong></span>
+      <div class="proj-row">
+        <div class="proj-semaforo" id="fn-semaforo" style="background:var(--ink4)"></div>
+        <span id="fn-proj-label">Cargando...</span>
+      </div>
+      <div class="proj-row" style="margin-top:6px;gap:14px">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:4px"></span>Real: <strong id="fn-proj-real">$0</strong></span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--blue);opacity:.65;margin-right:4px"></span>Proyectado: <strong id="fn-proj-est">$0</strong></span>
+      </div>
     </div>
   </div>
   <div class="cg fin-ads" id="fin-ads-box">
@@ -983,31 +991,6 @@ html.ios-standalone textarea{font-size:16px !important}
 </div>
 
 <!-- ══ NOTES ══ -->
-<div class="screen" id="s-notes">
-  <div class="lth"><div class="lth-title">Notas</div></div>
-  <div class="nwrap">
-    <div class="nside">
-      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:6px 10px 8px">Páginas</div>
-      <div id="npl"></div>
-      <button class="npg-add" onclick="addPage()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva página</button>
-    </div>
-    <div class="ned">
-      <div class="nstatus" id="ns-status"></div>
-      <input class="ntitle" id="ntitle" placeholder="Sin título" oninput="saveCurPage()">
-      <div class="ntb">
-        <button class="ntbtn" onclick="ec('bold')"><b>B</b></button>
-        <button class="ntbtn" onclick="ec('italic')"><i>I</i></button>
-        <button class="ntbtn" onclick="ec('underline')"><u>U</u></button>
-        <button class="ntbtn" onclick="ib('h1')">H1</button>
-        <button class="ntbtn" onclick="ib('h2')">H2</button>
-        <button class="ntbtn" onclick="ec('insertUnorderedList')">Lista</button>
-        <button class="ntbtn" onclick="ib('bq')">Cita</button>
-        <button class="ntbtn" onclick="deletePage(curPg)" style="margin-left:auto;color:var(--red)">Eliminar</button>
-      </div>
-      <div class="nbody" id="nbody" contenteditable="true" data-ph="Escribe aquí..." oninput="saveCurPage()"></div>
-    </div>
-  </div>
-</div>
 
 <!-- ══ CONFIG ══ -->
 <div class="screen" id="s-config">
@@ -1073,48 +1056,7 @@ html.ios-standalone textarea{font-size:16px !important}
 <!-- ══ REDES BOARD ══ -->
 <div class="screen" id="s-social">
   <div class="lth"><div class="lth-h"><div><div class="lth-title">Redes</div><div class="lth-sub">Tablero de contenido</div></div><button class="btn btn-p btn-sm" onclick="openSocialCard(-1,'todo')">+ Tarjeta</button></div></div>
-  <div class="soc-tab-bar">
-    <button class="soc-tab on" id="soc-tab-kanban" onclick="setSocialTab('kanban')">Tablero</button>
-    <button class="soc-tab" id="soc-tab-cal" onclick="setSocialTab('cal')">Calendario</button>
-    <button class="soc-tab" id="soc-tab-corr" onclick="setSocialTab('corr')">Correlación</button>
-  </div>
-  <div id="soc-cal-view" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 10px">
-      <button onclick="socCalPrev()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink2);padding:4px 8px">‹</button>
-      <div id="soc-cal-month-lbl" style="font-size:15px;font-weight:700;color:var(--ink)"></div>
-      <button onclick="socCalNext()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink2);padding:4px 8px">›</button>
-    </div>
-    <div class="soc-cal-wrap">
-      <div class="soc-cal-hdr">
-        <div class="soc-cal-hdr-d">L</div><div class="soc-cal-hdr-d">M</div><div class="soc-cal-hdr-d">X</div>
-        <div class="soc-cal-hdr-d">J</div><div class="soc-cal-hdr-d">V</div><div class="soc-cal-hdr-d">S</div>
-        <div class="soc-cal-hdr-d">D</div>
-      </div>
-      <div class="soc-cal-grid" id="soc-cal-grid"></div>
-    </div>
-    <div style="padding:0 16px 10px;font-size:12px;color:var(--ink4)">
-      <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(255,59,48,.2);margin-right:4px;vertical-align:middle"></span>Días sin contenido programado
-    </div>
-    <div style="padding:0 16px 20px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink4);margin-bottom:8px">Sin fecha asignada</div>
-      <div id="soc-undated" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-    </div>
-  </div>
-  <div id="soc-corr-view" style="display:none">
-    <div style="padding:0 16px 8px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:2px">Publicaciones vs Citas agendadas</div>
-      <div style="font-size:12px;color:var(--ink4);margin-bottom:12px">Últimas 8 semanas</div>
-    </div>
-    <div class="corr-wrap">
-      <div class="corr-legend">
-        <div class="corr-leg-item"><div class="corr-leg-dot" style="background:var(--blue)"></div>Citas</div>
-        <div class="corr-leg-item"><div class="corr-leg-dot" style="background:var(--purple)"></div>Publicaciones</div>
-      </div>
-      <div class="corr-rows" id="corr-rows"></div>
-      <div id="corr-insight"></div>
-    </div>
-  </div>
-  <div class="board" id="social-board">
+    <div class="board" id="social-board">
     <div class="board-col col-cancelado" id="col-cancelado">
       <div class="board-col-head">
         <span class="board-col-title">Cancelado</span>
@@ -1323,6 +1265,8 @@ html.ios-standalone textarea{font-size:16px !important}
 
 
 
+
+
 // ── iOS / PWA DETECTION ──
 if (window.navigator.standalone) {
   document.documentElement.classList.add('ios-standalone');
@@ -1485,8 +1429,8 @@ function openApptSheet(){
 function toast(msg,type='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+(type==='err'?'err':'ok');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='toast',3000);}
 
 // ── NAV ──
-const TITLES={home:'Resumen',calendar:'Calendario',analytics:'Analíticas',crm:'Clientes',points:'Puntos & Tiers',leaderboard:'Leaderboard',sessions:'Sesiones',pageeditor:'Editor',agenda:'Disponibilidad',flash:'Flash del Mes',seo:'SEO',habits:'Hábitos',goals:'Objetivos',inventory:'Inventario',finance:'Finanzas',notes:'Notas',config:'Configuración',email:'Confirmar Cita',social:'Redes'};
-const RENDERS={home:renderHome,social:renderSocial,email:renderEmailScreen,calendar:renderCal,analytics:loadGC,crm:()=>renderCRM(clients),points:renderPoints,leaderboard:renderLB,sessions:renderSessions,pageeditor:renderPE,agenda:renderAv,flash:renderFlash,habits:renderHabits,goals:renderGoals,inventory:renderInventory,finance:renderFinance,notes:renderNotion,config:renderCfg};
+const TITLES={home:'Resumen',calendar:'Calendario',analytics:'Analíticas',crm:'Clientes',points:'Puntos & Tiers',leaderboard:'Leaderboard',sessions:'Sesiones',pageeditor:'Editor',agenda:'Disponibilidad',flash:'Flash del Mes',seo:'SEO',habits:'Hábitos',goals:'Objetivos',inventory:'Inventario',finance:'Finanzas',config:'Configuración',email:'Confirmar Cita',social:'Redes'};
+const RENDERS={home:renderHome,social:renderSocial,email:renderEmailScreen,calendar:renderCal,analytics:loadGC,crm:()=>renderCRM(clients),points:renderPoints,leaderboard:renderLB,sessions:renderSessions,pageeditor:renderPE,agenda:renderAv,flash:renderFlash,habits:renderHabits,goals:renderGoals,inventory:renderInventory,finance:renderFinance,config:renderCfg};
 function nav(id,el){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   const sc=document.getElementById('s-'+id);if(sc)sc.classList.add('on');
@@ -1741,10 +1685,12 @@ function renderCal(){
     const isToday=iso===td;
     const isSel=iso===calSelected;
     const dots=dayAppts.slice(0,4).map(a=>`<div class="cal-dot" style="background:${APPT_COLORS[a.type]||'var(--blue)'}"></div>`).join('');
-    const socDots=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado').slice(0,2).map(()=>'<div class="cal-dot cal-dot-soc"></div>').join('');
+    const socCards=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado');
+    const SOC_PLAT_CAL={ig:'#c13584',tt:'#555',yt:'#cc0000',tw:'#1a8cd8',fb:'#1877f2',ot:'#6e6e73'};
+    const socChips=socCards.slice(0,2).map(c=>`<div style="margin-top:2px;border-radius:4px;font-size:8px;font-weight:700;padding:1px 4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;background:${SOC_PLAT_CAL[c.plat]||'#6e6e73'}22;color:${SOC_PLAT_CAL[c.plat]||'#6e6e73'};border:1px solid ${SOC_PLAT_CAL[c.plat]||'#6e6e73'}44">${c.title.slice(0,10)}</div>`).join('');
     html+=`<div class="cal-day${isOther?' other-month':''}${isToday?' today':''}${isSel?' selected':''}" onclick="selectCalDay('${iso}')">
       <div class="cal-dn">${d}</div>
-      ${(dots||socDots)?`<div class="cal-dots">${dots}${socDots}</div>`:''}
+      ${dots?`<div class="cal-dots">${dots}</div>`:''}${socChips}
     </div>`;
   }
   grid.innerHTML=html;
@@ -1786,6 +1732,29 @@ function renderDayPanel(iso){
       ${a.desc?`<div style="font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.5">${a.desc}</div>`:''}
     </div>`;
   }).join('');
+  // Social cards for this day
+  const SOC_PLAT_CAL2={ig:'#c13584',tt:'#555',yt:'#cc0000',tw:'#1a8cd8',fb:'#1877f2',ot:'#6e6e73'};
+  const PLAT_FULL={ig:'Instagram',tt:'TikTok',yt:'YouTube',tw:'Twitter/X',fb:'Facebook',ot:'Otra'};
+  const SOC_FMT_ICON={Reel:'🎬',Post:'📷',Story:'⭕',Video:'▶️',Carrusel:'🗂',Live:'🔴',Thread:'🧵'};
+  const daySocCards=(typeof socialCards!=='undefined'?socialCards:[]).filter(c=>c.date===iso&&c.status!=='cancelado');
+  if(daySocCards.length){
+    appts_el.innerHTML+=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#c13584;margin:12px 0 6px;padding-top:10px;border-top:1px solid var(--sep)">📱 Contenido Redes (${daySocCards.length})</div>`;
+    appts_el.innerHTML+=daySocCards.map(c=>{
+      const col=SOC_PLAT_CAL2[c.plat]||'#6e6e73';
+      const statusLabel={todo:'Por hacer',doing:'En progreso',done:'Publicado',cancelado:'Cancelado',emergencia:'Urgente'}[c.status]||c.status;
+      return`<div style="border-radius:14px;padding:11px 13px;margin-bottom:6px;background:${col}14;border:1.5px solid ${col}33;cursor:pointer" onclick="nav('social');openSocialCard(${socialCards.indexOf(c)})">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px">
+          <div style="font-size:14px;font-weight:600;color:var(--ink)">${c.title}</div>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:${col}22;color:${col}">${statusLabel}</span>
+        </div>
+        <div style="font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center">
+          <span style="color:${col};font-weight:600">${PLAT_FULL[c.plat]||c.plat}</span>
+          <span>${SOC_FMT_ICON[c.fmt]||''} ${c.fmt||''}</span>
+          ${c.idea?`<span style="color:var(--ink4)">${c.idea.slice(0,30)}${c.idea.length>30?'…':''}</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 function openApptSheetForDate(iso){
   apptEditIdx=-1;
@@ -2708,16 +2677,7 @@ function saveSocialLS() {
 }
 
 function renderSocial() {
-  // ensure kanban visible by default if no tab active
-  const board=document.getElementById('social-board');
-  const calV=document.getElementById('soc-cal-view');
-  const corrV=document.getElementById('soc-corr-view');
-  const activeTab=window._socialTab||'kanban';
-  if(board) board.style.display=activeTab==='kanban'?'flex':'none';
-  if(calV) calV.style.display=activeTab==='cal'?'block':'none';
-  if(corrV) corrV.style.display=activeTab==='corr'?'block':'none';
-  if(activeTab==='cal'){renderSocialCal();return;}
-  if(activeTab==='corr'){renderCorrelation();return;}
+  // kanban only
   SOCIAL_COLS.forEach(col => {
     const cards = socialCards.filter(c => c.status === col);
     const cnt = document.getElementById('cnt-' + col);
@@ -3039,6 +2999,7 @@ function renderWeeklySummary() {
   ];
 
   card.style.display = 'block';
+  // accordion stays closed until user opens
   const grid = document.getElementById('wsum-grid');
   if (grid) grid.innerHTML = tiles.map(t =>
     `<div class="wsum-tile">
@@ -3222,6 +3183,28 @@ function renderCorrelation() {
 }
 
 
+
+// ─── ACCORDION TOGGLES ─────────────────────────────────────
+function toggleWeekSum() {
+  const body = document.getElementById('wsum-body');
+  const caret = document.getElementById('wsum-caret');
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (caret) { caret.style.transform = open ? '' : 'rotate(90deg)'; }
+}
+
+function toggleProjCard() {
+  const body = document.getElementById('fn-proj-body');
+  const caret = document.getElementById('proj-caret');
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (caret) { caret.style.transform = open ? '' : 'rotate(90deg)'; }
+  if (body.style.display !== 'none') renderMonthlyProjection();
+}
+
+
 </script>
 
 <!-- ══ MORE SHEET (mobile) ══ -->
@@ -3251,8 +3234,7 @@ function renderCorrelation() {
         <button onclick="navMore('habits')" class="more-btn"><div class="more-ic" style="background:var(--green2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span>Hábitos</span></button>
         <button onclick="navMore('goals')" class="more-btn"><div class="more-ic" style="background:var(--blue2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><span>Objetivos</span></button>
         <button onclick="navMore('inventory')" class="more-btn"><div class="more-ic" style="background:var(--orng2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><span>Inventario</span></button>
-        <button onclick="navMore('notes')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span>Notas</span></button>
-        <button onclick="navMore('social')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div><span>Redes</span></button>
+                <button onclick="navMore('social')" class="more-btn"><div class="more-ic" style="background:var(--purple2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div><span>Redes</span></button>
       </div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:4px 6px 8px">Sistema</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
