@@ -61,6 +61,9 @@ textarea::placeholder{color:var(--text-3)}
 .intro-title{font-size:clamp(30px,5.5vw,48px);font-weight:700;letter-spacing:-.02em;line-height:1.12;margin-bottom:16px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .intro-sub{font-size:17px;color:var(--text-2);margin-bottom:32px;max-width:480px}
 .time-hint{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3);margin-top:20px}
+.name-input{width:100%;max-width:340px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));border:1px solid var(--glass-bdr);border-radius:var(--glass-r3);color:var(--text);font-family:var(--font);font-size:16px;padding:14px 16px;outline:none;transition:border-color .3s;margin-bottom:8px}
+.name-input:focus{border-color:var(--accent)}
+.name-input::placeholder{color:var(--text-3)}
 .checkmark{width:64px;height:64px;border-radius:50%;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.3);display:flex;align-items:center;justify-content:center;margin-bottom:24px;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
 @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .error-box{color:var(--err);font-size:13px;margin-top:16px}
@@ -101,6 +104,7 @@ textarea::placeholder{color:var(--text-3)}
     <img src="https://i.imgur.com/cFOFY4I.png" class="hero-logo" alt="">
     <h1 class="intro-title">¿Cómo estuvo tu sesión?</h1>
     <p class="intro-sub">Tu opinión me ayuda a mejorar cada sesión. Son solo 5 preguntas rápidas, totalmente anónimo si prefieres no dejar tu nombre.</p>
+    <input type="text" id="nombre-input" class="name-input" placeholder="Tu nombre (opcional)" autocomplete="name">
     <button class="btn-ok" id="start-btn">Empezar</button>
     <div class="time-hint">⏱ Toma menos de 1 minuto</div>
   </section>
@@ -108,56 +112,56 @@ textarea::placeholder{color:var(--text-3)}
   <!-- Q1 -->
   <section class="screen" data-screen="q" data-index="0">
     <span class="q-badge">1</span>
-    <h2 class="q-title">¿Qué tan satisfech@ quedaste con la experiencia general?</h2>
-    <p class="q-sub">Pensando en la sesión completa, de principio a fin.</p>
-    <div class="options" data-q="satisfaccion">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy mala</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Mala</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Regular</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Buena</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Excelente</button>
+    <h2 class="q-title">¿Qué tan fácil fue llegar y encontrar el estudio?</h2>
+    <p class="q-sub">Ubicación, accesibilidad, indicaciones para llegar.</p>
+    <div class="options" data-q="ubicacion">
+      <button class="opt" data-value="1"><span class="letter">A</span> Muy difícil</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Difícil</button>
+      <button class="opt" data-value="3"><span class="letter">C</span> Normal</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Fácil</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Muy fácil</button>
     </div>
   </section>
 
   <!-- Q2 -->
   <section class="screen" data-screen="q" data-index="1">
     <span class="q-badge">2</span>
-    <h2 class="q-title">¿Cómo te sentiste durante la sesión?</h2>
-    <p class="q-sub">Comodidad, ambiente, manejo del dolor.</p>
-    <div class="options" data-q="comodidad">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy incómod@</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Incómod@</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Cómod@</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy cómod@</button>
+    <h2 class="q-title">¿Cómo calificarías las instalaciones del estudio?</h2>
+    <p class="q-sub">Baño, higiene, orden y comodidad del espacio.</p>
+    <div class="options" data-q="instalaciones">
+      <button class="opt" data-value="1"><span class="letter">A</span> Muy malas</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Malas</button>
+      <button class="opt" data-value="3"><span class="letter">C</span> Aceptables</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Buenas</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Excelentes</button>
     </div>
   </section>
 
   <!-- Q3 -->
   <section class="screen" data-screen="q" data-index="2">
     <span class="q-badge">3</span>
-    <h2 class="q-title">¿La comunicación fue clara y funcional?</h2>
-    <p class="q-sub">Antes, durante y después de la sesión.</p>
-    <div class="options" data-q="comunicacion">
-      <button class="opt" data-value="1"><span class="letter">A</span> Nada clara</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Poco clara</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Aceptable</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Clara</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy clara</button>
+    <h2 class="q-title">¿Qué tan claro quedó el proceso, sin dudas pendientes?</h2>
+    <p class="q-sub">Explicación del diseño, cuidados y pasos de la sesión.</p>
+    <div class="options" data-q="claridad_proceso">
+      <button class="opt" data-value="1"><span class="letter">A</span> Muchas dudas</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Algunas dudas</button>
+      <button class="opt" data-value="3"><span class="letter">C</span> Pocas dudas</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Casi todo claro</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Todo clarísimo</button>
     </div>
   </section>
 
   <!-- Q4 -->
   <section class="screen" data-screen="q" data-index="3">
     <span class="q-badge">4</span>
-    <h2 class="q-title">¿Qué tan probable es que me recomiendes con un amigo?</h2>
-    <p class="q-sub">Sé honest@, así puedo mejorar de verdad.</p>
-    <div class="options" data-q="recomendacion">
-      <button class="opt" data-value="1"><span class="letter">A</span> Nada probable</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Poco probable</button>
+    <h2 class="q-title">Al terminar, ¿qué tan satisfech@ quedaste con el resultado?</h2>
+    <p class="q-sub">El tatuaje ya terminado, tal como quedó en tu piel.</p>
+    <div class="options" data-q="satisfaccion_resultado">
+      <button class="opt" data-value="1"><span class="letter">A</span> Muy insatisfech@</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Insatisfech@</button>
       <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Probable</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy probable</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Satisfech@</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Muy satisfech@</button>
     </div>
   </section>
 
@@ -286,10 +290,11 @@ textarea::placeholder{color:var(--text-3)}
     btn.textContent = 'Enviando...';
     errorMsg.style.display = 'none';
     const payload = {
-      satisfaccion: answers.satisfaccion || '',
-      comodidad: answers.comodidad || '',
-      comunicacion: answers.comunicacion || '',
-      recomendacion: answers.recomendacion || '',
+      nombre: document.getElementById('nombre-input').value || 'Anónimo',
+      ubicacion: answers.ubicacion || '',
+      instalaciones: answers.instalaciones || '',
+      claridad_proceso: answers.claridad_proceso || '',
+      satisfaccion_resultado: answers.satisfaccion_resultado || '',
       comentario: document.getElementById('comentario').value || '',
       fecha: new Date().toISOString()
     };
