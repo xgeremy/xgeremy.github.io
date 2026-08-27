@@ -103,7 +103,7 @@ textarea::placeholder{color:var(--text-3)}
   <section class="screen center-screen active" data-screen="intro">
     <img src="https://i.imgur.com/cFOFY4I.png" class="hero-logo" alt="">
     <h1 class="intro-title">¿Cómo estuvo tu sesión?</h1>
-    <p class="intro-sub">Tu opinión me ayuda a mejorar cada sesión. Son solo 5 preguntas rápidas, totalmente anónimo si prefieres no dejar tu nombre.</p>
+    <p class="intro-sub">Tu opinión me ayuda a mejorar cada sesión. Son solo 8 preguntas rápidas, totalmente anónimo si prefieres no dejar tu nombre.</p>
     <input type="text" id="nombre-input" class="name-input" placeholder="Tu nombre (opcional)" autocomplete="name">
     <button class="btn-ok" id="start-btn">Empezar</button>
     <div class="time-hint">⏱ Toma menos de 1 minuto</div>
@@ -112,6 +112,20 @@ textarea::placeholder{color:var(--text-3)}
   <!-- Q1 -->
   <section class="screen" data-screen="q" data-index="0">
     <span class="q-badge">1</span>
+    <h2 class="q-title">¿Qué tan satisfech@ quedaste con la experiencia general?</h2>
+    <p class="q-sub">Pensando en la sesión completa, de principio a fin.</p>
+    <div class="options" data-q="satisfaccion_general">
+      <button class="opt" data-value="1"><span class="letter">A</span> Muy mala</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Mala</button>
+      <button class="opt" data-value="3"><span class="letter">C</span> Regular</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Buena</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Excelente</button>
+    </div>
+  </section>
+
+  <!-- Q2 -->
+  <section class="screen" data-screen="q" data-index="1">
+    <span class="q-badge">2</span>
     <h2 class="q-title">¿Qué tan fácil fue llegar y encontrar el estudio?</h2>
     <p class="q-sub">Ubicación, accesibilidad, indicaciones para llegar.</p>
     <div class="options" data-q="ubicacion">
@@ -123,9 +137,9 @@ textarea::placeholder{color:var(--text-3)}
     </div>
   </section>
 
-  <!-- Q2 -->
-  <section class="screen" data-screen="q" data-index="1">
-    <span class="q-badge">2</span>
+  <!-- Q3 -->
+  <section class="screen" data-screen="q" data-index="2">
+    <span class="q-badge">3</span>
     <h2 class="q-title">¿Cómo calificarías las instalaciones del estudio?</h2>
     <p class="q-sub">Baño, higiene, orden y comodidad del espacio.</p>
     <div class="options" data-q="instalaciones">
@@ -137,9 +151,23 @@ textarea::placeholder{color:var(--text-3)}
     </div>
   </section>
 
-  <!-- Q3 -->
-  <section class="screen" data-screen="q" data-index="2">
-    <span class="q-badge">3</span>
+  <!-- Q4 -->
+  <section class="screen" data-screen="q" data-index="3">
+    <span class="q-badge">4</span>
+    <h2 class="q-title">¿Cómo te sentiste durante la sesión?</h2>
+    <p class="q-sub">Comodidad, ambiente, manejo del dolor.</p>
+    <div class="options" data-q="comodidad">
+      <button class="opt" data-value="1"><span class="letter">A</span> Muy incómod@</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Incómod@</button>
+      <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Cómod@</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Muy cómod@</button>
+    </div>
+  </section>
+
+  <!-- Q5 -->
+  <section class="screen" data-screen="q" data-index="4">
+    <span class="q-badge">5</span>
     <h2 class="q-title">¿Qué tan claro quedó el proceso, sin dudas pendientes?</h2>
     <p class="q-sub">Explicación del diseño, cuidados y pasos de la sesión.</p>
     <div class="options" data-q="claridad_proceso">
@@ -151,9 +179,9 @@ textarea::placeholder{color:var(--text-3)}
     </div>
   </section>
 
-  <!-- Q4 -->
-  <section class="screen" data-screen="q" data-index="3">
-    <span class="q-badge">4</span>
+  <!-- Q6 -->
+  <section class="screen" data-screen="q" data-index="5">
+    <span class="q-badge">6</span>
     <h2 class="q-title">Al terminar, ¿qué tan satisfech@ quedaste con el resultado?</h2>
     <p class="q-sub">El tatuaje ya terminado, tal como quedó en tu piel.</p>
     <div class="options" data-q="satisfaccion_resultado">
@@ -165,9 +193,23 @@ textarea::placeholder{color:var(--text-3)}
     </div>
   </section>
 
-  <!-- Q5 open -->
-  <section class="screen" data-screen="q" data-index="4">
-    <span class="q-badge">5</span>
+  <!-- Q7 -->
+  <section class="screen" data-screen="q" data-index="6">
+    <span class="q-badge">7</span>
+    <h2 class="q-title">¿Qué tan probable es que me recomiendes con un amigo?</h2>
+    <p class="q-sub">Sé honest@, así puedo mejorar de verdad.</p>
+    <div class="options" data-q="recomendacion">
+      <button class="opt" data-value="1"><span class="letter">A</span> Nada probable</button>
+      <button class="opt" data-value="2"><span class="letter">B</span> Poco probable</button>
+      <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
+      <button class="opt" data-value="4"><span class="letter">D</span> Probable</button>
+      <button class="opt" data-value="5"><span class="letter">E</span> Muy probable</button>
+    </div>
+  </section>
+
+  <!-- Q8 open -->
+  <section class="screen" data-screen="q" data-index="7">
+    <span class="q-badge">8</span>
     <h2 class="q-title">¿Algo que te gustaría que mejore para la próxima?</h2>
     <p class="q-sub">Opcional, pero toda sugerencia suma.</p>
     <textarea id="comentario" rows="2" placeholder="Escribe aquí tu respuesta..."></textarea>
@@ -197,7 +239,8 @@ textarea::placeholder{color:var(--text-3)}
 (function(){
   const FORM_ENDPOINT = "https://formspree.io/f/xaeywrdg";
   const screens = Array.from(document.querySelectorAll('.screen'));
-  const order = ['intro', ...Array.from({length:5}, (_,i)=>'q:'+i), 'thanks'];
+  const qCount = document.querySelectorAll('.screen[data-screen="q"]').length;
+  const order = ['intro', ...Array.from({length:qCount}, (_,i)=>'q:'+i), 'thanks'];
   let current = 0;
   const answers = {};
 
@@ -237,7 +280,7 @@ textarea::placeholder{color:var(--text-3)}
     document.getElementById('nav-up').disabled = current === 0;
     const key = order[current];
     const isAnswered = key.startsWith('q:') ? !!answers[questionKeyFor(key)] : true;
-    document.getElementById('nav-down').disabled = key === 'thanks' || (key.startsWith('q:') && key.split(':')[1] != 4 && !isAnswered);
+    document.getElementById('nav-down').disabled = key === 'thanks' || (key.startsWith('q:') && key.split(':')[1] != (qCount-1) && !isAnswered);
   }
 
   function questionKeyFor(key){
@@ -263,7 +306,7 @@ textarea::placeholder{color:var(--text-3)}
   document.getElementById('nav-up').addEventListener('click', ()=> goTo(current-1));
   document.getElementById('nav-down').addEventListener('click', ()=>{
     const key = order[current];
-    if(key.startsWith('q:') && key.split(':')[1] == 4) return; // last question uses submit button
+    if(key.startsWith('q:') && key.split(':')[1] == (qCount-1)) return; // last question uses submit button
     goTo(current+1);
   });
 
@@ -291,10 +334,13 @@ textarea::placeholder{color:var(--text-3)}
     errorMsg.style.display = 'none';
     const payload = {
       nombre: document.getElementById('nombre-input').value || 'Anónimo',
+      satisfaccion_general: answers.satisfaccion_general || '',
       ubicacion: answers.ubicacion || '',
       instalaciones: answers.instalaciones || '',
+      comodidad: answers.comodidad || '',
       claridad_proceso: answers.claridad_proceso || '',
       satisfaccion_resultado: answers.satisfaccion_resultado || '',
+      recomendacion: answers.recomendacion || '',
       comentario: document.getElementById('comentario').value || '',
       fecha: new Date().toISOString()
     };
