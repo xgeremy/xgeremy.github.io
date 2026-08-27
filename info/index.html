@@ -10,10 +10,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=optional" media="print" onload="this.media='all'">
 <style>
-:root{--font:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;--bg:#050505;--bg-2:#0f0f0f;--text:#f5f5f7;--text-2:#86868b;--text-3:#6e6e73;--border:rgba(255,255,255,0.09);--accent:#c8b89a;--glass-bg:rgba(255,255,255,0.065);--glass-bg-2:rgba(255,255,255,0.042);--glass-blur2:20px;--glass-sat:1.85;--glass-bdr:rgba(255,255,255,0.105);--glass-bdr-h:rgba(255,255,255,0.22);--glass-r2:18px;--glass-r3:14px;--glass-spec:rgba(255,255,255,0.20)}
+:root{--font:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;--bg:#050505;--bg-2:#0f0f0f;--text:#f5f5f7;--text-2:#86868b;--text-3:#6e6e73;--border:rgba(255,255,255,0.09);--accent:#c8b89a;--glass-bg:rgba(255,255,255,0.065);--glass-bg-2:rgba(255,255,255,0.042);--glass-blur2:20px;--glass-sat:1.85;--glass-bdr:rgba(255,255,255,0.105);--glass-bdr-h:rgba(255,255,255,0.22);--glass-r2:18px;--glass-r3:14px;--glass-spec:rgba(255,255,255,0.20);--err:#ff3b30;--ok:#30d158}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);font-optical-sizing:auto;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--font);font-optical-sizing:auto;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 #xg-grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");opacity:.018;pointer-events:none;z-index:500;animation:xg-grain .5s steps(2) infinite}
 @keyframes xg-grain{0%,100%{transform:translate(0,0)}25%{transform:translate(-1%,2%)}50%{transform:translate(2%,-1%)}75%{transform:translate(-1%,1%)}}
 
@@ -25,44 +25,66 @@ header{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:calc(10
 .back-link{color:var(--text);text-decoration:none;font-size:13px;opacity:.6;padding:7px 12px;border-radius:10px;transition:opacity .3s,background .3s}
 .back-link:hover{opacity:1;background:rgba(255,255,255,.07)}
 
-.fade-in{opacity:0;transform:translateY(20px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-.fade-in.visible{opacity:1;transform:translateY(0)}
+/* stage / screens (mismo sistema que /surveys) */
+#stage{position:relative;width:100%;height:100vh;padding:0 22px}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;max-width:720px;margin:0 auto;padding:0 22px 120px;opacity:0;pointer-events:none;transform:translateY(28px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);overflow-y:auto}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.screen.leaving{opacity:0;transform:translateY(-28px)}
+.center-screen{align-items:center;text-align:center}
 
-.hero-simple{padding:130px 22px 50px;text-align:center;max-width:780px;margin:0 auto}
-.hero-simple h1{font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:-.02em;margin-bottom:14px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-simple p{font-size:18px;color:var(--text-2);line-height:1.5;font-weight:300}
+.step-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.q-title{font-size:clamp(24px,4vw,36px);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:16px}
+.q-body p{font-size:16px;line-height:1.7;color:var(--text-2);margin-bottom:12px;font-weight:400}
+.q-body ul{list-style:none;padding-left:0;margin:14px 0}
+.q-body li{padding-left:22px;position:relative;margin-bottom:10px;font-size:15px;color:var(--text-2);line-height:1.6}
+.q-body li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:13px;top:3px}
 
-.content{max-width:760px;margin:0 auto;padding:20px 22px 100px}
+.warning-box{background:rgba(255,59,48,.07);border:1px solid rgba(255,59,48,.22);border-radius:12px;padding:16px 18px;margin-top:16px}
+.warning-box p{color:#ff3b30 !important;font-size:13px;margin:0;line-height:1.5}
+.tip-box{background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.22);border-radius:12px;padding:16px 18px;margin-top:16px}
+.tip-box p{color:#30d158 !important;font-size:13px;margin:0;line-height:1.5}
 
-.step-card{position:relative;display:flex;gap:20px;padding:26px 28px;margin-bottom:14px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));-webkit-backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));border:1px solid var(--glass-bdr);border-radius:var(--glass-r2);overflow:hidden;transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s}
-.step-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-spec) 45%,transparent)}
-.step-card:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h)}
-.step-num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--glass-bg);border:1px solid var(--glass-bdr);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--accent)}
-.step-body h2{font-size:20px;font-weight:600;margin-bottom:8px;color:var(--text)}
-.step-body p{font-size:15px;line-height:1.65;color:var(--text-2);margin-bottom:6px}
-.step-body ul{list-style:none;padding-left:0;margin-top:8px}
-.step-body li{padding-left:20px;position:relative;margin-bottom:6px;font-size:14px;color:var(--text-2);line-height:1.5}
-.step-body li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:12px;top:3px}
-
-.warning-box{background:rgba(255,59,48,.07);border:1px solid rgba(255,59,48,.22);border-radius:12px;padding:16px 18px;margin-top:14px}
-.warning-box p{color:#ff3b30;font-size:13px;margin:0;line-height:1.5}
-.tip-box{background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.22);border-radius:12px;padding:16px 18px;margin-top:14px}
-.tip-box p{color:#30d158;font-size:13px;margin:0;line-height:1.5}
-
-.contact-cta{padding:40px 28px;text-align:center;margin-top:40px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));border:1px solid var(--glass-bdr);border-radius:var(--glass-r2);backdrop-filter:blur(var(--glass-blur2))}
-.contact-cta h2{font-size:26px;font-weight:600;margin-bottom:12px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.contact-cta p{font-size:15px;color:var(--text-2);margin-bottom:20px;font-weight:300}
+/* hero / intro / final */
+.hero-logo{width:56px;height:56px;margin-bottom:24px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))}
+.intro-title{font-size:clamp(30px,5.5vw,48px);font-weight:700;letter-spacing:-.02em;line-height:1.12;margin-bottom:16px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.intro-sub{font-size:17px;color:var(--text-2);margin-bottom:32px;max-width:480px}
 .button{position:relative;display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--glass-r3);color:var(--text);font-family:var(--font);font-size:15px;font-weight:500;letter-spacing:-.01em;text-decoration:none;cursor:pointer;overflow:hidden;transition:transform .25s,background .2s}
 .button:hover{transform:translateY(-2px);background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.25)}
 
-footer{background:var(--bg);border-top:1px solid var(--border);padding:36px 22px;text-align:center}
-footer p{font-size:12px;color:var(--text-3)}
+/* barra de navegación inferior (fija dentro de la card) */
+.nav-bar{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);width:calc(100% - 44px);max-width:720px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));-webkit-backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));border:1px solid var(--glass-bdr);border-radius:var(--glass-r2);z-index:9997}
+.nav-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-spec) 45%,transparent);pointer-events:none}
+.step-dots{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.step-dot{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--glass-bdr);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;flex:none}
+.step-dot:hover{border-color:var(--glass-bdr-h);color:var(--text)}
+.step-dot.current{background:var(--accent);color:#050505;border-color:var(--accent)}
+.step-dot.done{color:var(--accent);border-color:rgba(200,184,154,.35)}
+.all-steps-link{font-size:12px;color:var(--text-3);text-decoration:underline;cursor:pointer;white-space:nowrap;display:none}
+.nav-actions{display:flex;align-items:center;gap:8px;flex:none}
+.btn-ok{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;background:var(--text);color:var(--bg);border:none;border-radius:var(--glass-r3);font-family:var(--font);font-size:14px;font-weight:600;letter-spacing:-.01em;cursor:pointer;transition:transform .25s,opacity .25s;white-space:nowrap}
+.btn-ok:hover{transform:translateY(-2px);opacity:.88}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;background:transparent;border:1px solid var(--glass-bdr);color:var(--text);border-radius:var(--glass-r3);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:transform .25s,border-color .25s;white-space:nowrap}
+.btn-ghost:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h)}
+.btn-ghost:disabled{opacity:.25;cursor:not-allowed;transform:none}
+
+/* overlay: ver todos los pasos */
+#steps-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);z-index:10001;align-items:center;justify-content:center;padding:24px}
+#steps-overlay.active{display:flex}
+.overlay-card{width:100%;max-width:460px;max-height:80vh;overflow-y:auto;background:var(--bg-2);border:1px solid var(--glass-bdr);border-radius:var(--glass-r2);padding:26px}
+.overlay-card h3{font-size:18px;margin-bottom:16px;font-weight:600}
+.overlay-item{display:flex;align-items:center;gap:12px;padding:12px 10px;border-radius:10px;cursor:pointer;transition:background .2s}
+.overlay-item:hover{background:rgba(255,255,255,.06)}
+.overlay-item .dot{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--glass-bdr);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;color:var(--text-2)}
+.overlay-item span.label{font-size:14px;color:var(--text)}
+.overlay-close{margin-top:14px;width:100%;text-align:center;padding:10px;font-size:13px;color:var(--text-2);cursor:pointer;border-top:1px solid var(--border)}
 
 @media(max-width:734px){
   header{width:calc(100% - 20px);top:10px}
-  .hero-simple h1{font-size:28px}
-  .step-card{padding:20px 18px;gap:14px}
-  .step-num{width:38px;height:38px;font-size:16px}
+  .screen{padding:0 20px 150px}
+  .nav-bar{bottom:14px;width:calc(100% - 24px);padding:12px 14px;flex-wrap:wrap}
+  .all-steps-link{display:none !important}
+  .step-dots{gap:5px}
+  .step-dot{width:23px;height:23px;font-size:10px}
 }
 </style>
 </head>
@@ -81,17 +103,21 @@ footer p{font-size:12px;color:var(--text-3)}
   </div>
 </header>
 
-<section class="hero-simple">
-  <h1>Antes de tu Sesión</h1>
-  <p>Todo lo que necesitas saber antes de venir, en 9 pasos simples.</p>
-</section>
+<div id="stage">
 
-<div class="content">
+  <!-- Intro -->
+  <section class="screen center-screen active" data-screen="intro">
+    <img src="https://i.imgur.com/cFOFY4I.png" class="hero-logo" alt="">
+    <h1 class="intro-title">Antes de tu Sesión</h1>
+    <p class="intro-sub">Todo lo que necesitas saber antes de venir, en 9 pasos simples. Léelos con calma, no hay apuro.</p>
+    <button class="button" id="start-btn">Empezar</button>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">1</div>
-    <div class="step-body">
-      <h2>Revisa que no tengas contraindicaciones</h2>
+  <!-- Paso 1 -->
+  <section class="screen" data-screen="q" data-index="0">
+    <span class="step-eyebrow">Paso 1 de 9</span>
+    <h2 class="q-title">Revisa que no tengas contraindicaciones</h2>
+    <div class="q-body">
       <p>Solo con diagnóstico médico previo pueden tatuarse personas con:</p>
       <ul>
         <li>Enfermedades cutáneas: acné, dermatitis, psoriasis, pústulas, pieles alérgicas o irritadas, sarna</li>
@@ -100,90 +126,195 @@ footer p{font-size:12px;color:var(--text-3)}
       </ul>
       <div class="warning-box"><p>Si algo de esto te aplica, avísame antes de la sesión para evaluarlo juntos.</p></div>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">2</div>
-    <div class="step-body">
-      <h2>Hidrata tu piel los días previos</h2>
-      <p>Una piel bien hidratada ayuda a lograr un mejor resultado en el tatuaje. Empieza a hidratarte desde unos días antes de la sesión.</p>
+  <!-- Paso 2 -->
+  <section class="screen" data-screen="q" data-index="1">
+    <span class="step-eyebrow">Paso 2 de 9</span>
+    <h2 class="q-title">Hidrata tu piel los días previos</h2>
+    <div class="q-body">
+      <p>Una piel bien hidratada ayuda a lograr un mejor resultado en el tatuaje. Empieza a hidratarte desde unos días antes de la sesión, con la crema o loción que uses habitualmente.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">3</div>
-    <div class="step-body">
-      <h2>Descansa bien la noche anterior</h2>
-      <p>Llegar descansad@ hace toda la diferencia en cómo se siente la sesión.</p>
+  <!-- Paso 3 -->
+  <section class="screen" data-screen="q" data-index="2">
+    <span class="step-eyebrow">Paso 3 de 9</span>
+    <h2 class="q-title">Descansa bien la noche anterior</h2>
+    <div class="q-body">
+      <p>Llegar descansad@ hace toda la diferencia en cómo se siente la sesión, tanto en el manejo del dolor como en la concentración.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">4</div>
-    <div class="step-body">
-      <h2>Come antes de venir</h2>
-      <p>Nunca vengas en ayunas. Comer bien antes de la sesión ayuda a evitar mareos o malestar durante el proceso.</p>
+  <!-- Paso 4 -->
+  <section class="screen" data-screen="q" data-index="3">
+    <span class="step-eyebrow">Paso 4 de 9</span>
+    <h2 class="q-title">Come antes de venir</h2>
+    <div class="q-body">
+      <p>Nunca vengas en ayunas. Comer bien antes de la sesión ayuda a evitar mareos, bajones de energía o malestar durante el proceso.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">5</div>
-    <div class="step-body">
-      <h2>Viste ropa cómoda y adecuada</h2>
-      <p>Piensa en la zona que te vas a tatuar y elige ropa que permita acceder a ella con comodidad, tanto para ti como para el proceso.</p>
+  <!-- Paso 5 -->
+  <section class="screen" data-screen="q" data-index="4">
+    <span class="step-eyebrow">Paso 5 de 9</span>
+    <h2 class="q-title">Viste ropa cómoda y adecuada</h2>
+    <div class="q-body">
+      <p>Piensa en la zona que te vas a tatuar y elige ropa que permita acceder a ella con comodidad, sin que tengas que estar incómod@ ajustándola durante la sesión.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">6</div>
-    <div class="step-body">
-      <h2>Ven sin acompañantes</h2>
+  <!-- Paso 6 -->
+  <section class="screen" data-screen="q" data-index="5">
+    <span class="step-eyebrow">Paso 6 de 9</span>
+    <h2 class="q-title">Ven sin acompañantes</h2>
+    <div class="q-body">
       <p>Es una condición del estudio. Te pido venir solo/a a tu sesión.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">7</div>
-    <div class="step-body">
-      <h2>Si necesitas reagendar, avisa con anticipación</h2>
-      <p>El día y la hora se pueden acomodar con al menos 24 horas de anticipación. Ten en cuenta que ningún abono es reembolsable, ya que mi trabajo parte desde el momento en que confirmo tu cotización y reservo el espacio en mi agenda.</p>
+  <!-- Paso 7 -->
+  <section class="screen" data-screen="q" data-index="6">
+    <span class="step-eyebrow">Paso 7 de 9</span>
+    <h2 class="q-title">Si necesitas reagendar, avisa con anticipación</h2>
+    <div class="q-body">
+      <p>El día y la hora se pueden acomodar con al menos 24 horas de anticipación.</p>
+      <div class="warning-box"><p>Ningún abono es reembolsable, ya que mi trabajo parte desde el momento en que confirmo tu cotización y reservo el espacio en mi agenda.</p></div>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">8</div>
-    <div class="step-body">
-      <h2>Llega relajad@ el día de la sesión</h2>
+  <!-- Paso 8 -->
+  <section class="screen" data-screen="q" data-index="7">
+    <span class="step-eyebrow">Paso 8 de 9</span>
+    <h2 class="q-title">Llega relajad@ el día de la sesión</h2>
+    <div class="q-body">
       <p>Evita agendar compromisos justo después de tu cita. El tatuaje es una expresión artística, y ninguna inspiración llega cuando hay apuro o estrés de por medio.</p>
       <div class="tip-box"><p>Mientras más relajad@ estés, mejor fluye la sesión para ambos.</p></div>
     </div>
-  </div>
+  </section>
 
-  <div class="step-card fade-in">
-    <div class="step-num">9</div>
-    <div class="step-body">
-      <h2>Comunica todo durante la sesión</h2>
+  <!-- Paso 9 -->
+  <section class="screen" data-screen="q" data-index="8">
+    <span class="step-eyebrow">Paso 9 de 9</span>
+    <h2 class="q-title">Comunica todo durante la sesión</h2>
+    <div class="q-body">
       <p>Si necesitas una pausa, ir al baño, moverte, o si algo te hace sentir mal o incómod@, dímelo. Así logramos un buen trabajo en equipo y la mejor experiencia posible.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="contact-cta fade-in">
-    <h2>¿Alguna duda antes de tu sesión?</h2>
-    <p>Escríbeme y lo resolvemos antes de que llegues.</p>
+  <!-- Final -->
+  <section class="screen center-screen" data-screen="thanks">
+    <h1 class="intro-title">¡Nos vemos pronto!</h1>
+    <p class="intro-sub">Ya tienes todo lo que necesitas saber. Si te queda alguna duda, escríbeme sin problema.</p>
     <a href="https://www.instagram.com/xgeremy" class="button" target="_blank" rel="noopener">Escribir por Instagram</a>
-  </div>
+  </section>
 
 </div>
 
-<footer>
-  <p>© XGEREMY™ — Tatuador en Valparaíso y Viña del Mar</p>
-</footer>
+<div class="nav-bar" id="nav-bar">
+  <div class="step-dots" id="step-dots"></div>
+  <span class="all-steps-link" id="all-steps-link">Ver todos los pasos</span>
+  <div class="nav-actions">
+    <button class="btn-ghost" id="nav-prev">Anterior</button>
+    <button class="btn-ok" id="nav-next">Siguiente</button>
+  </div>
+</div>
+
+<div id="steps-overlay">
+  <div class="overlay-card">
+    <h3>Todos los pasos</h3>
+    <div id="overlay-list"></div>
+    <div class="overlay-close" id="overlay-close">Cerrar</div>
+  </div>
+</div>
 
 <script>
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold:0.1});
-document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+(function(){
+  const order = ['intro', ...Array.from({length:9}, (_,i)=>'q:'+i), 'thanks'];
+  let current = 0;
+
+  const stepTitles = Array.from(document.querySelectorAll('.screen[data-screen="q"] .q-title')).map(el=>el.textContent);
+
+  function screenEl(key){
+    if(key === 'intro' || key === 'thanks') return document.querySelector(`.screen[data-screen="${key}"]`);
+    const idx = key.split(':')[1];
+    return document.querySelector(`.screen[data-index="${idx}"]`);
+  }
+
+  function goTo(newIndex){
+    if(newIndex < 0 || newIndex >= order.length) return;
+    const oldEl = screenEl(order[current]);
+    const newEl = screenEl(order[newIndex]);
+    oldEl.classList.remove('active');
+    oldEl.classList.add('leaving');
+    setTimeout(()=> oldEl.classList.remove('leaving'), 550);
+    newEl.classList.add('active');
+    newEl.scrollTop = 0;
+    current = newIndex;
+    render();
+  }
+
+  function render(){
+    const key = order[current];
+    const navBar = document.getElementById('nav-bar');
+    const dotsWrap = document.getElementById('step-dots');
+    const prevBtn = document.getElementById('nav-prev');
+    const nextBtn = document.getElementById('nav-next');
+    const allLink = document.getElementById('all-steps-link');
+
+    if(key === 'intro' || key === 'thanks'){
+      navBar.style.display = 'none';
+      return;
+    }
+    navBar.style.display = 'flex';
+
+    dotsWrap.innerHTML = '';
+    for(let i=0;i<9;i++){
+      const dot = document.createElement('div');
+      dot.className = 'step-dot';
+      const stepIdx = current - 1; // current 'q' index
+      if(i === stepIdx) dot.classList.add('current');
+      else if(i < stepIdx) dot.classList.add('done');
+      dot.textContent = i+1;
+      dot.addEventListener('click', ()=> goTo(i+1));
+      dotsWrap.appendChild(dot);
+    }
+
+    prevBtn.disabled = (key === 'q:0');
+    nextBtn.textContent = (key === 'q:8') ? 'Listo' : 'Siguiente';
+    allLink.style.display = 'inline';
+  }
+
+  document.getElementById('start-btn').addEventListener('click', ()=> goTo(1));
+  document.getElementById('nav-prev').addEventListener('click', ()=> goTo(current-1));
+  document.getElementById('nav-next').addEventListener('click', ()=> goTo(current+1));
+
+  document.getElementById('all-steps-link').addEventListener('click', ()=>{
+    const list = document.getElementById('overlay-list');
+    list.innerHTML = '';
+    stepTitles.forEach((title, i)=>{
+      const item = document.createElement('div');
+      item.className = 'overlay-item';
+      item.innerHTML = `<span class="dot">${i+1}</span><span class="label">${title}</span>`;
+      item.addEventListener('click', ()=>{
+        document.getElementById('steps-overlay').classList.remove('active');
+        goTo(i+1);
+      });
+      list.appendChild(item);
+    });
+    document.getElementById('steps-overlay').classList.add('active');
+  });
+  document.getElementById('overlay-close').addEventListener('click', ()=>{
+    document.getElementById('steps-overlay').classList.remove('active');
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight') goTo(current+1);
+    if(e.key === 'ArrowLeft') goTo(current-1);
+  });
+
+  render();
+})();
 </script>
 </body>
 </html>
