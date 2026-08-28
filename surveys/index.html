@@ -2,242 +2,257 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Encuesta de Sesión - XGEREMY™</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
 <style>
-:root{--font:'Helvetica Neue',Helvetica,Arial,sans-serif;--bg:#050505;--bg-2:#0f0f0f;--text:#f5f5f7;--text-2:#86868b;--text-3:#6e6e73;--border:rgba(255,255,255,0.09);--accent:#c8b89a;--glass-bg:rgba(255,255,255,0.065);--glass-bg-2:rgba(255,255,255,0.042);--glass-blur2:20px;--glass-sat:1.85;--glass-bdr:rgba(255,255,255,0.105);--glass-bdr-h:rgba(255,255,255,0.22);--glass-r2:18px;--glass-r3:14px;--glass-spec:rgba(255,255,255,0.20);--err:#ff3b30;--ok:#30d158}
+:root{--font:'Helvetica Neue',Helvetica,Arial,sans-serif;--bg:#050505;--text:#f5f5f7;--text-2:#86868b;--text-3:#5f5f63;--border:rgba(255,255,255,0.08);--accent:#c8b89a;--glass-bg:rgba(255,255,255,.055);--glass-bdr:rgba(255,255,255,.10);--glass-bdr-h:rgba(255,255,255,.2);--err:#ff3b30}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100vh;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-#xg-grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");opacity:.018;pointer-events:none;z-index:500;animation:xg-grain .5s steps(2) infinite}
-@keyframes xg-grain{0%,100%{transform:translate(0,0)}25%{transform:translate(-1%,2%)}50%{transform:translate(2%,-1%)}75%{transform:translate(-1%,1%)}}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100dvh;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
-header{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:calc(100% - 48px);max-width:980px;z-index:9999;display:flex;align-items:center;padding:0 8px;height:52px;background:linear-gradient(140deg,rgba(255,255,255,0.10),rgba(255,255,255,0.04));backdrop-filter:blur(28px) saturate(1.85) brightness(1.06);-webkit-backdrop-filter:blur(28px) saturate(1.85) brightness(1.06);border:1px solid var(--glass-bdr);border-radius:18px}
-.header-content{width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 12px}
-.logo{font-size:16px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
-.logo-img{height:26px;width:auto;opacity:.9}
-.logo sup{font-size:9px;font-weight:400;opacity:.5}
-.back-link{color:var(--text);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;opacity:.6;padding:7px 12px;border-radius:10px;transition:opacity .3s,background .3s}
-.back-link:hover{opacity:1;background:rgba(255,255,255,.07)}
+#xg-grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");opacity:.015;pointer-events:none;z-index:500}
 
-/* progress bar */
-#progress-track{position:fixed;top:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.06);z-index:10000}
+/* progreso arriba, discreto */
+#progress-track{position:fixed;top:0;left:0;width:100%;height:2px;background:rgba(255,255,255,.05);z-index:9999}
 #progress-fill{height:100%;width:0%;background:#fff;transition:width .5s cubic-bezier(.4,0,.2,1)}
 
-/* screens */
-#stage{position:relative;width:100%;height:100vh;padding:0 22px}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;max-width:700px;margin:0 auto;padding:0 22px;opacity:0;pointer-events:none;transform:translateY(28px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
-.screen.active{opacity:1;pointer-events:all;transform:translateY(0)}
-.screen.leaving{opacity:0;transform:translateY(-28px)}
-.q-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:var(--glass-bg);border:1px solid var(--glass-bdr);font-size:12px;font-weight:700;letter-spacing:-.01em;color:var(--accent);margin-bottom:18px}
-.q-title{font-size:clamp(24px,4.2vw,36px);font-weight:700;letter-spacing:-.03em;line-height:1.18;margin-bottom:10px}
-.q-sub{font-size:15px;color:var(--text-2);margin-bottom:32px;font-weight:300;letter-spacing:-.01em}
-.options{display:flex;flex-direction:column;gap:10px;width:100%}
-.opt{display:flex;align-items:center;gap:14px;padding:16px 18px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));-webkit-backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));border:1px solid var(--glass-bdr);border-radius:var(--glass-r3);cursor:pointer;font-family:var(--font);font-size:16px;font-weight:500;letter-spacing:-.01em;color:var(--text);text-align:left;transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .25s,background .25s;width:100%}
-.opt:hover{transform:translateX(4px);border-color:var(--glass-bdr-h)}
-.opt.selected{border-color:var(--accent);background:linear-gradient(145deg,rgba(200,184,154,.14),rgba(200,184,154,.05))}
-.opt .letter{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--glass-bdr);font-size:12px;font-weight:700}
-.opt.selected .letter{background:var(--accent);color:#050505;border-color:var(--accent)}
+a.back-link{position:fixed;top:20px;left:20px;z-index:9999;color:var(--text-2);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;opacity:.55;transition:opacity .25s}
+a.back-link:hover{opacity:1}
 
-textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--glass-bdr);color:var(--text);font-family:var(--font);font-size:20px;font-weight:300;letter-spacing:-.01em;padding:10px 2px;resize:none;outline:none;transition:border-color .3s}
+/* stage / screens */
+#stage{position:relative;width:100%;height:100dvh}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 28px;opacity:0;pointer-events:none}
+.screen.active{opacity:1;pointer-events:all}
+.screen-inner{max-width:480px;width:100%}
+.screen.q .screen-inner{text-align:left}
+
+/* elementos animados: fadeInUp escalonado al activarse */
+.a-item{opacity:0;transform:translateY(16px)}
+.screen.active .a-item{animation:fadeInUp .7s cubic-bezier(.16,1,.3,1) forwards}
+.screen.active .a-1{animation-delay:.05s}
+.screen.active .a-2{animation-delay:.14s}
+.screen.active .a-3{animation-delay:.22s}
+.screen.active .a-4{animation-delay:.3s}
+@keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
+
+.step-num{font-size:13px;font-weight:700;letter-spacing:-.01em;color:var(--text-3);margin-bottom:18px}
+.q-title{font-size:clamp(22px,5.5vw,32px);font-weight:700;letter-spacing:-.03em;line-height:1.22;margin-bottom:10px}
+.q-sub{font-size:15px;font-weight:300;letter-spacing:-.01em;color:var(--text-2);margin-bottom:30px}
+
+/* opciones: lista minimalista, sin cards */
+.options{display:flex;flex-direction:column;width:100%}
+.opt{display:flex;align-items:center;gap:14px;padding:15px 2px;background:none;border:none;border-bottom:1px solid var(--border);cursor:pointer;font-family:var(--font);font-size:16px;font-weight:400;letter-spacing:-.01em;color:var(--text-2);text-align:left;width:100%;transition:color .25s,padding-left .25s}
+.opt:last-child{border-bottom:1px solid var(--border)}
+.opt:hover{color:var(--text);padding-left:8px}
+.opt.selected{color:var(--text);font-weight:700}
+.opt .letter{font-size:12px;font-weight:700;color:var(--text-3);min-width:16px;transition:color .25s}
+.opt.selected .letter{color:var(--accent)}
+
+textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--glass-bdr);color:var(--text);font-family:var(--font);font-size:19px;font-weight:300;letter-spacing:-.01em;padding:10px 2px;resize:none;outline:none;transition:border-color .3s;margin-top:6px}
 textarea:focus{border-color:var(--accent)}
 textarea::placeholder{color:var(--text-3)}
 .hint{font-size:12px;font-weight:500;color:var(--text-3);margin-top:10px}
 
-.btn-ok{margin-top:32px;display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:var(--text);color:var(--bg);border:none;border-radius:var(--glass-r3);font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;cursor:pointer;transition:transform .25s,opacity .25s}
-.btn-ok:hover{transform:translateY(-2px);opacity:.88}
-.btn-ok:disabled{opacity:.35;cursor:not-allowed;transform:none}
-.btn-ghost{margin-top:32px;display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:transparent;border:1px solid var(--glass-bdr);color:var(--text);border-radius:var(--glass-r3);font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;cursor:pointer;transition:transform .25s,border-color .25s}
-.btn-ghost:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h)}
-
-/* intro / thanks */
-.center-screen{align-items:center;text-align:center}
-.hero-logo{width:56px;height:56px;margin-bottom:24px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))}
-.intro-title{font-size:clamp(30px,5.5vw,50px);font-weight:700;letter-spacing:-.035em;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.intro-sub{font-size:17px;font-weight:300;letter-spacing:-.01em;color:var(--text-2);margin-bottom:32px;max-width:480px}
-.time-hint{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text-3);margin-top:20px}
-.name-input{width:100%;max-width:340px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));border:1px solid var(--glass-bdr);border-radius:var(--glass-r3);color:var(--text);font-family:var(--font);font-size:16px;font-weight:400;letter-spacing:-.01em;padding:14px 16px;outline:none;transition:border-color .3s;margin-bottom:8px}
+.name-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--glass-bdr);color:var(--text);font-family:var(--font);font-size:16px;font-weight:400;letter-spacing:-.01em;padding:12px 2px;outline:none;transition:border-color .3s;margin-bottom:26px;text-align:center}
 .name-input:focus{border-color:var(--accent)}
 .name-input::placeholder{color:var(--text-3)}
-.checkmark{width:64px;height:64px;border-radius:50%;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.3);display:flex;align-items:center;justify-content:center;margin-bottom:24px;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.error-box{color:var(--err);font-size:13px;font-weight:500;margin-top:16px}
 
-/* nav arrows */
-#nav-arrows{position:fixed;bottom:28px;right:28px;display:flex;flex-direction:column;gap:8px;z-index:9998}
-.nav-btn{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));backdrop-filter:blur(20px);border:1px solid var(--glass-bdr);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .3s}
+/* intro / final */
+.intro-title{font-size:clamp(28px,7vw,44px);font-weight:700;letter-spacing:-.035em;line-height:1.12;margin-bottom:14px}
+.intro-sub{font-size:16px;font-weight:300;color:var(--text-2);line-height:1.55;letter-spacing:-.01em;margin-bottom:30px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;background:var(--text);color:var(--bg);border:none;border-radius:100px;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1),opacity .3s}
+.btn:hover{transform:translateY(-2px);opacity:.9}
+.btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:transparent;border:1px solid var(--glass-bdr);color:var(--text);border-radius:100px;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;text-decoration:none;cursor:pointer;transition:transform .3s,border-color .3s}
+.btn-outline:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h)}
+.checkmark{width:56px;height:56px;border-radius:50%;background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.25);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.error-box{color:var(--err);font-size:13px;font-weight:500;margin-top:14px}
+
+/* navegación: solo flechas discretas, esquina inferior */
+#nav{position:fixed;right:20px;bottom:22px;display:flex;gap:8px;z-index:9998}
+.nav-btn{width:38px;height:38px;border-radius:50%;background:var(--glass-bg);border:1px solid var(--glass-bdr);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all .3s}
 .nav-btn:hover{border-color:var(--glass-bdr-h);transform:translateY(-2px)}
-.nav-btn:disabled{opacity:.25;cursor:not-allowed;transform:none}
+.nav-btn:disabled{opacity:.2;cursor:not-allowed;transform:none}
+#counter{position:fixed;left:20px;bottom:30px;font-size:12px;font-weight:700;color:var(--text-3);letter-spacing:-.01em;z-index:9998}
 
-@media(max-width:734px){
-  header{width:calc(100% - 20px);top:10px}
-  #nav-arrows{bottom:18px;right:18px}
-  .screen{padding:0 22px}
+@media(max-width:600px){
+  .screen{padding:0 26px}
+  #nav{right:16px;bottom:18px}
+  #counter{left:16px;bottom:26px}
 }
 </style>
 </head>
 <body>
 <div id="xg-grain"></div>
 <div id="progress-track"><div id="progress-fill"></div></div>
-
-<header>
-  <div class="header-content">
-    <a href="/" class="logo">
-      <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo" class="logo-img">
-      XGEREMY<sup>™</sup>
-    </a>
-    <nav>
-      <a href="/" class="back-link">← Volver al inicio</a>
-    </nav>
-  </div>
-</header>
+<a href="/" class="back-link">← Inicio</a>
 
 <div id="stage">
 
   <!-- Intro -->
-  <section class="screen center-screen active" data-screen="intro">
-    <img src="https://i.imgur.com/cFOFY4I.png" class="hero-logo" alt="">
-    <h1 class="intro-title">¿Cómo estuvo tu sesión?</h1>
-    <p class="intro-sub">Tu opinión me ayuda a mejorar cada sesión. Son solo 8 preguntas rápidas, totalmente anónimo si prefieres no dejar tu nombre.</p>
-    <input type="text" id="nombre-input" class="name-input" placeholder="Tu nombre (opcional)" autocomplete="name">
-    <button class="btn-ok" id="start-btn">Empezar</button>
-    <div class="time-hint">⏱ Toma menos de 1 minuto</div>
+  <section class="screen active" data-screen="intro">
+    <div class="screen-inner">
+      <h1 class="intro-title a-item a-1">¿Cómo estuvo tu sesión?</h1>
+      <p class="intro-sub a-item a-2">Tu opinión me ayuda a mejorar cada sesión. Son 8 preguntas rápidas, anónimo si prefieres no dejar tu nombre.</p>
+      <input type="text" id="nombre-input" class="name-input a-item a-3" placeholder="Tu nombre (opcional)" autocomplete="name">
+      <button class="btn a-item a-3" id="start-btn">Empezar</button>
+    </div>
   </section>
 
   <!-- Q1 -->
-  <section class="screen" data-screen="q" data-index="0">
-    <span class="q-badge">1</span>
-    <h2 class="q-title">¿Qué tan satisfech@ quedaste con la experiencia general?</h2>
-    <p class="q-sub">Pensando en la sesión completa, de principio a fin.</p>
-    <div class="options" data-q="satisfaccion_general">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy mala</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Mala</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Regular</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Buena</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Excelente</button>
+  <section class="screen q" data-screen="q" data-index="0">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">01 / 08</div>
+      <h2 class="q-title a-item a-2">¿Qué tan satisfech@ quedaste con la experiencia general?</h2>
+      <p class="q-sub a-item a-2">Pensando en la sesión completa, de principio a fin.</p>
+      <div class="options a-item a-3" data-q="satisfaccion_general">
+        <button class="opt" data-value="1"><span class="letter">A</span> Muy mala</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Mala</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Regular</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Buena</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Excelente</button>
+      </div>
     </div>
   </section>
 
   <!-- Q2 -->
-  <section class="screen" data-screen="q" data-index="1">
-    <span class="q-badge">2</span>
-    <h2 class="q-title">¿Qué tan fácil fue llegar y encontrar el estudio?</h2>
-    <p class="q-sub">Ubicación, accesibilidad, indicaciones para llegar.</p>
-    <div class="options" data-q="ubicacion">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy difícil</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Difícil</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Normal</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Fácil</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy fácil</button>
+  <section class="screen q" data-screen="q" data-index="1">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">02 / 08</div>
+      <h2 class="q-title a-item a-2">¿Qué tan fácil fue llegar y encontrar el estudio?</h2>
+      <p class="q-sub a-item a-2">Ubicación, accesibilidad, indicaciones para llegar.</p>
+      <div class="options a-item a-3" data-q="ubicacion">
+        <button class="opt" data-value="1"><span class="letter">A</span> Muy difícil</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Difícil</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Normal</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Fácil</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Muy fácil</button>
+      </div>
     </div>
   </section>
 
   <!-- Q3 -->
-  <section class="screen" data-screen="q" data-index="2">
-    <span class="q-badge">3</span>
-    <h2 class="q-title">¿Cómo calificarías las instalaciones del estudio?</h2>
-    <p class="q-sub">Baño, higiene, orden y comodidad del espacio.</p>
-    <div class="options" data-q="instalaciones">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy malas</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Malas</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Aceptables</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Buenas</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Excelentes</button>
+  <section class="screen q" data-screen="q" data-index="2">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">03 / 08</div>
+      <h2 class="q-title a-item a-2">¿Cómo calificarías las instalaciones del estudio?</h2>
+      <p class="q-sub a-item a-2">Baño, higiene, orden y comodidad del espacio.</p>
+      <div class="options a-item a-3" data-q="instalaciones">
+        <button class="opt" data-value="1"><span class="letter">A</span> Muy malas</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Malas</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Aceptables</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Buenas</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Excelentes</button>
+      </div>
     </div>
   </section>
 
   <!-- Q4 -->
-  <section class="screen" data-screen="q" data-index="3">
-    <span class="q-badge">4</span>
-    <h2 class="q-title">¿Cómo te sentiste durante la sesión?</h2>
-    <p class="q-sub">Comodidad, ambiente, manejo del dolor.</p>
-    <div class="options" data-q="comodidad">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy incómod@</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Incómod@</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Cómod@</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy cómod@</button>
+  <section class="screen q" data-screen="q" data-index="3">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">04 / 08</div>
+      <h2 class="q-title a-item a-2">¿Cómo te sentiste durante la sesión?</h2>
+      <p class="q-sub a-item a-2">Comodidad, ambiente, manejo del dolor.</p>
+      <div class="options a-item a-3" data-q="comodidad">
+        <button class="opt" data-value="1"><span class="letter">A</span> Muy incómod@</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Incómod@</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Cómod@</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Muy cómod@</button>
+      </div>
     </div>
   </section>
 
   <!-- Q5 -->
-  <section class="screen" data-screen="q" data-index="4">
-    <span class="q-badge">5</span>
-    <h2 class="q-title">¿Qué tan claro quedó el proceso, sin dudas pendientes?</h2>
-    <p class="q-sub">Explicación del diseño, cuidados y pasos de la sesión.</p>
-    <div class="options" data-q="claridad_proceso">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muchas dudas</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Algunas dudas</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Pocas dudas</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Casi todo claro</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Todo clarísimo</button>
+  <section class="screen q" data-screen="q" data-index="4">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">05 / 08</div>
+      <h2 class="q-title a-item a-2">¿Qué tan claro quedó el proceso, sin dudas pendientes?</h2>
+      <p class="q-sub a-item a-2">Explicación del diseño, cuidados y pasos de la sesión.</p>
+      <div class="options a-item a-3" data-q="claridad_proceso">
+        <button class="opt" data-value="1"><span class="letter">A</span> Muchas dudas</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Algunas dudas</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Pocas dudas</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Casi todo claro</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Todo clarísimo</button>
+      </div>
     </div>
   </section>
 
   <!-- Q6 -->
-  <section class="screen" data-screen="q" data-index="5">
-    <span class="q-badge">6</span>
-    <h2 class="q-title">Al terminar, ¿qué tan satisfech@ quedaste con el resultado?</h2>
-    <p class="q-sub">El tatuaje ya terminado, tal como quedó en tu piel.</p>
-    <div class="options" data-q="satisfaccion_resultado">
-      <button class="opt" data-value="1"><span class="letter">A</span> Muy insatisfech@</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Insatisfech@</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Satisfech@</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy satisfech@</button>
+  <section class="screen q" data-screen="q" data-index="5">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">06 / 08</div>
+      <h2 class="q-title a-item a-2">Al terminar, ¿qué tan satisfech@ quedaste con el resultado?</h2>
+      <p class="q-sub a-item a-2">El tatuaje ya terminado, tal como quedó en tu piel.</p>
+      <div class="options a-item a-3" data-q="satisfaccion_resultado">
+        <button class="opt" data-value="1"><span class="letter">A</span> Muy insatisfech@</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Insatisfech@</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Satisfech@</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Muy satisfech@</button>
+      </div>
     </div>
   </section>
 
   <!-- Q7 -->
-  <section class="screen" data-screen="q" data-index="6">
-    <span class="q-badge">7</span>
-    <h2 class="q-title">¿Qué tan probable es que me recomiendes con un amigo?</h2>
-    <p class="q-sub">Sé honest@, así puedo mejorar de verdad.</p>
-    <div class="options" data-q="recomendacion">
-      <button class="opt" data-value="1"><span class="letter">A</span> Nada probable</button>
-      <button class="opt" data-value="2"><span class="letter">B</span> Poco probable</button>
-      <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
-      <button class="opt" data-value="4"><span class="letter">D</span> Probable</button>
-      <button class="opt" data-value="5"><span class="letter">E</span> Muy probable</button>
+  <section class="screen q" data-screen="q" data-index="6">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">07 / 08</div>
+      <h2 class="q-title a-item a-2">¿Qué tan probable es que me recomiendes con un amigo?</h2>
+      <p class="q-sub a-item a-2">Sé honest@, así puedo mejorar de verdad.</p>
+      <div class="options a-item a-3" data-q="recomendacion">
+        <button class="opt" data-value="1"><span class="letter">A</span> Nada probable</button>
+        <button class="opt" data-value="2"><span class="letter">B</span> Poco probable</button>
+        <button class="opt" data-value="3"><span class="letter">C</span> Neutral</button>
+        <button class="opt" data-value="4"><span class="letter">D</span> Probable</button>
+        <button class="opt" data-value="5"><span class="letter">E</span> Muy probable</button>
+      </div>
     </div>
   </section>
 
   <!-- Q8 open -->
-  <section class="screen" data-screen="q" data-index="7">
-    <span class="q-badge">8</span>
-    <h2 class="q-title">¿Algo que te gustaría que mejore para la próxima?</h2>
-    <p class="q-sub">Opcional, pero toda sugerencia suma.</p>
-    <textarea id="comentario" rows="2" placeholder="Escribe aquí tu respuesta..."></textarea>
-    <div class="hint">Shift + Enter para salto de línea</div>
-    <button class="btn-ok" id="submit-btn">Enviar</button>
-    <div class="error-box" id="error-msg" style="display:none">Hubo un problema al enviar. Intenta de nuevo.</div>
+  <section class="screen q" data-screen="q" data-index="7">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">08 / 08</div>
+      <h2 class="q-title a-item a-2">¿Algo que te gustaría que mejore para la próxima?</h2>
+      <p class="q-sub a-item a-2">Opcional, pero toda sugerencia suma.</p>
+      <div class="a-item a-3">
+        <textarea id="comentario" rows="2" placeholder="Escribe aquí tu respuesta..."></textarea>
+        <div class="hint">Shift + Enter para salto de línea</div>
+        <button class="btn" id="submit-btn" style="margin-top:26px">Enviar</button>
+        <div class="error-box" id="error-msg" style="display:none">Hubo un problema al enviar. Intenta de nuevo.</div>
+      </div>
+    </div>
   </section>
 
   <!-- Thanks -->
-  <section class="screen center-screen" data-screen="thanks">
-    <div class="checkmark">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9 17.5L20 6.5" stroke="#30d158" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <section class="screen" data-screen="thanks">
+    <div class="screen-inner">
+      <div class="checkmark a-item a-1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9 17.5L20 6.5" stroke="#30d158" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1 class="intro-title a-item a-2">¡Gracias por tu tiempo!</h1>
+      <p class="intro-sub a-item a-3">Tu opinión quedó registrada. Nos vemos en la próxima sesión.</p>
+      <a href="/" class="btn-outline a-item a-4">Volver al inicio</a>
     </div>
-    <h1 class="intro-title">¡Gracias por tu tiempo!</h1>
-    <p class="intro-sub">Tu opinión quedó registrada. Nos vemos en la próxima sesión ✌️</p>
-    <a href="/" class="btn-ghost">Volver al inicio</a>
   </section>
 
 </div>
 
-<div id="nav-arrows">
-  <button class="nav-btn" id="nav-up" aria-label="Anterior">↑</button>
-  <button class="nav-btn" id="nav-down" aria-label="Siguiente">↓</button>
+<div id="counter"></div>
+<div id="nav">
+  <button class="nav-btn" id="nav-prev" aria-label="Anterior">↑</button>
+  <button class="nav-btn" id="nav-next" aria-label="Siguiente">↓</button>
 </div>
 
 <script>
 (function(){
   const FORM_ENDPOINT = "https://formspree.io/f/xaeywrdg";
-  const screens = Array.from(document.querySelectorAll('.screen'));
-  const qCount = document.querySelectorAll('.screen[data-screen="q"]').length;
-  const order = ['intro', ...Array.from({length:qCount}, (_,i)=>'q:'+i), 'thanks'];
+  const TOTAL = 8;
+  const order = ['intro', ...Array.from({length:TOTAL}, (_,i)=>'q:'+i), 'thanks'];
   let current = 0;
   const answers = {};
 
@@ -247,46 +262,51 @@ textarea::placeholder{color:var(--text-3)}
     return document.querySelector(`.screen[data-index="${idx}"]`);
   }
 
-  function updateProgress(){
-    const qScreens = order.filter(k => k.startsWith('q:'));
-    const currentKey = order[current];
-    let pct = 0;
-    if(currentKey.startsWith('q:')){
-      const idx = parseInt(currentKey.split(':')[1]);
-      pct = ((idx+1) / qScreens.length) * 100;
-    } else if(currentKey === 'thanks'){
-      pct = 100;
-    }
-    document.getElementById('progress-fill').style.width = pct + '%';
-  }
-
-  function goTo(newIndex, dir){
-    if(newIndex < 0 || newIndex >= order.length) return;
-    const oldEl = screenEl(order[current]);
-    const newEl = screenEl(order[newIndex]);
-    oldEl.classList.remove('active');
-    oldEl.classList.add('leaving');
-    setTimeout(()=> oldEl.classList.remove('leaving'), 550);
-    newEl.classList.add('active');
-    current = newIndex;
-    updateProgress();
-    updateNavButtons();
-  }
-
-  function updateNavButtons(){
-    document.getElementById('nav-up').disabled = current === 0;
-    const key = order[current];
-    const isAnswered = key.startsWith('q:') ? !!answers[questionKeyFor(key)] : true;
-    document.getElementById('nav-down').disabled = key === 'thanks' || (key.startsWith('q:') && key.split(':')[1] != (qCount-1) && !isAnswered);
-  }
-
-  function questionKeyFor(key){
-    const idx = parseInt(key.split(':')[1]);
+  function questionKeyFor(idx){
     const el = document.querySelector(`.screen[data-index="${idx}"] .options`);
     return el ? el.dataset.q : null;
   }
 
+  function goTo(newIndex){
+    if(newIndex < 0 || newIndex >= order.length) return;
+    screenEl(order[current]).classList.remove('active');
+    current = newIndex;
+    screenEl(order[current]).classList.add('active');
+    render();
+  }
+
+  function render(){
+    const key = order[current];
+    const fill = document.getElementById('progress-fill');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('nav-prev');
+    const nextBtn = document.getElementById('nav-next');
+
+    if(key === 'intro' || key === 'thanks'){
+      fill.style.width = key === 'thanks' ? '100%' : '0%';
+      counter.textContent = '';
+      prevBtn.style.visibility = 'hidden';
+      nextBtn.style.visibility = 'hidden';
+      return;
+    }
+    const idx = parseInt(key.split(':')[1]);
+    fill.style.width = (((idx+1)/TOTAL)*100) + '%';
+    counter.textContent = (idx+1) + ' / ' + TOTAL;
+    prevBtn.style.visibility = 'visible';
+    prevBtn.disabled = false;
+    // último paso (abierta) navega con el botón Enviar, no con la flecha
+    if(idx === TOTAL - 1){
+      nextBtn.style.visibility = 'hidden';
+    } else {
+      nextBtn.style.visibility = 'visible';
+      const answered = !!answers[questionKeyFor(idx)];
+      nextBtn.disabled = !answered;
+    }
+  }
+
   document.getElementById('start-btn').addEventListener('click', ()=> goTo(1));
+  document.getElementById('nav-prev').addEventListener('click', ()=> goTo(current-1));
+  document.getElementById('nav-next').addEventListener('click', ()=> goTo(current+1));
 
   document.querySelectorAll('.options').forEach(group=>{
     group.addEventListener('click', (e)=>{
@@ -295,30 +315,20 @@ textarea::placeholder{color:var(--text-3)}
       group.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
       btn.classList.add('selected');
       answers[group.dataset.q] = btn.dataset.value;
-      updateNavButtons();
+      render();
       setTimeout(()=> goTo(current+1), 320);
     });
   });
 
-  document.getElementById('nav-up').addEventListener('click', ()=> goTo(current-1));
-  document.getElementById('nav-down').addEventListener('click', ()=>{
-    const key = order[current];
-    if(key.startsWith('q:') && key.split(':')[1] == (qCount-1)) return; // last question uses submit button
-    goTo(current+1);
-  });
-
   document.addEventListener('keydown', (e)=>{
-    if(document.activeElement.tagName === 'TEXTAREA') return;
-    const opts = ['1','2','3','4','5'];
-    if(opts.includes(e.key)){
-      const key = order[current];
-      if(key.startsWith('q:')){
-        const idx = key.split(':')[1];
-        const group = document.querySelector(`.screen[data-index="${idx}"] .options`);
-        if(group){
-          const btn = group.querySelector(`.opt[data-value="${e.key}"]`);
-          if(btn) btn.click();
-        }
+    if(document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT') return;
+    const key = order[current];
+    if(key.startsWith('q:')){
+      const idx = key.split(':')[1];
+      const group = document.querySelector(`.screen[data-index="${idx}"] .options`);
+      if(group && ['1','2','3','4','5'].includes(e.key)){
+        const btn = group.querySelector(`.opt[data-value="${e.key}"]`);
+        if(btn) btn.click();
       }
     }
   });
@@ -359,8 +369,21 @@ textarea::placeholder{color:var(--text-3)}
     }
   });
 
-  updateProgress();
-  updateNavButtons();
+  let touchStartY = null;
+  document.addEventListener('touchstart', e=> touchStartY = e.touches[0].clientY, {passive:true});
+  document.addEventListener('touchend', e=>{
+    if(touchStartY === null) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const key = order[current];
+    if(key.startsWith('q:') && document.querySelector(`.screen[data-index="${key.split(':')[1]}"] textarea`)) { touchStartY = null; return; }
+    if(Math.abs(dy) > 60){
+      if(dy > 0){ if(document.getElementById('nav-next').style.visibility !== 'hidden' && !document.getElementById('nav-next').disabled) goTo(current+1); }
+      else { goTo(current-1); }
+    }
+    touchStartY = null;
+  }, {passive:true});
+
+  render();
 })();
 </script>
 </body>
