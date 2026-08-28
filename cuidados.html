@@ -1,179 +1,339 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cuidados del Tatuaje - XGEREMY™</title>
-  <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
-  
-  <style>:root{--font:'Helvetica Neue',Helvetica,Arial,sans-serif;--bg:#050505;--bg-2:#0f0f0f;--bg-3:#1a1a1a;--text:#f5f5f7;--text-2:#86868b;--text-3:#6e6e73;--border:rgba(255,255,255,0.09);--accent:#c8b89a;--glass-bg:rgba(255,255,255,0.065);--glass-bg-2:rgba(255,255,255,0.042);--glass-blur:28px;--glass-blur2:20px;--glass-sat:1.85;--glass-bdr:rgba(255,255,255,0.105);--glass-bdr-h:rgba(255,255,255,0.22);--glass-r:20px;--glass-r2:18px;--glass-r3:14px;--glass-spec:rgba(255,255,255,0.20);--ch-blue:rgba(100,190,255,0.055);--ch-violet:rgba(150,90,255,0.045);--ch-pink:rgba(255,110,200,0.038);--ch-green:rgba(80,255,170,0.025);--nav-bg:rgba(10,10,10,0.82);--theme-icon:"☀️";--pts:rgba(200,184,154,0.85);--pts-dim:rgba(200,184,154,0.18);--pts-border:rgba(200,184,154,0.22)}*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transition:background .35s ease,color .35s ease}#xg-filters{position:absolute;width:0;height:0;overflow:hidden}#xg-grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");opacity:.018;pointer-events:none;z-index:500;animation:xg-grain .5s steps(2) infinite}@keyframes xg-grain{0%,100%{transform:translate(0,0)}25%{transform:translate(-1%,2%)}50%{transform:translate(2%,-1%)}75%{transform:translate(-1%,1%)}}.xg-card{position:relative;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));-webkit-backdrop-filter:blur(var(--glass-blur2)) saturate(var(--glass-sat));border:1px solid var(--glass-bdr);border-radius:var(--glass-r2);overflow:hidden;transition:transform .55s cubic-bezier(.16,1,.3,1),border-color .4s,box-shadow .5s}.xg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-spec) 45%,rgba(255,255,255,.08) 60%,transparent);pointer-events:none}.xg-card:hover{transform:translateY(-4px);border-color:var(--glass-bdr-h);box-shadow:0 32px 64px rgba(0,0,0,.28),inset 1px 1px 0 var(--ch-blue),inset -1px -1px 0 var(--ch-violet),inset 1px -1px 0 var(--ch-pink),inset -1px 1px 0 var(--ch-green)}.xg-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;background:linear-gradient(145deg,var(--glass-bg),var(--glass-bg-2));backdrop-filter:blur(20px) saturate(var(--glass-sat));-webkit-backdrop-filter:blur(20px) saturate(var(--glass-sat));border:1px solid var(--glass-bdr);border-radius:var(--glass-r3);color:var(--text);font-family:var(--font);font-size:15px;font-weight:500;letter-spacing:-.01em;text-decoration:none;cursor:pointer;overflow:hidden;transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .4s}.xg-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-spec) 50%,transparent);pointer-events:none}.xg-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(108deg,transparent 28%,rgba(255,255,255,.06) 50%,transparent 72%);background-size:220% 100%;animation:xg-shimmer 6s ease-in-out infinite;pointer-events:none}.xg-btn:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h);box-shadow:0 16px 40px rgba(0,0,0,.22),inset 1px 1px 0 var(--ch-blue),inset -1px -1px 0 var(--ch-violet)}.xg-btn span{position:relative;z-index:1}.xg-btn-solid{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;background:var(--text);color:var(--bg);border:1px solid transparent;border-radius:var(--glass-r3);font-family:var(--font);font-size:15px;font-weight:600;letter-spacing:-.01em;text-decoration:none;cursor:pointer;overflow:hidden;transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s,box-shadow .4s}.xg-btn-solid:hover{transform:translateY(-2px);opacity:.88;box-shadow:0 12px 32px rgba(0,0,0,.22)}header{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:calc(100% - 48px);max-width:980px;z-index:9999;display:flex;align-items:center;padding:0 8px;height:52px;background:linear-gradient(140deg,rgba(255,255,255,0.10),rgba(255,255,255,0.04));backdrop-filter:blur(28px) saturate(1.85) brightness(1.06);-webkit-backdrop-filter:blur(28px) saturate(1.85) brightness(1.06);border:1px solid var(--glass-bdr);border-radius:18px;transition:background .35s,border-color .35s}header::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-spec) 50%,transparent);border-radius:18px 18px 0 0;pointer-events:none}.header-content{width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 12px}.logo{font-size:16px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px;transition:opacity .3s}.logo:hover{opacity:.7}.logo-img{height:26px;width:auto;opacity:.9}.logo sup{font-size:9px;font-weight:400;opacity:.5}nav{display:flex;gap:6px;align-items:center}nav a{color:var(--text);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;opacity:.65;padding:7px 12px;border-radius:10px;transition:opacity .3s,background .3s}nav a:hover{opacity:1;background:rgba(255,255,255,0.07)}.nav-agendar{margin-left:4px;padding:8px 16px !important;background:var(--text) !important;color:var(--bg) !important;border-radius:11px;font-weight:700 !important;font-size:13px !important;letter-spacing:-.02em !important;opacity:1 !important;transition:opacity .3s,transform .3s !important}.nav-agendar:hover{opacity:.85 !important;transform:translateY(-1px);background:var(--text) !important}.back-link{color:var(--text);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;opacity:.6;padding:7px 12px;border-radius:10px;transition:opacity .3s,background .3s}.back-link:hover{opacity:1;background:rgba(255,255,255,.07)}@keyframes xg-shimmer{0%{background-position:-100% 0}100%{background-position:320% 0}}@keyframes xg-specular{0%{opacity:.6}100%{opacity:1}}@keyframes fadeInUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.fade-in{opacity:0;transform:translateY(20px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}.fade-in.visible{opacity:1;transform:translateY(0)}.gallery-item{aspect-ratio:1080/1350;border-radius:18px;overflow:visible;position:relative;transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s;background:var(--bg-2)}.gallery-item .gi-inner{position:absolute;inset:0;border-radius:18px;overflow:hidden}.gallery-item .gi-inner img{width:100%;height:100%;object-fit:cover;display:block}.gallery-item::before{display:none}}.gallery-item::after{content:'';position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 30%,transparent 60% );opacity:0;transition:opacity .4s;z-index:3;pointer-events:none}.gallery-item:hover::after{opacity:1}.gallery-item:hover{transform:scale(1.025);box-shadow:0 28px 56px rgba(0,0,0,.5)}footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 22px 40px;transition:background .35s}.footer-content{max-width:980px;margin:0 auto}.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:40px}.footer-brand h3{font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:-.02em;text-transform:uppercase}.footer-brand p{font-size:14px;color:var(--text-2);line-height:1.6}.footer-links h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:16px;color:var(--text-2)}.footer-links a{display:block;font-size:14px;color:var(--text-2);text-decoration:none;margin-bottom:10px;transition:color .3s}.footer-links a:hover{color:var(--text)}.footer-bottom{text-align:center;padding-top:36px;border-top:1px solid var(--border)}.footer-bottom p{font-size:12px;font-weight:500;color:var(--text-3)}.scroll-top{position:fixed;bottom:32px;right:32px;width:48px;height:48px;border-radius:50%;background:var(--glass-bg);backdrop-filter:blur(16px);border:1px solid var(--glass-bdr);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.16,1,.3,1);z-index:1000}.scroll-top.visible{opacity:1;pointer-events:all}.scroll-top:hover{transform:translateY(-4px);border-color:var(--glass-bdr-h)}.hero-simple{padding:130px 22px 60px;text-align:center;max-width:980px;margin:0 auto}.hero-simple h1{font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:-.035em;margin-bottom:14px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-simple p{font-size:18px;color:var(--text-2);line-height:1.5;font-weight:300;letter-spacing:-.01em}.content{max-width:800px;margin:0 auto;padding:40px 22px 100px}.info-card{padding:32px;margin-bottom:14px}.info-card h2{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:12px;color:var(--text)}.icon{font-size:30px}.info-card h3{font-size:19px;font-weight:700;letter-spacing:-.015em;margin:22px 0 10px;color:var(--text)}.info-card p,.info-card li{font-size:16px;font-weight:300;letter-spacing:-.01em;line-height:1.6;color:var(--text-2);margin-bottom:10px}.info-card ul{list-style:none;padding-left:0}.info-card li{padding-left:22px;position:relative;margin-bottom:14px}.info-card li::before{content:'→';position:absolute;left:0;color:var(--accent);font-weight:400;font-size:14px;top:2px}.warning-box{background:rgba(255,59,48,.07);border:1px solid rgba(255,59,48,.22);border-radius:12px;padding:18px;margin:20px 0}.warning-box p{color:#ff3b30;font-size:14px;font-weight:400;letter-spacing:-.01em;margin:0}.tip-box{background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.22);border-radius:12px;padding:18px;margin:20px 0}.tip-box p{color:#30d158;font-size:14px;font-weight:400;letter-spacing:-.01em;margin:0}.contact-cta{padding:40px;text-align:center;margin-top:60px}.contact-cta h2{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-bottom:14px;background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.contact-cta p{font-size:16px;color:var(--text-2);margin-bottom:22px;font-weight:300;letter-spacing:-.01em}.button{position:relative;display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--glass-r3);color:var(--text);font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;text-decoration:none;cursor:pointer;overflow:hidden;transition:transform .25s,background .2s}.button::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-spec) 50%,transparent)}.button::after{display:none}.button:hover{transform:translateY(-2px);background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.25)}footer{background:var(--bg);border-top:1px solid var(--border);padding:36px 22px;text-align:center;transition:background .35s}footer p{font-size:12px;font-weight:500;color:var(--text-3)}@media(max-width:734px){header{width:calc(100% - 20px);top:10px}.hero-simple h1{font-size:28px}.info-card{padding:22px}.contact-cta{padding:28px 20px}}#xg-loader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .32s ease}#xg-loader.active{opacity:1;pointer-events:all}#xg-loader.out{opacity:0}.loader-inner{display:flex;flex-direction:column;align-items:center;gap:20px;opacity:0;transform:translateY(10px);transition:opacity .4s,transform .45s cubic-bezier(.16,1,.3,1)}#xg-loader.active .loader-inner{opacity:1;transform:translateY(0)}.ldr-img{width:42px;height:42px;filter:drop-shadow(0 0 18px rgba(255,255,255,.18))}.ldr-track{width:110px;height:1.5px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}.ldr-fill{height:100%;width:0%;background:linear-gradient(90deg,#c8b89a,rgba(245,245,247,.85));border-radius:2px;transition:width .55s cubic-bezier(.4,0,.2,1)}#xg-loader.active .ldr-fill{width:82%}#xg-loader.done .ldr-fill{width:100%}.ldr-name{font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;color:rgba(245,245,247,.35);margin-top:-6px}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cuidados del Tatuaje - XGEREMY™</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
+<style>
+:root{--font:'Helvetica Neue',Helvetica,Arial,sans-serif;--bg:#050505;--text:#f5f5f7;--text-2:#86868b;--text-3:#5f5f63;--border:rgba(255,255,255,0.08);--accent:#c8b89a;--glass-bg:rgba(255,255,255,.055);--glass-bdr:rgba(255,255,255,.10);--glass-bdr-h:rgba(255,255,255,.2)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100dvh;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+#xg-grain{position:fixed;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");opacity:.015;pointer-events:none;z-index:500}
+
+/* progreso arriba, discreto */
+#progress-track{position:fixed;top:0;left:0;width:100%;height:2px;background:rgba(255,255,255,.05);z-index:9999}
+#progress-fill{height:100%;width:0%;background:#fff;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+a.back-link{position:fixed;top:20px;left:20px;z-index:9999;color:var(--text-2);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;opacity:.55;transition:opacity .25s}
+a.back-link:hover{opacity:1}
+
+/* stage / screens */
+#stage{position:relative;width:100%;height:100dvh}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 28px;opacity:0;pointer-events:none}
+.screen.active{opacity:1;pointer-events:all}
+.screen-inner{max-width:520px;width:100%}
+.screen.q .screen-inner{text-align:left}
+
+/* elementos animados: fadeInUp escalonado al activarse */
+.a-item{opacity:0;transform:translateY(16px)}
+.screen.active .a-item{animation:fadeInUp .7s cubic-bezier(.16,1,.3,1) forwards}
+.screen.active .a-1{animation-delay:.05s}
+.screen.active .a-2{animation-delay:.14s}
+.screen.active .a-3{animation-delay:.22s}
+.screen.active .a-4{animation-delay:.3s}
+@keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
+
+.step-num{font-size:13px;font-weight:700;letter-spacing:-.01em;color:var(--text-3);margin-bottom:18px}
+.q-title{font-size:clamp(22px,5.5vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1.22;margin-bottom:14px}
+.q-body p{font-size:16px;line-height:1.6;color:var(--text-2);font-weight:300;letter-spacing:-.01em}
+.q-body p + p{margin-top:10px}
+.q-body p strong{color:var(--text);font-weight:700}
+.q-note{font-size:13.5px;color:var(--text-3);font-weight:300;font-style:normal;margin-top:14px;line-height:1.5;letter-spacing:-.005em}
+.q-body ul{list-style:none;padding:0;margin-top:12px}
+.q-body li{padding-left:16px;position:relative;margin-bottom:8px;font-size:15px;font-weight:300;color:var(--text-2);line-height:1.5;letter-spacing:-.005em}
+.q-body li::before{content:'–';position:absolute;left:0;color:var(--text-3)}
+.q-body li strong{color:var(--text);font-weight:700}
+
+/* intro / final */
+.intro-title{font-size:clamp(28px,7vw,46px);font-weight:700;letter-spacing:-.035em;line-height:1.12;margin-bottom:14px}
+.intro-sub{font-size:16px;font-weight:300;color:var(--text-2);line-height:1.55;letter-spacing:-.01em;margin-bottom:30px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;background:var(--text);color:var(--bg);border:none;border-radius:100px;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;text-decoration:none;cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1),opacity .3s}
+.btn:hover{transform:translateY(-2px);opacity:.9}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:transparent;border:1px solid var(--glass-bdr);color:var(--text);border-radius:100px;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;text-decoration:none;cursor:pointer;transition:transform .3s,border-color .3s}
+.btn-outline:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h)}
+
+/* navegación: solo flechas discretas, esquina inferior */
+#nav{position:fixed;right:20px;bottom:22px;display:flex;gap:8px;z-index:9998}
+.nav-btn{width:38px;height:38px;border-radius:50%;background:var(--glass-bg);border:1px solid var(--glass-bdr);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all .3s}
+.nav-btn:hover{border-color:var(--glass-bdr-h);transform:translateY(-2px)}
+.nav-btn:disabled{opacity:.2;cursor:not-allowed;transform:none}
+#counter{position:fixed;left:20px;bottom:30px;font-size:12px;font-weight:700;color:var(--text-3);letter-spacing:-.01em;z-index:9998}
+
+@media(max-width:600px){
+  .screen{padding:0 26px}
+  #nav{right:16px;bottom:18px}
+  #counter{left:16px;bottom:26px}
+}
+</style>
 </head>
 <body>
-  <div id="xg-loader" aria-hidden="true"><div class="loader-inner"><img src="https://i.imgur.com/cFOFY4I.png" class="ldr-img" alt="" width="42" height="42"><div class="ldr-track"><div class="ldr-fill"></div></div><span class="ldr-name">XGEREMY</span></div></div>
-  
+<div id="xg-grain"></div>
+<div id="progress-track"><div id="progress-fill"></div></div>
+<a href="/" class="back-link">← Inicio</a>
 
+<div id="stage">
 
-  
-        <header>
-      <div class="header-content">
-        <a href="/" class="logo">
-          <img src="https://i.imgur.com/cFOFY4I.png" alt="XGEREMY Logo" class="logo-img">
-          XGEREMY<sup>™</sup>
-        </a>
-        <nav>
-          <a href="/" class="back-link">← Volver al inicio</a>
-        </nav>
-      </div>
-    </header>
-
-  <section class="hero-simple">
-    <h1>Información Importante</h1>
-    <p>Cuidados esenciales para tu nuevo tatuaje</p>
+  <!-- Intro -->
+  <section class="screen active" data-screen="intro">
+    <div class="screen-inner">
+      <h1 class="intro-title a-item a-1">Cuidados de tu tatuaje</h1>
+      <p class="intro-sub a-item a-2">10 puntos esenciales para una cicatrización perfecta. Tómate un minuto para leerlos.</p>
+      <button class="btn a-item a-3" id="start-btn">Empezar</button>
+    </div>
   </section>
 
-  <div class="content">
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">🩹</span> Cuidados Generales</h2>
-      <p>Después de hacerte el tatuaje, es fundamental seguir estas indicaciones para asegurar una correcta cicatrización y preservar la calidad de tu diseño.</p>
-      <h3>Primeras Horas</h3>
-      <ul>
-        <li>Mantén el vendaje protector durante 2-4 horas.</li>
-        <li>Retira el vendaje cuidadosamente con las manos limpias.</li>
-        <li>Lava suavemente con agua tibia y jabón neutro.</li>
-      </ul>
-      <h3>Primeros Días (Días 1-7)</h3>
-      <ul>
-        <li>Lava el tatuaje 2-3 veces al día con agua tibia y jabón neutro.</li>
-        <li>Seca con toques suaves usando papel absorbente o toalla limpia.</li>
-        <li>Aplica una capa fina de crema cicatrizante sin fragancia.</li>
-        <li>No cubras el tatuaje a menos que sea necesario (ropa ajustada o sucia).</li>
-      </ul>
-      <h3>Segunda Semana (Días 8-14)</h3>
-      <ul>
-        <li>Continúa lavando 2 veces al día.</li>
-        <li>Aplica crema hidratante sin fragancia.</li>
-        <li>Es normal que la piel se descame, NO arranques las costras.</li>
-        <li>Mantén la zona hidratada pero no en exceso.</li>
-      </ul>
-      <div class="warning-box">
-        <p><strong>⚠️ IMPORTANTE:</strong> No sumerjas el tatuaje en piscinas, playas, tinas o jacuzzis durante las primeras 2-3 semanas.</p>
+  <!-- Paso 1 -->
+  <section class="screen q" data-screen="q" data-index="0">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">01 / 10</div>
+      <h2 class="q-title a-item a-2">Primeras horas</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>Mantén el vendaje protector durante 2 a 4 horas.</li>
+          <li>Retíralo cuidadosamente con las manos limpias.</li>
+          <li>Lava suavemente con agua tibia y jabón neutro.</li>
+        </ul>
       </div>
     </div>
+  </section>
 
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">☀️</span> Exposición Solar</h2>
-      <ul>
-        <li>Evita la exposición directa al sol durante el primer mes.</li>
-        <li>Después de 28 días de cicatrización, usa protector solar SPF 50+ siempre que el tatuaje esté expuesto.</li>
-        <li>El sol es el principal enemigo de la durabilidad de los colores.</li>
-      </ul>
-    </div>
-
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">❌</span> Qué NO Hacer</h2>
-      <ul>
-        <li>NO rasques ni arranques las costras o piel descamada.</li>
-        <li>NO uses ropa ajustada que roce constantemente el tatuaje.</li>
-        <li>NO te expongas a sudoración excesiva (gimnasio, deportes intensos).</li>
-        <li>NO uses productos con alcohol, perfumes o fragancias.</li>
-        <li>NO permitas que mascotas laman o toquen el tatuaje.</li>
-        <li>NO uses cremas con retinol, ácidos o exfoliantes en la zona.</li>
-        <li>NO vayas a la playa ni a la piscina durante el primer mes.</li>
-      </ul>
-    </div>
-
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">💊</span> Productos Recomendados</h2>
-      <ul>
-        <li>Jabón neutro sin fragancia (ej: jabón de glicerina)</li>
-        <li>Crema cicatrizante: Bepanthen o Aquaphor sin fragancia</li>
-        <li>Crema hidratante: Eucerin, CeraVe, o Lubriderm sin fragancia</li>
-        <li>Protector solar SPF 50+ mineral</li>
-      </ul>
-      <div class="tip-box">
-        <p><strong>💡 TIP:</strong> Menos es más. Una capa muy fina de crema es suficiente. El exceso puede obstruir los poros y retrasar la cicatrización.</p>
+  <!-- Paso 2 -->
+  <section class="screen q" data-screen="q" data-index="1">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">02 / 10</div>
+      <h2 class="q-title a-item a-2">Primeros días (día 1 al 7)</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>Lava el tatuaje 2 a 3 veces al día con agua tibia y jabón neutro.</li>
+          <li>Seca con toques suaves usando papel absorbente o una toalla limpia.</li>
+          <li>Aplica una capa fina de crema cicatrizante sin fragancia.</li>
+          <li>No cubras el tatuaje a menos que sea necesario (ropa ajustada o suciedad).</li>
+        </ul>
       </div>
     </div>
+  </section>
 
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">🚨</span> Señales de Alerta</h2>
-      <p>Consulta inmediatamente si presentas:</p>
-      <ul>
-        <li>Enrojecimiento excesivo o que empeora después de 3 días</li>
-        <li>Hinchazón considerable o calor en la zona</li>
-        <li>Pus, líquido amarillento o mal olor</li>
-        <li>Fiebre o malestar general</li>
-        <li>Dolor intenso que no mejora</li>
-      </ul>
+  <!-- Paso 3 -->
+  <section class="screen q" data-screen="q" data-index="2">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">03 / 10</div>
+      <h2 class="q-title a-item a-2">Segunda semana (día 8 al 14)</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>Continúa lavando 2 veces al día.</li>
+          <li>Aplica crema hidratante sin fragancia.</li>
+          <li>Es normal que la piel se descame — no arranques las costras.</li>
+          <li>Mantén la zona hidratada, pero sin exceso.</li>
+        </ul>
+        <p class="q-note">No sumerjas el tatuaje en piscinas, playas, tinas o jacuzzis durante las primeras 2-3 semanas.</p>
+      </div>
     </div>
+  </section>
 
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">⏱️</span> Tiempo de Cicatrización</h2>
-      <ul>
-        <li><strong>Cicatrización superficial:</strong> 2-3 semanas</li>
-        <li><strong>Cicatrización completa:</strong> 3-4 meses</li>
-        <li>Durante este tiempo la piel se está regenerando en capas profundas</li>
-        <li>Continúa cuidando tu tatuaje incluso después de que parezca estar "curado"</li>
-      </ul>
+  <!-- Paso 4 -->
+  <section class="screen q" data-screen="q" data-index="3">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">04 / 10</div>
+      <h2 class="q-title a-item a-2">Exposición solar</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>Evita la exposición directa al sol durante el primer mes.</li>
+          <li>Después de 28 días de cicatrización, usa protector solar SPF 50+ siempre que el tatuaje esté expuesto.</li>
+          <li>El sol es el principal enemigo de la durabilidad de los colores.</li>
+        </ul>
+      </div>
     </div>
+  </section>
 
-    <div class="info-card xg-card fade-in">
-      <h2><span class="icon">✨</span> Mantenimiento a Largo Plazo</h2>
-      <ul>
-        <li>Hidrata diariamente la zona del tatuaje</li>
-        <li>Usa SIEMPRE protector solar cuando esté expuesto</li>
-        <li>Exfolia suavemente la piel 1-2 veces por semana (después de cicatrizar)</li>
-        <li>Mantén una buena hidratación corporal general</li>
-      </ul>
-      <h3>Garantía y Retoque</h3>
-      <p>Todos mis tatuajes incluyen una garantía que consiste en un retoque gratuito en caso de que el tatuaje no cicatrice correctamente. Si notas algún problema durante la cicatrización, contáctame y coordinamos una cita para evaluarlo y retocarlo sin costo adicional.</p>
-      <p style="font-size:11px;opacity:.45;margin-top:10px;"><em>*Sujeto a evaluación en algunos casos</em></p>
+  <!-- Paso 5 -->
+  <section class="screen q" data-screen="q" data-index="4">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">05 / 10</div>
+      <h2 class="q-title a-item a-2">Qué no hacer</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>No rasques ni arranques las costras o piel descamada.</li>
+          <li>No uses ropa ajustada que roce constantemente el tatuaje.</li>
+          <li>No te expongas a sudoración excesiva (gimnasio, deportes intensos).</li>
+          <li>No uses productos con alcohol, perfumes o fragancias.</li>
+          <li>No permitas que mascotas laman o toquen el tatuaje.</li>
+          <li>No uses cremas con retinol, ácidos o exfoliantes en la zona.</li>
+          <li>No vayas a la playa ni a la piscina durante el primer mes.</li>
+        </ul>
+      </div>
     </div>
+  </section>
 
-    <div class="contact-cta xg-card fade-in">
-      <h2>¿Dudas o Consultas?</h2>
-      <p>Si tienes alguna pregunta sobre el cuidado de tu tatuaje, no dudes en contactarme</p>
-      <a href="https://wa.me/56937669973" class="button">Contactar por WhatsApp →</a>
+  <!-- Paso 6 -->
+  <section class="screen q" data-screen="q" data-index="5">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">06 / 10</div>
+      <h2 class="q-title a-item a-2">Productos recomendados</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>Jabón neutro sin fragancia (por ejemplo, jabón de glicerina).</li>
+          <li>Crema cicatrizante: Bepanthen o Aquaphor sin fragancia.</li>
+          <li>Crema hidratante: Eucerin, CeraVe o Lubriderm sin fragancia.</li>
+          <li>Protector solar SPF 50+ mineral.</li>
+        </ul>
+        <p class="q-note">Menos es más — una capa muy fina de crema es suficiente. El exceso puede obstruir los poros y retrasar la cicatrización.</p>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <footer>
-    <p>XGEREMY<sup>™</sup> · Blackwork · Dotwork · Fine Line</p>
-    <p style="margin-top:8px;">Copyright © 2026 XGEREMY. All rights reserved.</p>
-  </footer>
+  <!-- Paso 7 -->
+  <section class="screen q" data-screen="q" data-index="6">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">07 / 10</div>
+      <h2 class="q-title a-item a-2">Señales de alerta</h2>
+      <div class="q-body a-item a-3">
+        <p>Consulta inmediatamente si presentas:</p>
+        <ul>
+          <li>Enrojecimiento excesivo o que empeora después de 3 días.</li>
+          <li>Hinchazón considerable o calor en la zona.</li>
+          <li>Pus, líquido amarillento o mal olor.</li>
+          <li>Fiebre o malestar general.</li>
+          <li>Dolor intenso que no mejora.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-  <script>(function(){
- const obs = new IntersectionObserver(entries => {
- entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
- }, { threshold: 0.08 });
- document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
- })();
- 
- (function(){
- var L=document.getElementById('xg-loader');
- if(!L)return;
- if(sessionStorage.getItem('xg-nav')){
- sessionStorage.removeItem('xg-nav');
- L.classList.add('active');
- setTimeout(function(){L.classList.add('done');},60);
- setTimeout(function(){L.classList.add('out');},600);
- setTimeout(function(){L.style.display='none';},930);
- }
- document.addEventListener('click',function(e){
- var a=e.target.closest('a');
- if(!a)return;
- var href=a.getAttribute('href');
- if(!href||href[0]==='#'||href.indexOf('http')===0||
- href.indexOf('mailto')===0||href.indexOf('tel')===0||
- a.target==='_blank')return;
- e.preventDefault();
- sessionStorage.setItem('xg-nav','1');
- L.style.display='';
- L.classList.remove('out','done');
- L.classList.add('active');
- setTimeout(function(){L.classList.add('done');},60);
- setTimeout(function(){window.location.href=href;},500);
- });
- })();</script>
+  <!-- Paso 8 -->
+  <section class="screen q" data-screen="q" data-index="7">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">08 / 10</div>
+      <h2 class="q-title a-item a-2">Tiempo de cicatrización</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li><strong>Cicatrización superficial:</strong> 2 a 3 semanas.</li>
+          <li><strong>Cicatrización completa:</strong> 3 a 4 meses.</li>
+          <li>Durante este tiempo la piel se sigue regenerando en capas profundas.</li>
+          <li>Sigue cuidando tu tatuaje incluso después de que parezca estar "curado".</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso 9 -->
+  <section class="screen q" data-screen="q" data-index="8">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">09 / 10</div>
+      <h2 class="q-title a-item a-2">Mantenimiento a largo plazo</h2>
+      <div class="q-body a-item a-3">
+        <ul>
+          <li>Hidrata diariamente la zona del tatuaje.</li>
+          <li>Usa siempre protector solar cuando esté expuesto.</li>
+          <li>Exfolia suavemente la piel 1-2 veces por semana, ya cicatrizado.</li>
+          <li>Mantén una buena hidratación corporal en general.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso 10 -->
+  <section class="screen q" data-screen="q" data-index="9">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">10 / 10</div>
+      <h2 class="q-title a-item a-2">Garantía y retoque</h2>
+      <div class="q-body a-item a-3">
+        <p>Todos mis tatuajes incluyen una garantía que consiste en un retoque gratuito en caso de que el tatuaje no cicatrice correctamente.</p>
+        <p>Si notas algún problema durante la cicatrización, contáctame y coordinamos una cita para evaluarlo y retocarlo sin costo adicional.</p>
+        <p class="q-note">Sujeto a evaluación en algunos casos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final -->
+  <section class="screen" data-screen="thanks">
+    <div class="screen-inner">
+      <h1 class="intro-title a-item a-1">¿Dudas o consultas?</h1>
+      <p class="intro-sub a-item a-2">Si tienes alguna pregunta sobre el cuidado de tu tatuaje, comunícamela por WhatsApp.</p>
+      <a href="https://wa.me/56937669973" class="btn-outline a-item a-3" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </section>
+
+</div>
+
+<div id="counter"></div>
+<div id="nav">
+  <button class="nav-btn" id="nav-prev" aria-label="Anterior">↑</button>
+  <button class="nav-btn" id="nav-next" aria-label="Siguiente">↓</button>
+</div>
+
+<script>
+(function(){
+  const TOTAL = 10;
+  const order = ['intro', ...Array.from({length:TOTAL}, (_,i)=>'q:'+i), 'thanks'];
+  let current = 0;
+
+  function screenEl(key){
+    if(key === 'intro' || key === 'thanks') return document.querySelector(`.screen[data-screen="${key}"]`);
+    const idx = key.split(':')[1];
+    return document.querySelector(`.screen[data-index="${idx}"]`);
+  }
+
+  function goTo(newIndex){
+    if(newIndex < 0 || newIndex >= order.length) return;
+    screenEl(order[current]).classList.remove('active');
+    current = newIndex;
+    screenEl(order[current]).classList.add('active');
+    render();
+  }
+
+  function render(){
+    const key = order[current];
+    const fill = document.getElementById('progress-fill');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('nav-prev');
+    const nextBtn = document.getElementById('nav-next');
+
+    if(key === 'intro'){
+      fill.style.width = '0%';
+      counter.textContent = '';
+      prevBtn.style.visibility = 'hidden';
+      nextBtn.style.visibility = 'hidden';
+      return;
+    }
+    if(key === 'thanks'){
+      fill.style.width = '100%';
+      counter.textContent = '';
+      prevBtn.style.visibility = 'hidden';
+      nextBtn.style.visibility = 'hidden';
+      return;
+    }
+    const idx = parseInt(key.split(':')[1]);
+    fill.style.width = (((idx+1)/TOTAL)*100) + '%';
+    counter.textContent = (idx+1) + ' / ' + TOTAL;
+    prevBtn.style.visibility = 'visible';
+    nextBtn.style.visibility = 'visible';
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+
+  document.getElementById('start-btn').addEventListener('click', ()=> goTo(1));
+  document.getElementById('nav-prev').addEventListener('click', ()=> goTo(Math.max(0,current-1)));
+  document.getElementById('nav-next').addEventListener('click', ()=> goTo(current+1));
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current+1);
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current-1);
+  });
+
+  let touchStartY = null;
+  document.addEventListener('touchstart', e=> touchStartY = e.touches[0].clientY, {passive:true});
+  document.addEventListener('touchend', e=>{
+    if(touchStartY === null) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if(Math.abs(dy) > 60){ dy > 0 ? goTo(current+1) : goTo(current-1); }
+    touchStartY = null;
+  }, {passive:true});
+
+  render();
+})();
+</script>
 </body>
 </html>
