@@ -41,10 +41,17 @@ a.back-link:hover{opacity:1}
 .q-title{font-size:clamp(22px,5.5vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1.22;margin-bottom:14px}
 .q-body p{font-size:16px;line-height:1.6;color:var(--text-2);font-weight:300;letter-spacing:-.01em}
 .q-body p + p{margin-top:10px}
+.q-body p strong{color:var(--text);font-weight:700}
 .q-note{font-size:13.5px;color:var(--text-3);font-weight:300;font-style:normal;margin-top:14px;line-height:1.5;letter-spacing:-.005em}
 .q-body ul{list-style:none;padding:0;margin-top:12px}
 .q-body li{padding-left:16px;position:relative;margin-bottom:8px;font-size:15px;font-weight:300;color:var(--text-2);line-height:1.5;letter-spacing:-.005em}
 .q-body li::before{content:'–';position:absolute;left:0;color:var(--text-3)}
+
+/* paleta de colores neutros */
+.palette{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:7px}
+.swatch-color{width:42px;height:42px;border-radius:11px;border:1px solid rgba(255,255,255,.10)}
+.swatch-label{font-size:10.5px;font-weight:700;letter-spacing:-.01em;color:var(--text-3);text-transform:uppercase;white-space:nowrap}
 
 /* intro / final */
 .intro-title{font-size:clamp(28px,7vw,46px);font-weight:700;letter-spacing:-.035em;line-height:1.12;margin-bottom:14px}
@@ -53,6 +60,7 @@ a.back-link:hover{opacity:1}
 .btn:hover{transform:translateY(-2px);opacity:.9}
 .btn-outline{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:transparent;border:1px solid var(--glass-bdr);color:var(--text);border-radius:100px;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.02em;text-decoration:none;cursor:pointer;transition:transform .3s,border-color .3s}
 .btn-outline:hover{transform:translateY(-2px);border-color:var(--glass-bdr-h)}
+.maps-btn{margin:14px 0}
 
 /* navegación: solo flechas discretas, esquina inferior */
 #nav{position:fixed;right:20px;bottom:22px;display:flex;gap:8px;z-index:9998}
@@ -65,6 +73,7 @@ a.back-link:hover{opacity:1}
   .screen{padding:0 26px}
   #nav{right:16px;bottom:18px}
   #counter{left:16px;bottom:26px}
+  .swatch-color{width:36px;height:36px}
 }
 </style>
 </head>
@@ -79,7 +88,7 @@ a.back-link:hover{opacity:1}
   <section class="screen active" data-screen="intro">
     <div class="screen-inner">
       <h1 class="intro-title a-item a-1">Antes de tu sesión</h1>
-      <p class="intro-sub a-item a-2">9 puntos rápidos para llegar preparad@. Tómate un minuto para leerlos.</p>
+      <p class="intro-sub a-item a-2">10 puntos rápidos para llegar preparad@. Tómate un minuto para leerlos.</p>
       <button class="btn a-item a-3" id="start-btn">Empezar</button>
     </div>
   </section>
@@ -87,7 +96,7 @@ a.back-link:hover{opacity:1}
   <!-- Paso 1 -->
   <section class="screen q" data-screen="q" data-index="0">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">01 / 09</div>
+      <div class="step-num a-item a-1">01 / 10</div>
       <h2 class="q-title a-item a-2">Revisa que no tengas contraindicaciones</h2>
       <div class="q-body a-item a-3">
         <p>Solo con diagnóstico médico previo pueden tatuarse personas con enfermedades cutáneas (acné, dermatitis, psoriasis, pieles alérgicas o irritadas), condiciones que afectan la cicatrización (piel queloide, anticoagulantes, diabetes sin tratamiento), embarazo, lactancia, anorexia o anemia.</p>
@@ -99,10 +108,14 @@ a.back-link:hover{opacity:1}
   <!-- Paso 2 -->
   <section class="screen q" data-screen="q" data-index="1">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">02 / 09</div>
-      <h2 class="q-title a-item a-2">Hidrata tu piel los días previos</h2>
+      <div class="step-num a-item a-1">02 / 10</div>
+      <h2 class="q-title a-item a-2">Ubicación y cómo llegar</h2>
       <div class="q-body a-item a-3">
-        <p>Una piel bien hidratada ayuda a lograr un mejor resultado. Empieza unos días antes con la crema que uses habitualmente.</p>
+        <p>Estamos ubicados en <strong>Pelle 80, Valparaíso, Chile</strong>.</p>
+        <a class="btn-outline maps-btn" href="https://maps.app.goo.gl/4hwAmFBQ3GcwPDpH7" target="_blank" rel="noopener">Abrir en Google Maps ↗</a>
+        <p>El edificio es Pelle 80 — te espero en la entrada. No toques timbre ni pases al edificio.</p>
+        <p>Si tienes auto o vehículo, hay estacionamiento disponible, pero debes consultarlo conmigo antes.</p>
+        <p class="q-note">Tengo el tiempo bastante medido — prefiero que llegues 10 minutos tarde a que llegues 10 minutos antes.</p>
       </div>
     </div>
   </section>
@@ -110,10 +123,10 @@ a.back-link:hover{opacity:1}
   <!-- Paso 3 -->
   <section class="screen q" data-screen="q" data-index="2">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">03 / 09</div>
-      <h2 class="q-title a-item a-2">Descansa bien la noche anterior</h2>
+      <div class="step-num a-item a-1">03 / 10</div>
+      <h2 class="q-title a-item a-2">Hidrata tu piel los días previos</h2>
       <div class="q-body a-item a-3">
-        <p>Llegar descansad@ hace la diferencia en el manejo del dolor y la concentración durante la sesión.</p>
+        <p>Una piel bien hidratada ayuda a lograr un mejor resultado. Empieza unos días antes con la crema que uses habitualmente.</p>
       </div>
     </div>
   </section>
@@ -121,10 +134,10 @@ a.back-link:hover{opacity:1}
   <!-- Paso 4 -->
   <section class="screen q" data-screen="q" data-index="3">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">04 / 09</div>
-      <h2 class="q-title a-item a-2">Come antes de venir</h2>
+      <div class="step-num a-item a-1">04 / 10</div>
+      <h2 class="q-title a-item a-2">Descansa bien la noche anterior</h2>
       <div class="q-body a-item a-3">
-        <p>Nunca vengas en ayunas — ayuda a evitar mareos o malestar durante el proceso.</p>
+        <p>Llegar descansad@ hace la diferencia en el manejo del dolor y la concentración durante la sesión.</p>
       </div>
     </div>
   </section>
@@ -132,10 +145,10 @@ a.back-link:hover{opacity:1}
   <!-- Paso 5 -->
   <section class="screen q" data-screen="q" data-index="4">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">05 / 09</div>
-      <h2 class="q-title a-item a-2">Viste ropa cómoda y adecuada</h2>
+      <div class="step-num a-item a-1">05 / 10</div>
+      <h2 class="q-title a-item a-2">Come antes de venir</h2>
       <div class="q-body a-item a-3">
-        <p>Piensa en la zona a tatuar y elige ropa que permita acceder a ella sin tener que estar ajustándola durante la sesión.</p>
+        <p>Nunca vengas en ayunas — ayuda a evitar mareos o malestar durante el proceso.</p>
       </div>
     </div>
   </section>
@@ -143,10 +156,21 @@ a.back-link:hover{opacity:1}
   <!-- Paso 6 -->
   <section class="screen q" data-screen="q" data-index="5">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">06 / 09</div>
-      <h2 class="q-title a-item a-2">Ven sin acompañantes</h2>
+      <div class="step-num a-item a-1">06 / 10</div>
+      <h2 class="q-title a-item a-2">Viste ropa cómoda y adecuada</h2>
       <div class="q-body a-item a-3">
-        <p>Es una condición del estudio — te pido venir solo/a a tu sesión.</p>
+        <p>Piensa en la zona a tatuar y elige ropa que permita acceder a ella sin tener que estar ajustándola durante la sesión.</p>
+        <p>Si es posible, prefiero colores neutros — ayudan a que las fotos del proceso y el resultado final se vean más limpias.</p>
+      </div>
+      <div class="palette a-item a-4">
+        <div class="swatch"><span class="swatch-color" style="background:#A1AD92"></span><span class="swatch-label">Reseda</span></div>
+        <div class="swatch"><span class="swatch-color" style="background:#594536"></span><span class="swatch-label">Cocoa</span></div>
+        <div class="swatch"><span class="swatch-color" style="background:#F0EDE5"></span><span class="swatch-label">Coconut Milk</span></div>
+        <div class="swatch"><span class="swatch-color" style="background:#94B2C4"></span><span class="swatch-label">Powder Blue</span></div>
+        <div class="swatch"><span class="swatch-color" style="background:#241F1A"></span><span class="swatch-label">Ivory Black</span></div>
+      </div>
+      <div class="q-body a-item a-4">
+        <p class="q-note">Si la zona es brazo o cuello, puedes venir con joyas sin problema — ayuda a la foto y muestra tu estilo, queda muy bien.</p>
       </div>
     </div>
   </section>
@@ -154,7 +178,18 @@ a.back-link:hover{opacity:1}
   <!-- Paso 7 -->
   <section class="screen q" data-screen="q" data-index="6">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">07 / 09</div>
+      <div class="step-num a-item a-1">07 / 10</div>
+      <h2 class="q-title a-item a-2">Ven sin acompañantes</h2>
+      <div class="q-body a-item a-3">
+        <p>Es una condición del estudio — te pido venir solo/a a tu sesión.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso 8 -->
+  <section class="screen q" data-screen="q" data-index="7">
+    <div class="screen-inner">
+      <div class="step-num a-item a-1">08 / 10</div>
       <h2 class="q-title a-item a-2">Si necesitas reagendar, avisa con tiempo</h2>
       <div class="q-body a-item a-3">
         <p>El día y hora se pueden mover con al menos 24 horas de anticipación.</p>
@@ -163,10 +198,10 @@ a.back-link:hover{opacity:1}
     </div>
   </section>
 
-  <!-- Paso 8 -->
-  <section class="screen q" data-screen="q" data-index="7">
+  <!-- Paso 9 -->
+  <section class="screen q" data-screen="q" data-index="8">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">08 / 09</div>
+      <div class="step-num a-item a-1">09 / 10</div>
       <h2 class="q-title a-item a-2">Llega relajad@</h2>
       <div class="q-body a-item a-3">
         <p>Evita compromisos justo después de la cita. Ninguna inspiración llega con apuro o estrés de por medio.</p>
@@ -174,10 +209,10 @@ a.back-link:hover{opacity:1}
     </div>
   </section>
 
-  <!-- Paso 9 -->
-  <section class="screen q" data-screen="q" data-index="8">
+  <!-- Paso 10 -->
+  <section class="screen q" data-screen="q" data-index="9">
     <div class="screen-inner">
-      <div class="step-num a-item a-1">09 / 09</div>
+      <div class="step-num a-item a-1">10 / 10</div>
       <h2 class="q-title a-item a-2">Comunica todo durante la sesión</h2>
       <div class="q-body a-item a-3">
         <p>Si necesitas una pausa, ir al baño, moverte, o algo te incomoda — dímelo. Así logramos el mejor resultado juntos.</p>
@@ -204,7 +239,8 @@ a.back-link:hover{opacity:1}
 
 <script>
 (function(){
-  const order = ['intro', ...Array.from({length:9}, (_,i)=>'q:'+i), 'thanks'];
+  const TOTAL = 10;
+  const order = ['intro', ...Array.from({length:TOTAL}, (_,i)=>'q:'+i), 'thanks'];
   let current = 0;
 
   function screenEl(key){
@@ -243,8 +279,8 @@ a.back-link:hover{opacity:1}
       return;
     }
     const idx = parseInt(key.split(':')[1]);
-    fill.style.width = (((idx+1)/9)*100) + '%';
-    counter.textContent = (idx+1) + ' / 9';
+    fill.style.width = (((idx+1)/TOTAL)*100) + '%';
+    counter.textContent = (idx+1) + ' / ' + TOTAL;
     prevBtn.style.visibility = 'visible';
     nextBtn.style.visibility = 'visible';
     prevBtn.disabled = false;
