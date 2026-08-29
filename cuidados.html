@@ -349,7 +349,7 @@ a.back-link:hover{opacity:1}
     }
     const idx = parseInt(key.split(':')[1]);
     fill.style.width = (((idx+1)/TOTAL)*100) + '%';
-    counter.textContent = (idx+1) + ' / ' + TOTAL;
+    counter.textContent = (idx===12) ? '' : ((idx+1) + ' / ' + TOTAL);
     prevBtn.style.visibility = 'visible';
     nextBtn.style.visibility = 'visible';
     prevBtn.disabled = false;
