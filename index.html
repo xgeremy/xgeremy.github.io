@@ -471,47 +471,36 @@ nav{display:flex;align-items:center}
   ctx.imageSmoothingEnabled=true;
   var frameCount=387;
   var frames=new Array(frameCount);
-  function src(i){ return '/frames/frame-'+('00'+i).slice(-3)+'.jpg'; }
-  var ready=0;
+  function src(i){ return '/frames/frame-'+String(i).padStart(3,'0')+'.jpg'; }
   for(var i=0;i<frameCount;i++){
     frames[i]=new Image();
-    frames[i].onload=function(){ ready++; };
     frames[i].src=src(i);
   }
-  function paint(i){
+  frames[0].onload=function(){ draw(0); };
+  var last=-1;
+  function draw(i){
     var im=frames[i];
-    if(!im||!im.complete||!im.naturalWidth) return false;
+    if(!im||!im.complete||!im.naturalWidth){
+      for(var k=i;k>=0;k--){
+        if(frames[k]&&frames[k].complete&&frames[k].naturalWidth){ im=frames[k]; i=k; break; }
+      }
+      if(!im||!im.naturalWidth) return;
+    }
     ctx.fillStyle='#000';
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.drawImage(im,0,0,canvas.width,canvas.height);
-    return true;
+    last=i;
   }
-  var last=-1, ticking=false;
-  function frameFromScroll(){
+  function onScroll(){
     var r=run.getBoundingClientRect();
     var max=Math.max(1, run.offsetHeight-window.innerHeight);
-    var scrolled=Math.max(0, Math.min(max, -r.top));
-    var p=scrolled/max;
-    return Math.max(0, Math.min(frameCount-1, Math.round(p*(frameCount-1))));
+    var p=Math.max(0, Math.min(1, (-r.top)/max));
+    var i=Math.round(p*(frameCount-1));
+    if(i!==last) draw(i);
   }
-  function tick(){
-    ticking=false;
-    var target=frameFromScroll();
-    if(last<0){ if(paint(target)) last=target; return; }
-    if(target===last) return;
-    var step=target>last?Math.min(target,last+1):Math.max(target,last-1);
-    if(paint(step)) last=step;
-  }
-  function requestTick(){
-    if(!ticking){ ticking=true; requestAnimationFrame(tick); }
-  }
-  function loop(){
-    tick();
-    requestAnimationFrame(loop);
-  }
-  window.addEventListener('scroll', requestTick, {passive:true});
-  window.addEventListener('resize', requestTick, {passive:true});
-  requestAnimationFrame(loop);
+  window.addEventListener('scroll', function(){ requestAnimationFrame(onScroll); }, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  onScroll();
 })();
 
 
