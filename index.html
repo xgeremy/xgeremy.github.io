@@ -139,6 +139,14 @@ nav{display:flex;align-items:center}
 .book-row-arrow{width:82px;min-width:82px;border-left:1px solid rgba(255,255,255,.38);display:flex;align-items:center;justify-content:center}
 .book-row-arrow svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:square;stroke-linejoin:miter}
 .book-row:hover{opacity:.82}.book-row + .about{margin-top:0}
+.work-intro{max-width:860px;margin:0 auto 36px;text-align:center}
+.work-kicker{display:inline-block;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff;margin:0 auto 28px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.4)}
+.work-kicker span{margin-left:6px}
+.work-title{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:clamp(34px,9vw,52px);font-weight:400;letter-spacing:-.035em;line-height:1.05;color:#fff;margin:0 0 36px;text-align:center}
+.work-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;text-align:left}
+.work-left{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;letter-spacing:-.02em;line-height:1.35;color:#fff;margin:0;max-width:210px}
+.work-right{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;letter-spacing:-.02em;white-space:nowrap;flex-shrink:0}
+.work-right svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:square;transform:rotate(90deg)}
 .transition-tag{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px}.transition-tag span{opacity:.6}</style>
   <noscript><style>.fade-in{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -229,8 +237,17 @@ nav{display:flex;align-items:center}
   </section>
 
   <section class="gallery fade-in" id="work" data-px="0.04">
-    <div class="transition-tag">Explora mi trabajo <span>↓</span></div>
-    <h2 class="section-headline">Selected Work<sup>®</sup></h2>
+    <div class="work-intro">
+      <p class="work-kicker">Explora mi trabajo <span>↓</span></p>
+      <h2 class="work-title">Selected work</h2>
+      <div class="work-row">
+        <p class="work-left">Cada tatuaje tiene una historia, cuál es la tuya.</p>
+        <a class="work-right" href="#galleryGrid">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7v8h10"/><path d="M12 12l3 3-3 3"/></svg>
+          <span>Ver trabajo</span>
+        </a>
+      </div>
+    </div>
     <div class="gallery-grid" id="galleryGrid">
       <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 1"><div class="gi-inner"><img loading="lazy" decoding="async" fetchpriority="low" src="https://i.imgur.com/OlGXhSl.jpg" alt="Tatuaje blackwork Valparaíso - XGEREMY"></div></div>
       <div class="gallery-item" aria-label="Tatuaje blackwork ejemplo 2"><div class="gi-inner"><img loading="lazy" decoding="async" fetchpriority="low" src="https://i.imgur.com/dE8Sr9J.jpg" alt="Tatuaje blackwork Viña del Mar - XGEREMY"></div></div>
