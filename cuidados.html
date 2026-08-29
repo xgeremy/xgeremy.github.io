@@ -71,9 +71,8 @@ a.back-link:hover{opacity:1}
 .btn-outline,.maps-btn{display:inline!important;background:none!important;border:none!important;border-radius:0!important;padding:0!important;color:#fff!important;font-weight:700!important;letter-spacing:-.02em!important;text-decoration:underline;text-underline-offset:3px}
 .swipe-hint{margin-top:28px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,245,247,.45)}
 
-.guia-title{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:400;font-size:clamp(22px,5.5vw,34px);letter-spacing:-.03em;line-height:1.15;margin:0 0 6px}
-.guia-sub{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(26px,6vw,40px);letter-spacing:-.04em;margin:0 0 18px}
-.guia-video{width:100%;max-height:58dvh;background:#000;display:block;object-fit:contain}
+.guia-title{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:clamp(22px,5.5vw,34px);letter-spacing:-.03em;line-height:1.15;margin:0 0 16px;text-align:left}
+.guia-video{width:auto;max-width:100%;height:auto;max-height:62dvh;background:transparent;display:block;margin:0 auto;object-fit:contain}
 @media(max-width:600px){
   .screen{padding:0 26px}
   #nav{right:16px;bottom:18px}
@@ -280,9 +279,8 @@ a.back-link:hover{opacity:1}
   <section class="screen q" data-screen="q" data-index="12">
     <div class="screen-inner">
       <div class="step-num a-item a-1">13 / 13</div>
-      <h2 class="guia-title a-item a-2">Guía facil</h2>
-      <p class="guia-sub a-item a-2">En video</p>
-      <video class="guia-video a-item a-3" id="guiaVideo" src="/healing.mp4" playsinline webkit-playsinline controls muted loop preload="metadata"></video>
+      <h2 class="guia-title a-item a-2">Guia facil</h2>
+      <video class="guia-video a-item a-3" id="guiaVideo" src="/healing.mp4" playsinline webkit-playsinline controls loop preload="auto"></video>
     </div>
   </section>
 
@@ -321,7 +319,7 @@ a.back-link:hover{opacity:1}
     current = newIndex;
     screenEl(order[current]).classList.add('active');
     var v=document.getElementById('guiaVideo');
-    if(v){ if(order[current]==='q:12'){ v.currentTime=0; v.play().catch(function(){}); } else { v.pause(); } }
+    if(v){ if(order[current]==='q:12'){ v.muted=false; v.volume=1; v.currentTime=0; var p=v.play(); if(p&&p.catch) p.catch(function(){ v.muted=true; v.play().catch(function(){}); }); } else { v.pause(); } }
     render();
   }
 
