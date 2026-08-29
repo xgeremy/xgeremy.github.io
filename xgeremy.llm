@@ -1,0 +1,15 @@
+entity: tattoo_artist
+name: Geremy Monsalve
+brand: XGEREMY
+url: https://xgeremy.work/
+city_primary: Viña del Mar
+city_secondary: Valparaíso
+country: Chile
+styles: blackwork, dotwork, fine line
+booking: https://wa.me/56937669973
+instagram: https://instagram.com/xgeremy
+same_as:
+  - https://instagram.com/xgeremy
+  - https://www.tiktok.com/@xgeremyy
+  - https://xgeremy.work/
+llms: https://xgeremy.work/llms.txt
