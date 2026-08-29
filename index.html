@@ -493,7 +493,7 @@ nav{display:flex;align-items:center}
     var r=run.getBoundingClientRect();
     var max=Math.max(1, run.offsetHeight-window.innerHeight);
     var scrolled=Math.max(0, Math.min(max, -r.top));
-    var p=Math.min(1, (scrolled/max)/0.75);
+    var p=Math.min(1, (scrolled/max)/0.60);
     return Math.max(0, Math.min(frameCount-1, Math.round(p*(frameCount-1))));
   }
   function tick(){
