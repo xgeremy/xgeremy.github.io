@@ -387,7 +387,6 @@ nav{display:flex;align-items:center}
     </div>
   </footer>
 
-  <button class="scroll-top" id="scrollTop">↑</button>
 
   <div class="reviews-modal" id="reviewsModal">
     <button class="reviews-close xg-btn" id="closeReviews">×</button>
@@ -483,9 +482,6 @@ if(t) window.scrollTo({top: t.getBoundingClientRect().top + window.pageYOffset -
 });
 });
 
-const stBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', () => stBtn.classList.toggle('visible', window.scrollY > 300), {passive:true});
-stBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
 
 const modal = document.getElementById('reviewsModal');
