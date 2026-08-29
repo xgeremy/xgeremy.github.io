@@ -294,6 +294,18 @@ nav{display:flex;align-items:center}
     </div>
   </section>
 
+  <section class="process fade-in" id="faq">
+    <div class="proc-acc">
+      <button type="button" class="book-row proc-acc-btn" id="faqAccBtn" aria-expanded="false">
+        <span class="book-row-label">FAQ</span>
+        <span class="book-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M8 12l8 8 8-8"/></svg>
+        </span>
+      </button>
+      <div class="proc-acc-panel" id="faqAccPanel" hidden></div>
+    </div>
+  </section>
+
   <section class="rewards fade-in" id="rewards" data-px="0.04">
     <h2 class="section-headline">Gana Puntos<sup>®</sup></h2>
     <p class="section-subheadline">Acumula puntos en cada tatuaje y canjea premios exclusivos</p>
@@ -465,6 +477,18 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') setOpen(false
     if(Math.abs(dx) < 40) return;
     go(cur + (dx < 0 ? 1 : -1));
   }, {passive:true});
+})();
+
+
+(function(){
+  var btn = document.getElementById('faqAccBtn');
+  var panel = document.getElementById('faqAccPanel');
+  if(!btn||!panel) return;
+  btn.addEventListener('click', function(){
+    var open = panel.hasAttribute('hidden');
+    if(open) panel.removeAttribute('hidden'); else panel.setAttribute('hidden','');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
 })();
 
 function toggleBonusDetails() {
