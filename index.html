@@ -36,6 +36,7 @@
   
   <!-- Preload above-fold assets → mejora LCP -->
   <link rel="preload" as="image" href="/hero.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="/frames/frame-000.jpg">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -122,11 +123,11 @@ nav{display:flex;align-items:center}
 .footer-plus{font-size:14px;letter-spacing:.28em;text-align:center;padding-bottom:2px;text-transform:none}
 .footer-col a{opacity:.72}
 .footer-content{max-width:980px;margin:0 auto}.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:40px}.footer-brand h3{font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:.04em;text-transform:uppercase}.footer-brand p{font-size:14px;color:var(--text-2);line-height:1.6}.footer-links h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;color:var(--text-2)}.footer-links a{display:block;font-size:14px;color:var(--text-2);text-decoration:none;margin-bottom:10px;transition:color .3s}.footer-links a:hover{color:var(--text)}.footer-bottom{text-align:center;padding-top:36px;border-top:1px solid var(--border)}.footer-bottom p{font-size:12px;color:var(--text-3)}.scroll-top{position:fixed;bottom:32px;right:32px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.16,1,.3,1);z-index:1000}.scroll-top.visible{opacity:1;pointer-events:all}.scroll-top:hover{transform:translateY(-4px);border-color:var(--glass-bdr-h)}.hero{height:100svh;min-height:100svh;display:block;text-align:left;padding:0;background:var(--bg);position:relative;overflow:hidden}.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;z-index:0;opacity:.78;filter:none;display:block}.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to bottom,transparent 0%,var(--bg) 100%);z-index:0;pointer-events:none}.hero-content{position:absolute;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom, 0px));z-index:1;padding:0 28px 0;width:100%;max-width:none;transform:none}@media(max-width:734px){.hero-content{padding:0 20px;bottom:calc(62px + env(safe-area-inset-bottom, 0px))}}.hero h1{font-size:clamp(48px,14vw,118px);font-weight:700;letter-spacing:-.04em;line-height:.86;color:#fff;margin-bottom:16px;opacity:1;animation:none;text-transform:uppercase;max-width:92vw}.hero-logo{display:none}.hero h1 span{display:block}.hero-subtitle{font-size:clamp(11px,2.6vw,14px);line-height:1.2;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:0;opacity:1;animation:none}.hero-location{font-size:13px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;color:var(--text-2);opacity:0;animation:fadeInUp 1s ease .4s forwards}.hero-cta{display:none}
-
- 
-
-
-
+.seq-block{position:relative;background:#000;margin:0;padding:0}
+ .seq-run{height:360vh;background:#000}
+.seq-pin{position:sticky;top:88px;height:calc(100svh - 168px);display:flex;align-items:center;justify-content:center;padding:12px 22px;background:#000;z-index:2;-webkit-transform:translateZ(0);transform:translateZ(0)}
+#seqCanvas{width:min(72vw,380px);height:auto;display:block;background:#000}
+.seq-fade{height:96px;background:linear-gradient(180deg,#000 0%,#050505 100%);position:relative;z-index:0}
 .about{background:var(--bg);max-width:none;margin:0;padding:72px 22px 36px;display:block}
 .about-content{max-width:860px;margin:0 auto}
 .about-content p.about-kicker{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;line-height:1.25;color:#fff;margin:0 0 12px;max-width:160px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.4)}
@@ -236,7 +237,16 @@ nav{display:flex;align-items:center}
     </span>
   </a>
 
-<section class="about fade-in" id="about" data-px="0.03">
+  <section class="seq-block" id="seq">
+    <div class="seq-run">
+      <div class="seq-pin">
+        <canvas id="seqCanvas" width="400" height="400" aria-label="Secuencia"></canvas>
+      </div>
+    </div>
+    <div class="seq-fade" aria-hidden="true"></div>
+  </section>
+
+  <section class="about fade-in" id="about" data-px="0.03">
     <div class="about-content">
       <p class="about-kicker">Sobre mí</p>
       <p class="about-lead">Tatuador radicado en Chile con más de 3 años de experiencia creando piezas únicas y personalizadas. En cada tatuaje mi enfoque es combinar técnica, precisión y visión artística.</p>
@@ -451,6 +461,67 @@ nav{display:flex;align-items:center}
   else start();
 })();
 
+
+(function(){
+  var canvas=document.getElementById('seqCanvas');
+  var section=document.getElementById('seq');
+  var run=section && section.querySelector('.seq-run');
+  if(!canvas||!section||!run) return;
+  var ctx=canvas.getContext('2d',{alpha:false});
+  ctx.imageSmoothingEnabled=true;
+  var frameCount=196;
+  var frames=new Array(frameCount);
+  var loadedAll=false;
+  function src(i){ return '/frames/frame-'+('00'+i).slice(-3)+'.jpg'; }
+  function preload(){
+    if(loadedAll) return;
+    loadedAll=true;
+    for(var i=0;i<frameCount;i++){
+      frames[i]=new Image();
+      frames[i].src=src(i);
+    }
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(ents){
+      if(ents.some(function(e){ return e.isIntersecting; })){ preload(); io.disconnect(); }
+    },{rootMargin:'400px'});
+    io.observe(section);
+  } else preload();
+  function paint(i){
+    var im=frames[i];
+    if(!im||!im.complete||!im.naturalWidth) return false;
+    ctx.fillStyle='#000';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(im,0,0,canvas.width,canvas.height);
+    return true;
+  }
+  var last=-1, ticking=false;
+  function frameFromScroll(){
+    var r=run.getBoundingClientRect();
+    var max=Math.max(1, run.offsetHeight-window.innerHeight);
+    var scrolled=Math.max(0, Math.min(max, -r.top));
+    var p=scrolled/max;
+    return Math.max(0, Math.min(frameCount-1, Math.round(p*(frameCount-1))));
+  }
+  function tick(){
+    ticking=false;
+    var target=frameFromScroll();
+    if(last<0){ if(paint(target)) last=target; return; }
+    if(target===last) return;
+    var step=target>last?Math.min(target,last+3):Math.max(target,last-3);
+    if(paint(step)) last=step;
+  }
+  function requestTick(){
+    if(!ticking){ ticking=true; requestAnimationFrame(tick); }
+  }
+  function loop(){
+    tick();
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener('scroll', requestTick, {passive:true});
+  window.addEventListener('resize', requestTick, {passive:true});
+  requestAnimationFrame(loop);
+})();
 
 
 (function(){
