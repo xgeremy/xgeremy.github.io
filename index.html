@@ -189,6 +189,7 @@ nav{display:flex;align-items:center}
 .work-right svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:square;transform:rotate(90deg)}
 .transition-tag{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px}.transition-tag span{opacity:.6}</style>
   <noscript><style>.fade-in{opacity:1!important;transform:none!important}</style></noscript>
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
 </head>
 <body>
   <div id="xg-loader"><div class="loader-plus" aria-hidden="true"><span>+</span><span>+</span><span>+</span></div></div>
@@ -438,7 +439,21 @@ nav{display:flex;align-items:center}
     </div>
   </div>
 
+  <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
   <script>
+(function(){
+  var touch=window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints>0;
+  if(touch || typeof Lenis==='undefined') return;
+  var lenis=new Lenis({
+    autoRaf:true,
+    lerp:0.09,
+    wheelMultiplier:0.9,
+    anchors:true,
+    syncTouch:false
+  });
+  window.xgLenis=lenis;
+})();
+
 
 (function(){
   var canvas=document.getElementById('seqCanvas');
