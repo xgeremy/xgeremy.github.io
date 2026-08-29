@@ -35,8 +35,8 @@
   <meta name="apple-mobile-web-app-title" content="XGEREMY">
   
   <!-- Preload above-fold assets → mejora LCP -->
-  <link rel="preload" as="image" href="https://i.imgur.com/cFOFY4I.png" fetchpriority="high">
-  <link rel="preload" as="image" href="https://i.imgur.com/GWu0skP.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="/hero.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="/frames/frame-000.jpg">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -211,7 +211,7 @@ nav{display:flex;align-items:center}
     </div>
 
   <section class="hero">
-    <img class="hero-photo" src="/hero.jpg" alt="Geremy Monsalve, tatuador en Viña del Mar y Valparaíso — XGEREMY" width="1500" height="2667">
+    <img class="hero-photo" src="/hero.jpg" fetchpriority="high" decoding="async" alt="Geremy Monsalve, tatuador en Viña del Mar y Valparaíso — XGEREMY" width="1500" height="2667">
     <div class="hero-content">
       <h1><span>Geremy</span><span>Monsalve</span></h1>
       <p class="hero-subtitle">Blackwork · Dotwork · Fine Line</p>
@@ -464,13 +464,22 @@ nav{display:flex;align-items:center}
   ctx.imageSmoothingEnabled=true;
   var frameCount=196;
   var frames=new Array(frameCount);
+  var loadedAll=false;
   function src(i){ return '/frames/frame-'+('00'+i).slice(-3)+'.jpg'; }
-  var ready=0;
-  for(var i=0;i<frameCount;i++){
-    frames[i]=new Image();
-    frames[i].onload=function(){ ready++; };
-    frames[i].src=src(i);
+  function preload(){
+    if(loadedAll) return;
+    loadedAll=true;
+    for(var i=0;i<frameCount;i++){
+      frames[i]=new Image();
+      frames[i].src=src(i);
+    }
   }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(ents){
+      if(ents.some(function(e){ return e.isIntersecting; })){ preload(); io.disconnect(); }
+    },{rootMargin:'400px'});
+    io.observe(section);
+  } else preload();
   function paint(i){
     var im=frames[i];
     if(!im||!im.complete||!im.naturalWidth) return false;
@@ -536,13 +545,16 @@ nav{display:flex;align-items:center}
   document.body.style.overflow='hidden';
   var ctx=canvas.getContext('2d',{alpha:false});
   ctx.imageSmoothingEnabled=true;
-  var n=196, frames=new Array(n), lastReady=0;
+  var ids=[], i;
+  for(i=0;i<196;i+=4) ids.push(i);
+  if(ids[ids.length-1]!==195) ids.push(195);
+  var n=ids.length, frames=new Array(n), lastReady=0;
   function pad(i){ return ('00'+i).slice(-3); }
-  for(var i=0;i<n;i++){
+  for(i=0;i<n;i++){
     (function(i){
       var im=new Image();
       im.onload=function(){ lastReady=Math.max(lastReady,i); if(i===0) ctx.drawImage(im,0,0); };
-      im.src='/frames/frame-'+pad(i)+'.jpg';
+      im.src='/frames/frame-'+pad(ids[i])+'.jpg';
       frames[i]=im;
     })(i);
   }
@@ -674,8 +686,7 @@ document.addEventListener('keydown', e => { if(!modal.classList.contains('active
 if ('serviceWorker' in navigator) {
 window.addEventListener('load', () => {
 navigator.serviceWorker.register('/sw.js')
-.then(r => console.log('[SW] registered:', r.scope))
-.catch(e => console.warn('[SW] failed:', e));
+.catch(function(){});
 });
 }
 
