@@ -491,8 +491,10 @@ nav{display:flex;align-items:center}
     peeked=true;
     var el=document.querySelector('.about-kicker') || document.querySelector('.about');
     if(!el) return;
-    var y=el.getBoundingClientRect().top + window.scrollY - Math.round(window.innerHeight*0.90);
-    if(window.xgLenis && window.xgLenis.scrollTo) window.xgLenis.scrollTo(y,{duration:1.8,easing:function(t){return 1-Math.pow(1-t,3);}});
+    var target=el.getBoundingClientRect().top + window.scrollY - Math.round(window.innerHeight*0.90);
+    var now=window.scrollY;
+    var y=now + (target-now)*0.25;
+    if(window.xgLenis && window.xgLenis.scrollTo) window.xgLenis.scrollTo(y,{duration:2.4,easing:function(t){return 1-Math.pow(1-t,4);}});
     else window.scrollTo({top:y,behavior:'smooth'});
   }
   function maybePeek(i){
