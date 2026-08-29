@@ -447,8 +447,8 @@ nav{display:flex;align-items:center}
     if(phone || typeof Lenis==='undefined') return;
     var lenis=new Lenis({
       autoRaf:true,
-      lerp:0.07,
-      duration:1.1,
+      lerp:0.09,
+      duration:0.93,
       wheelMultiplier:0.85,
       anchors:true,
       syncTouch:false,
@@ -493,7 +493,7 @@ nav{display:flex;align-items:center}
     var r=run.getBoundingClientRect();
     var max=Math.max(1, run.offsetHeight-window.innerHeight);
     var scrolled=Math.max(0, Math.min(max, -r.top));
-    var p=Math.min(1, (scrolled/max)/0.60);
+    var p=Math.min(1, (scrolled/max)/0.51);
     return Math.max(0, Math.min(frameCount-1, Math.round(p*(frameCount-1))));
   }
   function tick(){
