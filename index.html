@@ -103,8 +103,8 @@ nav{display:flex;align-items:center}
 .nav-agendar,.menu-toggle{margin:0;padding:0 !important;background:none !important;color:#fff !important;border-radius:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700 !important;font-size:17px !important;letter-spacing:.04em !important;text-transform:uppercase;opacity:1 !important;transition:opacity .3s !important}
 .nav-agendar:hover,.menu-toggle:hover{opacity:.55 !important;transform:none;background:none !important}
 .menu-toggle{cursor:pointer;border:none;line-height:1}
-.xg-fs-menu{position:fixed;inset:0;z-index:9998;background:#050505;display:flex;align-items:stretch;justify-content:stretch;opacity:1;visibility:hidden;pointer-events:none;transform:none;clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.77,0,.175,1),visibility 0s linear .7s;will-change:clip-path}
-.xg-fs-menu.open{visibility:visible;pointer-events:auto;clip-path:inset(0);transition:clip-path .7s cubic-bezier(.77,0,.175,1),visibility 0s}
+.xg-fs-menu{position:fixed;inset:0;z-index:9998;background:#050505;display:flex;align-items:stretch;justify-content:stretch;opacity:1;visibility:hidden;pointer-events:none;transform:none;clip-path:inset(0 0 100% 0);transition:clip-path .42s cubic-bezier(.22,.61,.36,1),visibility 0s linear .42s;will-change:clip-path}
+.xg-fs-menu.open{visibility:visible;pointer-events:auto;clip-path:inset(0);transition:clip-path .42s cubic-bezier(.22,.61,.36,1),visibility 0s}
 .xg-fs-inner{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:72px 22px}
 .xg-fs-nav{display:flex;flex-direction:column;gap:0;margin:0}
 .xg-fs-menu .xg-fs-nav a{display:block;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif !important;font-size:clamp(42px,12.5vw,76px) !important;font-weight:700 !important;letter-spacing:-.05em !important;line-height:.9 !important;color:#fff !important;text-transform:uppercase !important;opacity:1 !important;transform:none !important;text-decoration:none !important}
@@ -469,7 +469,7 @@ nav{display:flex;align-items:center}
   if(!canvas||!section||!run) return;
   var ctx=canvas.getContext('2d',{alpha:false});
   ctx.imageSmoothingEnabled=true;
-  var frameCount=196;
+  var frameCount=387;
   var frames=new Array(frameCount);
   function src(i){ return '/frames/frame-'+('00'+i).slice(-3)+'.jpg'; }
   var ready=0;
@@ -499,7 +499,7 @@ nav{display:flex;align-items:center}
     var target=frameFromScroll();
     if(last<0){ if(paint(target)) last=target; return; }
     if(target===last) return;
-    var step=target>last?Math.min(target,last+3):Math.max(target,last-3);
+    var step=target>last?Math.min(target,last+1):Math.max(target,last-1);
     if(paint(step)) last=step;
   }
   function requestTick(){
