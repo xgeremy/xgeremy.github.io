@@ -485,7 +485,19 @@ nav{display:flex;align-items:center}
     ctx.drawImage(im,0,0,canvas.width,canvas.height);
     return true;
   }
-  var last=-1, ticking=false, autoplaying=false, autoDone=false;
+  var last=-1, ticking=false, autoplaying=false, autoDone=false, peeked=false;
+  function peekAbout(){
+    if(peeked) return;
+    peeked=true;
+    var el=document.querySelector('.about-kicker') || document.querySelector('.about');
+    if(!el) return;
+    var y=el.getBoundingClientRect().top + window.scrollY - Math.round(window.innerHeight*0.42);
+    if(window.xgLenis && window.xgLenis.scrollTo) window.xgLenis.scrollTo(y,{duration:1});
+    else window.scrollTo({top:y,behavior:'smooth'});
+  }
+  function maybePeek(i){
+    if(i>=Math.round((frameCount-1)*0.75)) peekAbout();
+  }
   function frameFromScroll(){
     var r=run.getBoundingClientRect();
     var max=Math.max(1, run.offsetHeight-window.innerHeight);
@@ -497,10 +509,11 @@ nav{display:flex;align-items:center}
     ticking=false;
     if(autoplaying) return;
     var target=frameFromScroll();
-    if(last<0){ if(paint(target)) last=target; return; }
+    if(last<0){ if(paint(target)) last=target; maybePeek(target); return; }
     if(target===last) return;
     var step=target>last?Math.min(target,last+3):Math.max(target,last-3);
     if(paint(step)) last=step;
+    maybePeek(last);
   }
   function requestTick(){
     if(!ticking){ ticking=true; requestAnimationFrame(tick); }
@@ -508,15 +521,6 @@ nav{display:flex;align-items:center}
   function loop(){
     tick();
     requestAnimationFrame(loop);
-  }
-  function peekNext(){
-    var extra=Math.round(window.innerHeight*0.18);
-    var top=run.getBoundingClientRect().top + window.scrollY + run.offsetHeight - window.innerHeight + extra;
-    if(window.xgLenis && window.xgLenis.scrollTo){
-      window.xgLenis.scrollTo(top,{duration:0.9});
-    } else {
-      window.scrollTo({top:top,behavior:'smooth'});
-    }
   }
   function autoplay(){
     if(autoplaying||autoDone) return;
@@ -526,12 +530,9 @@ nav{display:flex;align-items:center}
       var p=Math.min(1,(now-t0)/dur);
       var i=Math.round(p*(frameCount-1));
       paint(i); last=i;
+      maybePeek(i);
       if(p<1) requestAnimationFrame(step);
-      else {
-        autoplaying=false;
-        autoDone=true;
-        peekNext();
-      }
+      else { autoplaying=false; autoDone=true; }
     }
     requestAnimationFrame(step);
   }
