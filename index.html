@@ -478,10 +478,7 @@ nav{display:flex;align-items:center}
     frames[i]=new Image();
     frames[i].src=src(i);
   }
-  paintReady();
-  function paintReady(){
-    frames[0].onload=function(){ paint(0); last=0; };
-  }
+  frames[0].onload=function(){ paint(0); last=0; };
   function paint(i){
     var im=frames[i];
     if(!im||!im.complete||!im.naturalWidth) return false;
@@ -491,29 +488,15 @@ nav{display:flex;align-items:center}
     ctx.drawImage(im,0,0,canvas.width,canvas.height);
     return true;
   }
-  var last=-1, ticking=false, autoplaying=false, autoDone=false, peeked=false;
+  var last=-1, ticking=false, autoplaying=false, autoDone=false;
   function pastHero(){
     return window.scrollY > window.innerHeight * 0.7;
-  }
-  function peekAbout(){
-    if(peeked || !pastHero()) return;
-    peeked=true;
-    var el=document.querySelector('.about-kicker') || document.querySelector('.about');
-    if(!el) return;
-    var target=el.getBoundingClientRect().top + window.scrollY - Math.round(window.innerHeight*0.90);
-    var now=window.scrollY;
-    var y=now + (target-now)*0.25;
-    if(window.xgLenis && window.xgLenis.scrollTo) window.xgLenis.scrollTo(y,{duration:2.4,easing:function(t){return 1-Math.pow(1-t,4);}});
-    else window.scrollTo({top:y,behavior:'smooth'});
-  }
-  function maybePeek(i){
-    if(i>=Math.round((frameCount-1)*0.75)) peekAbout();
   }
   function frameFromScroll(){
     var r=run.getBoundingClientRect();
     var max=Math.max(1, run.offsetHeight-window.innerHeight);
     var scrolled=Math.max(0, Math.min(max, -r.top));
-    var p=scrolled/max;
+    var p=Math.min(1, (scrolled/max)/0.75);
     return Math.max(0, Math.min(frameCount-1, Math.round(p*(frameCount-1))));
   }
   function tick(){
@@ -521,11 +504,10 @@ nav{display:flex;align-items:center}
     if(autoplaying) return;
     if(!pastHero()){ if(last!==0){ paint(0); last=0; } return; }
     var target=frameFromScroll();
-    if(last<0){ if(paint(target)) last=target; maybePeek(target); return; }
+    if(last<0){ if(paint(target)) last=target; return; }
     if(target===last) return;
     var step=target>last?Math.min(target,last+3):Math.max(target,last-3);
     if(paint(step)) last=step;
-    maybePeek(last);
   }
   function requestTick(){
     if(!ticking){ ticking=true; requestAnimationFrame(tick); }
@@ -537,12 +519,11 @@ nav{display:flex;align-items:center}
   function autoplay(){
     if(autoplaying||autoDone||!pastHero()) return;
     autoplaying=true;
-    var t0=performance.now(), dur=1800;
+    var t0=performance.now(), dur=1350;
     function step(now){
       var p=Math.min(1,(now-t0)/dur);
       var i=Math.round(p*(frameCount-1));
       paint(i); last=i;
-      maybePeek(i);
       if(p<1) requestAnimationFrame(step);
       else { autoplaying=false; autoDone=true; }
     }
