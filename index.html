@@ -405,11 +405,6 @@ const stBtn = document.getElementById('scrollTop');
 window.addEventListener('scroll', () => stBtn.classList.toggle('visible', window.scrollY > 300), {passive:true});
 stBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
-window.addEventListener('scroll',()=>{
-const s = window.pageYOffset;
-const hc = document.querySelector('.hero-content');
-if(hc && s < window.innerHeight) hc.style.transform = `translateY(${s*.25}px)`;
-}, {passive:true});
 
 const modal = document.getElementById('reviewsModal');
 const slides = document.querySelectorAll('.review-slide');
