@@ -71,17 +71,11 @@ a.back-link:hover{opacity:1}
 .btn-outline,.maps-btn{display:inline!important;background:none!important;border:none!important;border-radius:0!important;padding:0!important;color:#fff!important;font-weight:700!important;letter-spacing:-.02em!important;text-decoration:underline;text-underline-offset:3px}
 .swipe-hint{margin-top:28px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,245,247,.45)}
 
-.guia-screen{background:#fff!important}
-.guia-screen .screen-inner{text-align:center;max-width:420px}
-.guia-screen .step-num{display:none}
-.guia-wrap{width:100%;aspect-ratio:9/16;margin:0 auto;border-radius:8px;overflow:hidden;background:#fff}
+.screen[data-index="12"] .screen-inner{text-align:center}
+.guia-title{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:800;font-size:13px;letter-spacing:.02em;line-height:1.2;margin:0 0 4px;text-align:center}
+.guia-sub{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;margin:0 0 16px;text-align:center}
+.guia-wrap{width:min(72vw,280px);aspect-ratio:9/16;margin:0 auto;border-radius:22px;overflow:hidden;background:transparent}
 .guia-video{width:100%;height:100%;object-fit:cover;display:block;background:#fff;border:0}
-body.guia-on{background:#fff}
-body.guia-on .back-link,body.guia-on #counter{color:#111;opacity:.7}
-body.guia-on #progress-track{background:rgba(0,0,0,.08)}
-body.guia-on #progress-fill{background:#111}
-.guia-caption{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:400;font-size:12px;letter-spacing:-.01em;color:#111;margin:14px 0 0;text-align:center}
-.guia-screen .q-title,.guia-screen .q-body{color:#111}
 @media(max-width:600px){
   .screen{padding:0 26px}
   #nav{right:16px;bottom:18px}
@@ -285,12 +279,12 @@ body.guia-on #progress-fill{background:#111}
 
 
   <!-- Paso 13 video -->
-  <section class="screen q guia-screen" data-screen="q" data-index="12">
+  <section class="screen q" data-screen="q" data-index="12">
     <div class="screen-inner">
-      <div class="guia-wrap a-item a-1">
-        <video class="guia-video" id="guiaVideo" src="/healing.mp4" playsinline webkit-playsinline loop preload="auto"></video>
+      <div class="step-num a-item a-1">13 / 13</div>
+      <div class="guia-wrap a-item a-3">
+        <video class="guia-video" id="guiaVideo" src="/healing.mp4" playsinline webkit-playsinline controls loop preload="auto"></video>
       </div>
-      <p class="guia-caption a-item a-2">Explicado con gatos</p>
     </div>
   </section>
 
@@ -328,9 +322,8 @@ body.guia-on #progress-fill{background:#111}
     screenEl(order[current]).classList.remove('active');
     current = newIndex;
     screenEl(order[current]).classList.add('active');
-    document.body.classList.toggle('guia-on', order[current]==='q:12');
     var v=document.getElementById('guiaVideo');
-    if(v){ if(order[current]==='q:12'){ v.muted=false; v.volume=1; var p=v.play(); if(p&&p.catch) p.catch(function(){}); if(!v.dataset.tap){ v.dataset.tap='1'; v.addEventListener('click', function(){ if(v.paused) v.play(); else v.pause(); }); } } else { v.pause(); } }
+    if(v){ if(order[current]==='q:12'){ v.muted=false; v.volume=1; v.currentTime=0; var p=v.play(); if(p&&p.catch) p.catch(function(){ v.muted=true; v.play().catch(function(){}); }); } else { v.pause(); } }
     render();
   }
 
