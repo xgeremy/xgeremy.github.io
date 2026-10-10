@@ -129,7 +129,7 @@ body.lock .hero-infobar{opacity:0}
 /* RAIL (carrusel horizontal, pensado para el pulgar) */
 .rail{
   display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:auto;
   padding:4px var(--pad) 12px;scrollbar-width:none;
 }
 .rail::-webkit-scrollbar{display:none}
@@ -346,19 +346,18 @@ footer{
   <!-- SERVICIOS -->
   <section class="sec" id="servicios">
     <h2 class="section-headline rv">Servicios</h2>
-    <p class="section-sub rv">Precios en CLP</p>
+    <p class="section-sub rv">Valores por servicio</p>
     <div class="list">
       <div class="svc rv">
-        <span class="t">Tomas profesionales</span><span class="p">Desde $X</span>
+        <span class="t">Tomas profesionales</span><span class="p">$25.000 CLP</span>
         <span class="s">Sin postproducción</span>
-        <span class="d">Durante la jornada (2 días) paso a hacerte tomas profesionales para que puedas editar tu propio contenido. Serán alrededor de 20 clips: tomas del proceso, del stand, close ups y mucho más.</span>
+        <span class="d">Durante la jornada (2 días) pasaré a grabarte tomas profesionales para que puedas editar tu propio contenido. Serán alrededor de 20 clips: tomas del proceso, del stand, close ups y mucho más.</span>
       </div>
       <div class="svc rv">
-        <span class="t">Reel profesional</span><span class="p">Desde $X</span>
-        <span class="d">Me encargo de producir un reel profesional para ti. Te acompaño desde el inicio del proceso y también en el resultado. Será un video de 20 a 40 segundos, con música de fondo y efectos de sonido.</span>
+        <span class="t">Reel profesional</span><span class="p">$40.000 CLP</span>
+        <span class="d">Me encargaré de producir un reel profesional para ti. Te acompañaré desde el inicio del proceso hasta el resultado final. Será un video de 20 a 40 segundos, con música de fondo y efectos de sonido.</span>
       </div>
     </div>
-    <p class="note rv">Cada proyecto se cotiza según locación y entrega. Escríbeme con tu idea y te respondo con una propuesta.</p>
   </section>
 
   <!-- CONTACTO -->
@@ -432,7 +431,7 @@ footer{
   if(hv){
     hv.muted = true;
     hv.src = hv.getAttribute('data-src');
-    if(!reduce){ var hp = hv.play(); if(hp && hp.catch) hp.catch(function(){}); }
+    var hp = hv.play(); if(hp && hp.catch) hp.catch(function(){});
   }
 
   /* Videos verticales: cargan cerca de la pantalla, reproducen al ver ≥60% */
@@ -455,7 +454,7 @@ footer{
     new IntersectionObserver(function(es){ if(es[0].isIntersecting) load(); },{rootMargin:'300px'}).observe(box);
     new IntersectionObserver(function(es){
       if(!loaded) return;
-      if(es[0].isIntersecting){ if(!reduce){ var p = v.play(); if(p && p.catch) p.catch(function(){}); } }
+      if(es[0].isIntersecting){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
       else { v.pause(); }
     },{threshold:.6}).observe(box);
     function tap(){
@@ -477,7 +476,7 @@ footer{
   });
 
   /* Carruseles en movimiento continuo (igual que la galería de xgeremy.work) */
-  if(!reduce){
+  if(true){
     document.querySelectorAll('[data-rail]').forEach(function(g){
       var hold = false, t = null, x = 0, visible = false;
       function tick(){
