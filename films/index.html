@@ -3,357 +3,513 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Geremy Monsalve — Filmmaker</title>
-<meta name="description" content="Geremy Monsalve, filmmaker y fotógrafo en Viña del Mar, Chile. Video y fotografía de ritmo pausado y estética editorial.">
+<title>Geremy Monsalve — Filmmaker | XGEREMY™</title>
+<meta name="description" content="Geremy Monsalve, filmmaker y fotógrafo en Viña del Mar, Chile. Video vertical, contenido para redes y fotografía editorial.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#ffffff">
+<meta name="format-detection" content="telephone=no">
 <link rel="canonical" href="https://xgeremy.work/films/">
 <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
 :root{
-  --font:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
   --bg:#ffffff;
-  --text:#0a0a0a;
-  --mute:#8c8c8c;
-  --soft:#f3f3f3;
-  --line:rgba(10,10,10,.12);
-  --pad:28px;
-  --ease:cubic-bezier(.2,.7,.2,1);
+  --text:#050505;
+  --text-2:#86868b;
+  --text-3:#a1a1a6;
+  --line:rgba(5,5,5,.14);
+  --soft:#f2f2f3;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:20px;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--bg)}
 body{
-  font-family:var(--font);
-  background:var(--bg);
-  color:var(--text);
-  font-size:15px;
-  line-height:1.35;
-  letter-spacing:-.01em;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  -webkit-tap-highlight-color:transparent;overflow-x:hidden;
 }
+body.lock{overflow:hidden}
 a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-appearance:none;appearance:none}
 img,video{display:block;width:100%}
+svg.ar{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;flex-shrink:0}
 
-/* NAV */
+/* NAV (misma jerarquía que la web principal) */
 .nav{
-  position:fixed;top:0;left:0;right:0;z-index:20;
+  position:fixed;top:0;left:0;right:0;z-index:50;
   display:flex;justify-content:space-between;align-items:center;
-  padding:calc(18px + env(safe-area-inset-top,0px)) var(--pad) 18px;
-  background:var(--bg);
+  padding:calc(6px + env(safe-area-inset-top,0px)) var(--pad) 6px;
+  transition:background .35s,border-color .35s;border-bottom:1px solid transparent;
 }
-.nav-logo{font-weight:500;font-size:15px;letter-spacing:-.02em}
-.nav-links{display:flex;gap:28px}
-.nav a{transition:opacity .3s var(--ease)}
-.nav-links:hover a{opacity:.35}
-.nav-links a:hover{opacity:1}
+.nav.solid{
+  background:rgba(255,255,255,.82);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom-color:var(--line);
+}
+.nav-logo,.menu-toggle{
+  display:flex;align-items:center;min-height:44px;
+  font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;
+}
+.menu-toggle{padding:0}
+
+/* MENU */
+.menu{
+  position:fixed;inset:0;z-index:40;background:var(--bg);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 var(--pad) calc(36px + env(safe-area-inset-bottom,0px));
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s;
+}
+.menu.open{opacity:1;visibility:visible}
+.menu a{
+  display:block;min-height:44px;padding:4px 0;
+  font-size:clamp(40px,12vw,72px);font-weight:700;letter-spacing:-.04em;line-height:1.02;text-transform:uppercase;
+}
+.menu small{display:block;margin-top:28px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
 
 /* HERO */
-.hero{padding:calc(120px + env(safe-area-inset-top,0px)) var(--pad) 40px}
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;overflow:hidden;background:var(--bg)}
+.hero-media{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 20%;
+}
+.hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:140px;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 100%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:58%;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,#fff 82%);
+}
+.hero-content{
+  position:absolute;left:0;right:0;z-index:2;padding:0 var(--pad);
+  bottom:calc(64px + env(safe-area-inset-bottom,0px));
+}
 .hero h1{
-  font-weight:500;
-  font-size:clamp(56px,15.2vw,320px);
-  line-height:.84;
-  letter-spacing:-.065em;
-  margin-left:-.04em;
+  font-size:clamp(48px,14vw,118px);font-weight:700;letter-spacing:-.04em;line-height:.86;
+  text-transform:uppercase;margin-bottom:16px;max-width:92vw;
 }
 .hero h1 span{display:block}
-.hero-meta{
-  display:flex;justify-content:space-between;
-  margin-top:40px;padding-top:14px;
-  border-top:1px solid var(--line);
-  color:var(--mute);
+.hero-subtitle{
+  font-size:clamp(11px,2.6vw,14px);line-height:1.2;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
 }
+.hero-infobar{
+  position:absolute;left:var(--pad);right:var(--pad);z-index:2;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  display:flex;justify-content:space-between;
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);
+}
+
+/* FILA DE RESERVA */
+.book-row{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  min-height:72px;padding:0 var(--pad);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  font-size:18px;font-weight:700;letter-spacing:-.02em;
+}
+.book-row.single{border-top:0}
 
 /* SECCIONES */
-section{padding:96px var(--pad) 0}
-.sec-head{
-  display:flex;justify-content:space-between;align-items:baseline;
-  padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:28px;
+.sec{padding-top:80px}
+.section-headline{
+  font-size:clamp(34px,6.5vw,64px);line-height:1;font-weight:700;letter-spacing:-.04em;text-align:center;
+  margin-bottom:8px;padding:0 var(--pad);
+  background:linear-gradient(135deg,var(--text) 0%,var(--text-2) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
 }
-.sec-head h2{font-weight:500;font-size:15px;letter-spacing:-.01em}
-.sec-head span{color:var(--mute)}
+.section-sub{
+  font-size:13px;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;line-height:1.4;
+  text-align:center;color:var(--text-3);margin-bottom:32px;padding:0 var(--pad);
+}
 
-/* TRABAJOS (VIDEO) */
-.works{display:grid;grid-template-columns:repeat(2,1fr);gap:48px 20px}
-.work.wide{grid-column:1 / -1}
-.slot{
-  position:relative;overflow:hidden;background:var(--soft);
-  aspect-ratio:16/9;
+/* RAIL (carrusel horizontal, pensado para el pulgar) */
+.rail{
+  display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;overscroll-behavior-x:contain;
+  padding:4px var(--pad) 12px;scroll-padding:0 var(--pad);scrollbar-width:none;
 }
-.work.wide .slot{aspect-ratio:21/9}
-.slot video{height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
-.slot .ph{
+.rail::-webkit-scrollbar{display:none}
+.card{flex:0 0 min(72vw,300px);scroll-snap-align:start}
+.card.photo{flex-basis:min(78vw,340px)}
+.reel{
+  position:relative;aspect-ratio:9/16;background:var(--soft);overflow:hidden;cursor:pointer;
+  -webkit-touch-callout:none;
+}
+.photo .reel{aspect-ratio:1080/1350;cursor:default}
+.reel video,.reel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  color:var(--mute);font-size:13px;pointer-events:none;
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);pointer-events:none;
 }
-.work:hover .slot video{transform:scale(1.025)}
-.cap{display:flex;justify-content:space-between;gap:16px;margin-top:12px}
-.cap b{font-weight:500}
-.cap span{color:var(--mute)}
-.works:hover .work{opacity:.4}
-.works .work{transition:opacity .4s var(--ease)}
-.works .work:hover{opacity:1}
-
-/* FOTOGRAFIA */
-.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.photos .slot{aspect-ratio:4/5}
-.photos img{height:100%;object-fit:cover}
+.snd{
+  position:absolute;left:10px;bottom:10px;z-index:2;display:none;
+  padding:7px 10px;border-radius:999px;pointer-events:none;
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;
+  background:rgba(5,5,5,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.reel.ready .snd{display:block}
+.cap{margin-top:12px}
+.cap b{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.cap span{display:block;margin-top:4px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.rail-count{
+  padding:6px var(--pad) 0;text-align:right;
+  font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text-2);
+}
 
 /* SOBRE MI */
-.about{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.about{max-width:860px;margin:0 auto;padding:88px 22px 0}
+.about-kicker{
+  font-size:15px;font-weight:700;letter-spacing:-.01em;line-height:1.25;
+  max-width:160px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--text);
+}
 .about-lead{
-  font-weight:500;
-  font-size:clamp(26px,3.4vw,52px);
-  line-height:1.08;
-  letter-spacing:-.04em;
-  grid-column:1 / -1;
-  max-width:18em;
-  margin-bottom:56px;
+  font-size:clamp(34px,9vw,48px);font-weight:400;letter-spacing:-.035em;line-height:1.15;
+  margin:32px 0 0;text-align:right;
 }
-.about p{color:var(--text);max-width:34em}
-.about .mute{color:var(--mute)}
+.about p.body{
+  font-size:clamp(20px,2.4vw,26px);font-weight:300;line-height:1.42;letter-spacing:-.015em;margin-top:28px;
+}
+.btn-outline{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  width:100%;max-width:420px;min-height:56px;margin-top:32px;padding:16px 18px;
+  border:1px solid rgba(5,5,5,.38);border-radius:12px;
+  font-size:18px;font-weight:700;letter-spacing:-.02em;
+}
 
-/* SERVICIOS (lista tipo Publications) */
-.list a,.list div.row{
-  display:grid;grid-template-columns:1.1fr 2fr auto;gap:20px;align-items:baseline;
-  padding:18px 0;border-bottom:1px solid var(--line);
-  transition:opacity .3s var(--ease);
+/* SERVICIOS */
+.list{margin-top:36px;border-bottom:1px solid var(--line)}
+.svc{
+  display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline;
+  padding:20px var(--pad);border-top:1px solid var(--line);
 }
-.list:hover .row{opacity:.35}
-.list .row:hover{opacity:1}
-.row .t{font-weight:500;font-size:clamp(20px,2.4vw,32px);letter-spacing:-.035em}
-.row .d{color:var(--mute)}
-.row .p{white-space:nowrap}
-.note{margin-top:20px;color:var(--mute);max-width:40em}
+.svc .t{font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.svc .p{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--text-2);white-space:nowrap}
+.svc .d{grid-column:1 / -1;font-size:14px;line-height:1.5;color:var(--text-2)}
+.note{padding:20px var(--pad) 0;font-size:14px;line-height:1.5;color:var(--text-2);max-width:40em}
 
-/* CONTACTO / FOOTER */
-.cta{padding:140px var(--pad) 0}
-.cta small{display:block;font-size:15px;margin-bottom:6px}
-.cta a.big{
-  display:inline-block;
-  font-weight:500;
-  font-size:clamp(72px,22vw,420px);
-  line-height:.82;
-  letter-spacing:-.07em;
-  margin-left:-.04em;
-  transition:opacity .4s var(--ease);
+/* CONTACTO */
+.contact{max-width:860px;margin:0 auto;padding:96px 22px 0}
+.contact h2{font-size:clamp(34px,9vw,64px);font-weight:700;letter-spacing:-.04em;line-height:1}
+.contact p{margin-top:10px;font-size:14px;line-height:1.5;color:var(--text-2)}
+.wa-btn{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  min-height:60px;margin-top:28px;padding:18px;border-radius:12px;
+  background:var(--text);color:#fff;font-size:18px;font-weight:700;letter-spacing:-.02em;
 }
-.cta a.big:hover{opacity:.45}
-.wa{
-  display:inline-flex;align-items:center;gap:10px;
-  margin-top:40px;padding:14px 22px;
-  border:1px solid var(--text);border-radius:999px;
-  font-weight:500;
-  transition:background .3s var(--ease),color .3s var(--ease);
-}
-.wa:hover{background:var(--text);color:var(--bg)}
-.wa svg{width:16px;height:16px}
+.contact .book-row{padding:0;margin-top:0}
+.contact .rows{margin-top:20px}
+
+/* FOOTER */
 footer{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
-  padding:96px var(--pad) calc(28px + env(safe-area-inset-bottom,0px));
+  min-height:34vh;display:flex;align-items:flex-end;
+  padding:48px var(--pad) calc(48px + env(safe-area-inset-bottom,0px));
 }
-footer .col{display:flex;flex-direction:column;gap:4px}
-footer .mute{color:var(--mute)}
-footer a{transition:opacity .3s var(--ease)}
-footer a:hover{opacity:.45}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;width:100%}
+.footer-col{display:flex;flex-direction:column;gap:8px}
+.footer-col.r{align-items:flex-end;text-align:right}
+.footer-col span,.footer-col a{font-size:11px;font-weight:400;letter-spacing:.08em}
+.footer-col a{opacity:.72;display:inline-flex;min-height:28px;align-items:center}
+
+/* DOCK WHATSAPP (iPhone: pulgar siempre cerca del botón) */
+.dock{
+  position:fixed;left:var(--pad);right:var(--pad);z-index:30;
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex;justify-content:center;pointer-events:none;
+  transform:translateY(160%);transition:transform .55s var(--ease);
+}
+.dock.show{transform:none}
+.dock a{
+  pointer-events:auto;display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:420px;min-height:54px;padding:0 20px;border-radius:14px;
+  background:rgba(5,5,5,.92);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.01em;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+}
+.dock svg.ar{width:20px;height:20px}
 
 /* REVEAL */
-.rv{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .rv.in{opacity:1;transform:none}
+
+/* Hover solo donde existe (evita hover pegado en iPhone) */
+@media (hover:hover) and (pointer:fine){
+  .nav a,.menu-toggle,.book-row,.btn-outline,.wa-btn,.footer-col a{transition:opacity .3s}
+  .nav a:hover,.menu-toggle:hover,.book-row:hover,.btn-outline:hover,.wa-btn:hover{opacity:.55}
+  .footer-col a:hover{opacity:1}
+}
+@media (min-width:900px){
+  .rail{padding-left:max(var(--pad),calc((100vw - 980px)/2))}
+  .rail-count{padding-right:max(var(--pad),calc((100vw - 980px)/2))}
+  .dock{display:none}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none;transition:none}
-  .slot video{transition:none}
-}
-
-/* MOVIL */
-@media (max-width:760px){
-  :root{--pad:18px}
-  .nav-links{gap:16px}
-  section{padding-top:72px}
-  .works{grid-template-columns:1fr;gap:36px}
-  .work.wide .slot{aspect-ratio:16/9}
-  .photos{grid-template-columns:1fr 1fr;gap:12px}
-  .about{grid-template-columns:1fr}
-  .list a,.list div.row{grid-template-columns:1fr auto;gap:6px 12px}
-  .row .d{grid-column:1 / -1;order:3}
-  footer{grid-template-columns:1fr 1fr;row-gap:36px}
-  .cta{padding-top:96px}
+  .dock{transition:none}
 }
 </style>
 </head>
 <body>
 
-<header class="nav">
-  <a class="nav-logo" href="#top">Geremy Monsalve</a>
-  <nav class="nav-links">
-    <a href="#trabajos">Trabajos</a>
-    <a href="#sobre">Sobre mí</a>
-    <a href="#servicios">Servicios</a>
-    <a href="#contacto">Hablemos</a>
-  </nav>
+<header class="nav" id="nav">
+  <a class="nav-logo" href="/">XGEREMY™</a>
+  <button class="menu-toggle" id="menuBtn" aria-expanded="false" aria-controls="menu">Menú</button>
 </header>
 
-<main id="top">
-  <div class="hero">
-    <h1 class="rv"><span>Geremy</span><span>Monsalve</span></h1>
-    <div class="hero-meta rv">
-      <span>Filmmaker &amp; Fotógrafo</span>
-      <span>Viña del Mar · Chile</span>
-    </div>
-  </div>
+<nav class="menu" id="menu" aria-label="Menú">
+  <a href="#top">Inicio</a>
+  <a href="#trabajos">Trabajos</a>
+  <a href="#stills">Stills</a>
+  <a href="#sobre">Sobre mí</a>
+  <a href="#servicios">Servicios</a>
+  <a href="#contacto">Contacto</a>
+  <a href="/">Tatuajes</a>
+  <small>Viña del Mar · Chile</small>
+</nav>
 
-  <!-- TRABAJOS -->
-  <section id="trabajos">
-    <div class="sec-head rv"><h2>Trabajos</h2><span>2026</span></div>
-    <div class="works">
-      <article class="work wide rv">
-        <div class="slot">
-          <video muted loop playsinline preload="metadata" data-src="/films/media/work-01.mp4"></video>
-          <div class="ph">Video 01</div>
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <video class="hero-media" id="heroVid" poster="/hero.jpg" data-src="/films/media/hero.mp4" muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture aria-hidden="true"></video>
+    <div class="hero-content">
+      <h1><span>Geremy</span><span>Monsalve</span></h1>
+      <p class="hero-subtitle">Filmmaker · Fotógrafo</p>
+    </div>
+    <div class="hero-infobar">
+      <span>Viña del Mar · Chile</span>
+      <span id="pct">Scroll (0%)</span>
+    </div>
+  </section>
+
+  <a class="book-row" href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">
+    <span>Cotizar un proyecto</span>
+    <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
+  </a>
+
+  <!-- TRABAJOS (video vertical 9:16) -->
+  <section class="sec" id="trabajos">
+    <h2 class="section-headline rv">Selected films</h2>
+    <p class="section-sub rv">Video vertical · Reels · Marcas</p>
+    <div class="rail rv" data-rail>
+      <article class="card">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir video 01">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/work-01.mp4"></video>
+          <div class="ph">Video 01</div><span class="snd">Sonido off</span>
         </div>
         <div class="cap"><b>Título del proyecto 01</b><span>Marca · 2026</span></div>
       </article>
-      <article class="work rv">
-        <div class="slot">
-          <video muted loop playsinline preload="metadata" data-src="/films/media/work-02.mp4"></video>
-          <div class="ph">Video 02</div>
+      <article class="card">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir video 02">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/work-02.mp4"></video>
+          <div class="ph">Video 02</div><span class="snd">Sonido off</span>
         </div>
         <div class="cap"><b>Título del proyecto 02</b><span>Reel · 2026</span></div>
       </article>
-      <article class="work rv">
-        <div class="slot">
-          <video muted loop playsinline preload="metadata" data-src="/films/media/work-03.mp4"></video>
-          <div class="ph">Video 03</div>
+      <article class="card">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir video 03">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/work-03.mp4"></video>
+          <div class="ph">Video 03</div><span class="snd">Sonido off</span>
         </div>
         <div class="cap"><b>Título del proyecto 03</b><span>Videoclip · 2026</span></div>
       </article>
-      <article class="work rv">
-        <div class="slot">
-          <video muted loop playsinline preload="metadata" data-src="/films/media/work-04.mp4"></video>
-          <div class="ph">Video 04</div>
+      <article class="card">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir video 04">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/work-04.mp4"></video>
+          <div class="ph">Video 04</div><span class="snd">Sonido off</span>
         </div>
         <div class="cap"><b>Título del proyecto 04</b><span>Evento · 2026</span></div>
       </article>
-      <article class="work rv">
-        <div class="slot">
-          <video muted loop playsinline preload="metadata" data-src="/films/media/work-05.mp4"></video>
-          <div class="ph">Video 05</div>
+      <article class="card">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir video 05">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/work-05.mp4"></video>
+          <div class="ph">Video 05</div><span class="snd">Sonido off</span>
         </div>
         <div class="cap"><b>Título del proyecto 05</b><span>Documental · 2026</span></div>
       </article>
     </div>
+    <p class="rail-count" data-count>01 / 05</p>
   </section>
 
-  <!-- FOTOGRAFIA -->
-  <section id="fotografia">
-    <div class="sec-head rv"><h2>Fotografía</h2><span>Selección</span></div>
-    <div class="photos">
-      <div class="slot rv"><img data-src="/films/media/photo-01.jpg" alt="Fotografía 01" loading="lazy"><div class="ph">Foto 01</div></div>
-      <div class="slot rv"><img data-src="/films/media/photo-02.jpg" alt="Fotografía 02" loading="lazy"><div class="ph">Foto 02</div></div>
-      <div class="slot rv"><img data-src="/films/media/photo-03.jpg" alt="Fotografía 03" loading="lazy"><div class="ph">Foto 03</div></div>
+  <!-- STILLS -->
+  <section class="sec" id="stills">
+    <h2 class="section-headline rv">Stills</h2>
+    <p class="section-sub rv">Fotografía · Selección</p>
+    <div class="rail rv" data-rail>
+      <article class="card photo"><div class="reel"><img data-src="/films/media/photo-01.jpg" alt="Fotografía 01" loading="lazy" decoding="async"><div class="ph">Foto 01</div></div></article>
+      <article class="card photo"><div class="reel"><img data-src="/films/media/photo-02.jpg" alt="Fotografía 02" loading="lazy" decoding="async"><div class="ph">Foto 02</div></div></article>
+      <article class="card photo"><div class="reel"><img data-src="/films/media/photo-03.jpg" alt="Fotografía 03" loading="lazy" decoding="async"><div class="ph">Foto 03</div></div></article>
+      <article class="card photo"><div class="reel"><img data-src="/films/media/photo-04.jpg" alt="Fotografía 04" loading="lazy" decoding="async"><div class="ph">Foto 04</div></div></article>
     </div>
+    <p class="rail-count" data-count>01 / 04</p>
   </section>
 
   <!-- SOBRE MI -->
-  <section id="sobre">
-    <div class="sec-head rv"><h2>Sobre mí</h2><span>Viña del Mar</span></div>
-    <div class="about">
-      <p class="about-lead rv">Filmmaker y fotógrafo. Imágenes con ritmo pausado, luz cuidada y una mirada editorial.</p>
-      <p class="rv">Soy Geremy Monsalve, radicado en Viña del Mar, Chile. Dirijo, filmo y edito piezas audiovisuales, y manejo mi propia fotografía y video de principio a fin.</p>
-      <p class="rv mute">También soy tatuador (@xgeremy). Esa mirada al detalle es la misma que llevo a cada proyecto de video.</p>
-    </div>
+  <section class="about" id="sobre">
+    <p class="about-kicker rv">Sobre mí</p>
+    <p class="about-lead rv">Filmmaker y fotógrafo. Imagen vertical, luz cuidada, mirada editorial.</p>
+    <p class="body rv">Soy Geremy Monsalve, radicado en Viña del Mar, Chile. Dirijo, filmo y edito mis propias piezas, de la idea a la entrega.</p>
+    <p class="body rv">También soy tatuador. Esa atención al detalle es la misma que llevo a cada proyecto de video.</p>
+    <a class="btn-outline rv" href="https://www.instagram.com/xgeremy" target="_blank" rel="noopener">
+      <span>Ver Instagram</span>
+      <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
+    </a>
   </section>
 
   <!-- SERVICIOS -->
-  <section id="servicios">
-    <div class="sec-head rv"><h2>Servicios</h2><span>Precios en CLP</span></div>
+  <section class="sec" id="servicios">
+    <h2 class="section-headline rv">Servicios</h2>
+    <p class="section-sub rv">Precios en CLP</p>
     <div class="list">
-      <div class="row rv"><span class="t">Video de marca</span><span class="d">Pieza audiovisual para una marca o emprendimiento</span><span class="p">Desde $X</span></div>
-      <div class="row rv"><span class="t">Contenido para redes</span><span class="d">Reels y clips verticales con dirección y edición</span><span class="p">Desde $X</span></div>
-      <div class="row rv"><span class="t">Fotografía</span><span class="d">Retrato, producto y editorial</span><span class="p">Desde $X</span></div>
-      <div class="row rv"><span class="t">Videoclip</span><span class="d">Dirección, rodaje y postproducción</span><span class="p">Desde $X</span></div>
-      <div class="row rv"><span class="t">Cobertura de eventos</span><span class="d">Registro en video y foto</span><span class="p">Desde $X</span></div>
+      <div class="svc rv"><span class="t">Contenido vertical</span><span class="p">Desde $X</span><span class="d">Reels y clips para redes, con dirección, rodaje y edición.</span></div>
+      <div class="svc rv"><span class="t">Video de marca</span><span class="p">Desde $X</span><span class="d">Pieza audiovisual para una marca o emprendimiento.</span></div>
+      <div class="svc rv"><span class="t">Fotografía</span><span class="p">Desde $X</span><span class="d">Retrato, producto y editorial.</span></div>
+      <div class="svc rv"><span class="t">Videoclip</span><span class="p">Desde $X</span><span class="d">Dirección, rodaje y postproducción.</span></div>
+      <div class="svc rv"><span class="t">Cobertura de eventos</span><span class="p">Desde $X</span><span class="d">Registro en video y foto.</span></div>
     </div>
-    <p class="note rv">Cada proyecto se cotiza según duración, locaciones y entrega. Escríbeme por WhatsApp con tu idea y te respondo con una propuesta.</p>
+    <p class="note rv">Cada proyecto se cotiza según duración, locaciones y entrega. Escríbeme con tu idea y te respondo con una propuesta.</p>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contact" id="contacto">
+    <h2 class="rv">Hagamos cine.</h2>
+    <p class="rv">Cuéntame qué quieres contar. Respondo por WhatsApp.</p>
+    <a class="wa-btn rv" href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">
+      <span>Escribir por WhatsApp</span>
+      <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
+    </a>
+    <div class="rows rv">
+      <a class="book-row" href="https://www.instagram.com/xgeremy" target="_blank" rel="noopener"><span>Instagram</span><svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg></a>
+      <a class="book-row single" href="mailto:contacto@xgeremy.work"><span>Email</span><svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg></a>
+    </div>
   </section>
 </main>
 
-<!-- CONTACTO -->
-<div class="cta" id="contacto">
-  <small class="rv">Hagamos</small>
-  <a class="big rv" href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">Cine</a>
-  <div class="rv">
-    <a class="wa" href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
-      Escribir por WhatsApp
-    </a>
-  </div>
-</div>
-
 <footer>
-  <div class="col">
-    <a href="#trabajos">Trabajos</a>
-    <a href="#sobre">Sobre mí</a>
-    <a href="#servicios">Servicios</a>
-  </div>
-  <div class="col">
-    <a href="https://www.instagram.com/xgeremy" target="_blank" rel="noopener">Instagram</a>
-    <a href="mailto:contacto@xgeremy.work">contacto@xgeremy.work</a>
-    <a href="/">Tatuajes</a>
-  </div>
-  <div class="col mute">
-    <span>Geremy Monsalve</span>
-    <span>Filmmaker</span>
-  </div>
-  <div class="col mute">
-    <span>©</span>
-    <span>2026</span>
+  <div class="footer-top">
+    <div class="footer-col"><span>XGEREMY™ Films</span><span>Viña del Mar · Chile</span></div>
+    <div class="footer-col r"><span>© 2026</span><a href="/">Tatuajes</a></div>
   </div>
 </footer>
+
+<div class="dock" id="dock">
+  <a href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">
+    <span>Cotizar por WhatsApp</span>
+    <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
+  </a>
+</div>
 
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nav = document.getElementById('nav');
+  var dock = document.getElementById('dock');
+  var pct = document.getElementById('pct');
+  var contact = document.getElementById('contacto');
+  var menu = document.getElementById('menu');
+  var menuBtn = document.getElementById('menuBtn');
 
-  // Reveal al hacer scroll
+  /* Menú */
+  function setMenu(open){
+    menu.classList.toggle('open', open);
+    document.body.classList.toggle('lock', open);
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuBtn.textContent = open ? 'Cerrar' : 'Menú';
+  }
+  menuBtn.addEventListener('click', function(){ setMenu(!menu.classList.contains('open')); });
+  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') setMenu(false); });
+
+  /* Scroll: nav sólida, contador y dock de WhatsApp */
+  var contactVisible = false, ticking = false;
+  function onScroll(){
+    ticking = false;
+    var y = window.scrollY || window.pageYOffset;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    nav.classList.toggle('solid', y > 30);
+    if(pct) pct.textContent = 'Scroll (' + (max > 0 ? Math.min(100, Math.round(y / max * 100)) : 0) + '%)';
+    dock.classList.toggle('show', y > window.innerHeight * 0.7 && !contactVisible);
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(onScroll); }
+  }, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      contactVisible = es[0].isIntersecting; onScroll();
+    },{threshold:.15}).observe(contact);
+  }
+
+  /* Reveal */
   var rv = document.querySelectorAll('.rv');
   if('IntersectionObserver' in window && !reduce){
     var io = new IntersectionObserver(function(es){
       es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    },{threshold:.08,rootMargin:'0px 0px -4% 0px'});
     rv.forEach(function(el){ io.observe(el); });
-  } else {
-    rv.forEach(function(el){ el.classList.add('in'); });
+  } else { rv.forEach(function(el){ el.classList.add('in'); }); }
+
+  /* Hero: el poster (/hero.jpg) se ve hasta que exista hero.mp4 */
+  var hv = document.getElementById('heroVid');
+  if(hv){
+    hv.muted = true;
+    hv.src = hv.getAttribute('data-src');
+    if(!reduce){ var hp = hv.play(); if(hp && hp.catch) hp.catch(function(){}); }
   }
 
-  // Videos: cargan al entrar en pantalla; si el archivo no existe, queda el placeholder
-  document.querySelectorAll('video[data-src]').forEach(function(v){
-    var ph = v.parentNode.querySelector('.ph');
-    v.addEventListener('loadeddata', function(){ if(ph) ph.style.display='none'; });
-    v.addEventListener('error', function(){ v.style.display='none'; });
-    var loaded = false;
-    var vo = new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(e.isIntersecting){
-          if(!loaded){ v.src = v.getAttribute('data-src'); loaded = true; }
-          if(!reduce){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
-        } else if(loaded){ v.pause(); }
-      });
-    },{threshold:.35});
-    vo.observe(v);
+  /* Videos verticales: cargan cerca de la pantalla, reproducen al ver ≥60% */
+  var reels = Array.prototype.slice.call(document.querySelectorAll('.reel video'));
+  function muteOthers(except){
+    reels.forEach(function(v){
+      if(v !== except){ v.muted = true; setChip(v); }
+    });
+  }
+  function setChip(v){
+    var chip = v.parentNode.querySelector('.snd');
+    if(chip) chip.textContent = v.muted ? 'Sonido off' : 'Sonido on';
+  }
+  reels.forEach(function(v){
+    var box = v.parentNode, ph = box.querySelector('.ph'), loaded = false;
+    v.muted = true;
+    v.addEventListener('loadeddata', function(){ if(ph) ph.style.display = 'none'; box.classList.add('ready'); });
+    v.addEventListener('error', function(){ v.style.display = 'none'; });
+    function load(){ if(!loaded){ v.src = v.getAttribute('data-src'); loaded = true; } }
+    new IntersectionObserver(function(es){ if(es[0].isIntersecting) load(); },{rootMargin:'300px'}).observe(box);
+    new IntersectionObserver(function(es){
+      if(!loaded) return;
+      if(es[0].isIntersecting){ if(!reduce){ var p = v.play(); if(p && p.catch) p.catch(function(){}); } }
+      else { v.pause(); }
+    },{threshold:.6}).observe(box);
+    function tap(){
+      if(!loaded || v.style.display === 'none') return;
+      if(v.paused){ var p = v.play(); if(p && p.catch) p.catch(function(){}); return; }
+      v.muted = !v.muted; setChip(v);
+      if(!v.muted) muteOthers(v);
+    }
+    box.addEventListener('click', tap);
+    box.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); tap(); } });
   });
 
-  // Fotos: mismo criterio
+  /* Fotos */
   document.querySelectorAll('img[data-src]').forEach(function(img){
     var ph = img.parentNode.querySelector('.ph');
-    img.addEventListener('load', function(){ if(ph) ph.style.display='none'; });
-    img.addEventListener('error', function(){ img.style.display='none'; });
+    img.addEventListener('load', function(){ if(ph) ph.style.display = 'none'; });
+    img.addEventListener('error', function(){ img.style.display = 'none'; });
     img.src = img.getAttribute('data-src');
+  });
+
+  /* Contador 01 / 05 de cada carrusel */
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  document.querySelectorAll('[data-rail]').forEach(function(rail){
+    var counter = rail.nextElementSibling;
+    var cards = rail.querySelectorAll('.card');
+    if(!counter || !cards.length) return;
+    rail.addEventListener('scroll', function(){
+      var step = cards[0].offsetWidth + 14;
+      var i = Math.min(cards.length, Math.max(1, Math.round(rail.scrollLeft / step) + 1));
+      counter.textContent = pad(i) + ' / ' + pad(cards.length);
+    }, {passive:true});
   });
 })();
 </script>
