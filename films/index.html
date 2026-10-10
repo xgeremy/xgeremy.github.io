@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Geremy Monsalve — Filmmaker</title>
+<meta name="description" content="Geremy Monsalve, filmmaker y fotógrafo en Viña del Mar, Chile. Video y fotografía de ritmo pausado y estética editorial.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://xgeremy.work/films/">
+<link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --bg:#ffffff;
+  --text:#0a0a0a;
+  --mute:#8c8c8c;
+  --soft:#f3f3f3;
+  --line:rgba(10,10,10,.12);
+  --pad:28px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
+  line-height:1.35;
+  letter-spacing:-.01em;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+a{color:inherit;text-decoration:none}
+img,video{display:block;width:100%}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:calc(18px + env(safe-area-inset-top,0px)) var(--pad) 18px;
+  background:var(--bg);
+}
+.nav-logo{font-weight:500;font-size:15px;letter-spacing:-.02em}
+.nav-links{display:flex;gap:28px}
+.nav a{transition:opacity .3s var(--ease)}
+.nav-links:hover a{opacity:.35}
+.nav-links a:hover{opacity:1}
+
+/* HERO */
+.hero{padding:calc(120px + env(safe-area-inset-top,0px)) var(--pad) 40px}
+.hero h1{
+  font-weight:500;
+  font-size:clamp(56px,15.2vw,320px);
+  line-height:.84;
+  letter-spacing:-.065em;
+  margin-left:-.04em;
+}
+.hero h1 span{display:block}
+.hero-meta{
+  display:flex;justify-content:space-between;
+  margin-top:40px;padding-top:14px;
+  border-top:1px solid var(--line);
+  color:var(--mute);
+}
+
+/* SECCIONES */
+section{padding:96px var(--pad) 0}
+.sec-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:28px;
+}
+.sec-head h2{font-weight:500;font-size:15px;letter-spacing:-.01em}
+.sec-head span{color:var(--mute)}
+
+/* TRABAJOS (VIDEO) */
+.works{display:grid;grid-template-columns:repeat(2,1fr);gap:48px 20px}
+.work.wide{grid-column:1 / -1}
+.slot{
+  position:relative;overflow:hidden;background:var(--soft);
+  aspect-ratio:16/9;
+}
+.work.wide .slot{aspect-ratio:21/9}
+.slot video{height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.slot .ph{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:var(--mute);font-size:13px;pointer-events:none;
+}
+.work:hover .slot video{transform:scale(1.025)}
+.cap{display:flex;justify-content:space-between;gap:16px;margin-top:12px}
+.cap b{font-weight:500}
+.cap span{color:var(--mute)}
+.works:hover .work{opacity:.4}
+.works .work{transition:opacity .4s var(--ease)}
+.works .work:hover{opacity:1}
+
+/* FOTOGRAFIA */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.photos .slot{aspect-ratio:4/5}
+.photos img{height:100%;object-fit:cover}
+
+/* SOBRE MI */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.about-lead{
+  font-weight:500;
+  font-size:clamp(26px,3.4vw,52px);
+  line-height:1.08;
+  letter-spacing:-.04em;
+  grid-column:1 / -1;
+  max-width:18em;
+  margin-bottom:56px;
+}
+.about p{color:var(--text);max-width:34em}
+.about .mute{color:var(--mute)}
+
+/* SERVICIOS (lista tipo Publications) */
+.list a,.list div.row{
+  display:grid;grid-template-columns:1.1fr 2fr auto;gap:20px;align-items:baseline;
+  padding:18px 0;border-bottom:1px solid var(--line);
+  transition:opacity .3s var(--ease);
+}
+.list:hover .row{opacity:.35}
+.list .row:hover{opacity:1}
+.row .t{font-weight:500;font-size:clamp(20px,2.4vw,32px);letter-spacing:-.035em}
+.row .d{color:var(--mute)}
+.row .p{white-space:nowrap}
+.note{margin-top:20px;color:var(--mute);max-width:40em}
+
+/* CONTACTO / FOOTER */
+.cta{padding:140px var(--pad) 0}
+.cta small{display:block;font-size:15px;margin-bottom:6px}
+.cta a.big{
+  display:inline-block;
+  font-weight:500;
+  font-size:clamp(72px,22vw,420px);
+  line-height:.82;
+  letter-spacing:-.07em;
+  margin-left:-.04em;
+  transition:opacity .4s var(--ease);
+}
+.cta a.big:hover{opacity:.45}
+.wa{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:40px;padding:14px 22px;
+  border:1px solid var(--text);border-radius:999px;
+  font-weight:500;
+  transition:background .3s var(--ease),color .3s var(--ease);
+}
+.wa:hover{background:var(--text);color:var(--bg)}
+.wa svg{width:16px;height:16px}
+footer{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+  padding:96px var(--pad) calc(28px + env(safe-area-inset-bottom,0px));
+}
+footer .col{display:flex;flex-direction:column;gap:4px}
+footer .mute{color:var(--mute)}
+footer a{transition:opacity .3s var(--ease)}
+footer a:hover{opacity:.45}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  .slot video{transition:none}
+}
+
+/* MOVIL */
+@media (max-width:760px){
+  :root{--pad:18px}
+  .nav-links{gap:16px}
+  section{padding-top:72px}
+  .works{grid-template-columns:1fr;gap:36px}
+  .work.wide .slot{aspect-ratio:16/9}
+  .photos{grid-template-columns:1fr 1fr;gap:12px}
+  .about{grid-template-columns:1fr}
+  .list a,.list div.row{grid-template-columns:1fr auto;gap:6px 12px}
+  .row .d{grid-column:1 / -1;order:3}
+  footer{grid-template-columns:1fr 1fr;row-gap:36px}
+  .cta{padding-top:96px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav-logo" href="#top">Geremy Monsalve</a>
+  <nav class="nav-links">
+    <a href="#trabajos">Trabajos</a>
+    <a href="#sobre">Sobre mí</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#contacto">Hablemos</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <h1 class="rv"><span>Geremy</span><span>Monsalve</span></h1>
+    <div class="hero-meta rv">
+      <span>Filmmaker &amp; Fotógrafo</span>
+      <span>Viña del Mar · Chile</span>
+    </div>
+  </div>
+
+  <!-- TRABAJOS -->
+  <section id="trabajos">
+    <div class="sec-head rv"><h2>Trabajos</h2><span>2026</span></div>
+    <div class="works">
+      <article class="work wide rv">
+        <div class="slot">
+          <video muted loop playsinline preload="metadata" data-src="/films/media/work-01.mp4"></video>
+          <div class="ph">Video 01</div>
+        </div>
+        <div class="cap"><b>Título del proyecto 01</b><span>Marca · 2026</span></div>
+      </article>
+      <article class="work rv">
+        <div class="slot">
+          <video muted loop playsinline preload="metadata" data-src="/films/media/work-02.mp4"></video>
+          <div class="ph">Video 02</div>
+        </div>
+        <div class="cap"><b>Título del proyecto 02</b><span>Reel · 2026</span></div>
+      </article>
+      <article class="work rv">
+        <div class="slot">
+          <video muted loop playsinline preload="metadata" data-src="/films/media/work-03.mp4"></video>
+          <div class="ph">Video 03</div>
+        </div>
+        <div class="cap"><b>Título del proyecto 03</b><span>Videoclip · 2026</span></div>
+      </article>
+      <article class="work rv">
+        <div class="slot">
+          <video muted loop playsinline preload="metadata" data-src="/films/media/work-04.mp4"></video>
+          <div class="ph">Video 04</div>
+        </div>
+        <div class="cap"><b>Título del proyecto 04</b><span>Evento · 2026</span></div>
+      </article>
+      <article class="work rv">
+        <div class="slot">
+          <video muted loop playsinline preload="metadata" data-src="/films/media/work-05.mp4"></video>
+          <div class="ph">Video 05</div>
+        </div>
+        <div class="cap"><b>Título del proyecto 05</b><span>Documental · 2026</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FOTOGRAFIA -->
+  <section id="fotografia">
+    <div class="sec-head rv"><h2>Fotografía</h2><span>Selección</span></div>
+    <div class="photos">
+      <div class="slot rv"><img data-src="/films/media/photo-01.jpg" alt="Fotografía 01" loading="lazy"><div class="ph">Foto 01</div></div>
+      <div class="slot rv"><img data-src="/films/media/photo-02.jpg" alt="Fotografía 02" loading="lazy"><div class="ph">Foto 02</div></div>
+      <div class="slot rv"><img data-src="/films/media/photo-03.jpg" alt="Fotografía 03" loading="lazy"><div class="ph">Foto 03</div></div>
+    </div>
+  </section>
+
+  <!-- SOBRE MI -->
+  <section id="sobre">
+    <div class="sec-head rv"><h2>Sobre mí</h2><span>Viña del Mar</span></div>
+    <div class="about">
+      <p class="about-lead rv">Filmmaker y fotógrafo. Imágenes con ritmo pausado, luz cuidada y una mirada editorial.</p>
+      <p class="rv">Soy Geremy Monsalve, radicado en Viña del Mar, Chile. Dirijo, filmo y edito piezas audiovisuales, y manejo mi propia fotografía y video de principio a fin.</p>
+      <p class="rv mute">También soy tatuador (@xgeremy). Esa mirada al detalle es la misma que llevo a cada proyecto de video.</p>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="sec-head rv"><h2>Servicios</h2><span>Precios en CLP</span></div>
+    <div class="list">
+      <div class="row rv"><span class="t">Video de marca</span><span class="d">Pieza audiovisual para una marca o emprendimiento</span><span class="p">Desde $X</span></div>
+      <div class="row rv"><span class="t">Contenido para redes</span><span class="d">Reels y clips verticales con dirección y edición</span><span class="p">Desde $X</span></div>
+      <div class="row rv"><span class="t">Fotografía</span><span class="d">Retrato, producto y editorial</span><span class="p">Desde $X</span></div>
+      <div class="row rv"><span class="t">Videoclip</span><span class="d">Dirección, rodaje y postproducción</span><span class="p">Desde $X</span></div>
+      <div class="row rv"><span class="t">Cobertura de eventos</span><span class="d">Registro en video y foto</span><span class="p">Desde $X</span></div>
+    </div>
+    <p class="note rv">Cada proyecto se cotiza según duración, locaciones y entrega. Escríbeme por WhatsApp con tu idea y te respondo con una propuesta.</p>
+  </section>
+</main>
+
+<!-- CONTACTO -->
+<div class="cta" id="contacto">
+  <small class="rv">Hagamos</small>
+  <a class="big rv" href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">Cine</a>
+  <div class="rv">
+    <a class="wa" href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
+      Escribir por WhatsApp
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="col">
+    <a href="#trabajos">Trabajos</a>
+    <a href="#sobre">Sobre mí</a>
+    <a href="#servicios">Servicios</a>
+  </div>
+  <div class="col">
+    <a href="https://www.instagram.com/xgeremy" target="_blank" rel="noopener">Instagram</a>
+    <a href="mailto:contacto@xgeremy.work">contacto@xgeremy.work</a>
+    <a href="/">Tatuajes</a>
+  </div>
+  <div class="col mute">
+    <span>Geremy Monsalve</span>
+    <span>Filmmaker</span>
+  </div>
+  <div class="col mute">
+    <span>©</span>
+    <span>2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal al hacer scroll
+  var rv = document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    rv.forEach(function(el){ io.observe(el); });
+  } else {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // Videos: cargan al entrar en pantalla; si el archivo no existe, queda el placeholder
+  document.querySelectorAll('video[data-src]').forEach(function(v){
+    var ph = v.parentNode.querySelector('.ph');
+    v.addEventListener('loadeddata', function(){ if(ph) ph.style.display='none'; });
+    v.addEventListener('error', function(){ v.style.display='none'; });
+    var loaded = false;
+    var vo = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          if(!loaded){ v.src = v.getAttribute('data-src'); loaded = true; }
+          if(!reduce){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
+        } else if(loaded){ v.pause(); }
+      });
+    },{threshold:.35});
+    vo.observe(v);
+  });
+
+  // Fotos: mismo criterio
+  document.querySelectorAll('img[data-src]').forEach(function(img){
+    var ph = img.parentNode.querySelector('.ph');
+    img.addEventListener('load', function(){ if(ph) ph.style.display='none'; });
+    img.addEventListener('error', function(){ img.style.display='none'; });
+    img.src = img.getAttribute('data-src');
+  });
+})();
+</script>
+</body>
+</html>
