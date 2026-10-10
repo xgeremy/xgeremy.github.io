@@ -95,11 +95,14 @@ svg.ar{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;fle
   font-size:clamp(11px,2.6vw,14px);line-height:1.2;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
 }
 .hero-infobar{
-  position:absolute;left:var(--pad);right:var(--pad);z-index:2;
-  bottom:calc(20px + env(safe-area-inset-bottom,0px));
-  display:flex;justify-content:space-between;
-  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);
+  position:fixed;bottom:0;left:0;right:0;z-index:9990;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px var(--pad) calc(12px + env(safe-area-inset-bottom,0px));
+  font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:#fff;mix-blend-mode:difference;pointer-events:none;font-variant-numeric:tabular-nums;
+  transition:opacity .3s;
 }
+body.lock .hero-infobar{opacity:0}
 
 /* FILA DE RESERVA */
 .book-row{
@@ -126,11 +129,11 @@ svg.ar{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;fle
 /* RAIL (carrusel horizontal, pensado para el pulgar) */
 .rail{
   display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;overscroll-behavior-x:contain;
-  padding:4px var(--pad) 12px;scroll-padding:0 var(--pad);scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+  padding:4px var(--pad) 12px;scrollbar-width:none;
 }
 .rail::-webkit-scrollbar{display:none}
-.card{flex:0 0 min(72vw,300px);scroll-snap-align:start}
+.card{flex:0 0 min(72vw,300px)}
 .card.photo{flex-basis:min(78vw,340px)}
 .reel{
   position:relative;aspect-ratio:9/16;background:var(--soft);overflow:hidden;cursor:pointer;
@@ -185,6 +188,7 @@ svg.ar{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;fle
 }
 .svc .t{font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
 .svc .p{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--text-2);white-space:nowrap}
+.svc .s{grid-column:1 / -1;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
 .svc .d{grid-column:1 / -1;font-size:14px;line-height:1.5;color:var(--text-2)}
 .note{padding:20px var(--pad) 0;font-size:14px;line-height:1.5;color:var(--text-2);max-width:40em}
 
@@ -203,29 +207,13 @@ svg.ar{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;fle
 /* FOOTER */
 footer{
   min-height:34vh;display:flex;align-items:flex-end;
-  padding:48px var(--pad) calc(48px + env(safe-area-inset-bottom,0px));
+  padding:48px var(--pad) calc(72px + env(safe-area-inset-bottom,0px));
 }
 .footer-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;width:100%}
 .footer-col{display:flex;flex-direction:column;gap:8px}
 .footer-col.r{align-items:flex-end;text-align:right}
 .footer-col span,.footer-col a{font-size:11px;font-weight:400;letter-spacing:.08em}
 .footer-col a{opacity:.72;display:inline-flex;min-height:28px;align-items:center}
-
-/* DOCK WHATSAPP (iPhone: pulgar siempre cerca del botón) */
-.dock{
-  position:fixed;left:var(--pad);right:var(--pad);z-index:30;
-  bottom:calc(14px + env(safe-area-inset-bottom,0px));
-  display:flex;justify-content:center;pointer-events:none;
-  transform:translateY(160%);transition:transform .55s var(--ease);
-}
-.dock.show{transform:none}
-.dock a{
-  pointer-events:auto;display:flex;align-items:center;justify-content:space-between;
-  width:100%;max-width:420px;min-height:54px;padding:0 20px;border-radius:14px;
-  background:rgba(5,5,5,.92);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.01em;
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-}
-.dock svg.ar{width:20px;height:20px}
 
 /* REVEAL */
 .rv{opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
@@ -240,12 +228,10 @@ footer{
 @media (min-width:900px){
   .rail{padding-left:max(var(--pad),calc((100vw - 980px)/2))}
   .rail-count{padding-right:max(var(--pad),calc((100vw - 980px)/2))}
-  .dock{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none;transition:none}
-  .dock{transition:none}
 }
 </style>
 </head>
@@ -258,14 +244,19 @@ footer{
 
 <nav class="menu" id="menu" aria-label="Menú">
   <a href="#top">Inicio</a>
+  <a href="#sobre">Sobre mí</a>
   <a href="#trabajos">Trabajos</a>
   <a href="#stills">Stills</a>
-  <a href="#sobre">Sobre mí</a>
   <a href="#servicios">Servicios</a>
   <a href="#contacto">Contacto</a>
   <a href="/">Tatuajes</a>
   <small>Viña del Mar · Chile</small>
 </nav>
+
+<div class="hero-infobar" id="infobar">
+  <span id="xg-hero-loc">Viña del Mar · Chile</span>
+  <span id="pct">Scroll (0%)</span>
+</div>
 
 <main id="top">
 
@@ -274,11 +265,7 @@ footer{
     <video class="hero-media" id="heroVid" poster="/hero.jpg" data-src="/films/media/hero.mp4" muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture aria-hidden="true"></video>
     <div class="hero-content">
       <h1><span>Geremy</span><span>Monsalve</span></h1>
-      <p class="hero-subtitle">Filmmaker · Fotógrafo</p>
-    </div>
-    <div class="hero-infobar">
-      <span>Viña del Mar · Chile</span>
-      <span id="pct">Scroll (0%)</span>
+      <p class="hero-subtitle">Filmmaker · Tattoo Artist</p>
     </div>
   </section>
 
@@ -286,6 +273,18 @@ footer{
     <span>Cotizar un proyecto</span>
     <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
   </a>
+
+  <!-- SOBRE MI -->
+  <section class="about" id="sobre">
+    <p class="about-kicker rv">Sobre mí</p>
+    <p class="about-lead rv">Hola, mi nombre es Geremy Monsalve, radicado en Viña del Mar, Chile.</p>
+    <p class="body rv">Soy tatuador y, en la búsqueda de tener buenos videos para mis redes sociales, terminé haciéndolos yo mismo, de inicio a fin.</p>
+    <p class="body rv">Mi enfoque es llevar esa atención al detalle a cada proyecto de video.</p>
+    <a class="btn-outline rv" href="https://www.instagram.com/xgeremy" target="_blank" rel="noopener">
+      <span>Ver Instagram</span>
+      <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
+    </a>
+  </section>
 
   <!-- TRABAJOS (video vertical 9:16) -->
   <section class="sec" id="trabajos">
@@ -344,30 +343,22 @@ footer{
     <p class="rail-count" data-count>01 / 04</p>
   </section>
 
-  <!-- SOBRE MI -->
-  <section class="about" id="sobre">
-    <p class="about-kicker rv">Sobre mí</p>
-    <p class="about-lead rv">Filmmaker y fotógrafo. Imagen vertical, luz cuidada, mirada editorial.</p>
-    <p class="body rv">Soy Geremy Monsalve, radicado en Viña del Mar, Chile. Dirijo, filmo y edito mis propias piezas, de la idea a la entrega.</p>
-    <p class="body rv">También soy tatuador. Esa atención al detalle es la misma que llevo a cada proyecto de video.</p>
-    <a class="btn-outline rv" href="https://www.instagram.com/xgeremy" target="_blank" rel="noopener">
-      <span>Ver Instagram</span>
-      <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
-    </a>
-  </section>
-
   <!-- SERVICIOS -->
   <section class="sec" id="servicios">
     <h2 class="section-headline rv">Servicios</h2>
     <p class="section-sub rv">Precios en CLP</p>
     <div class="list">
-      <div class="svc rv"><span class="t">Contenido vertical</span><span class="p">Desde $X</span><span class="d">Reels y clips para redes, con dirección, rodaje y edición.</span></div>
-      <div class="svc rv"><span class="t">Video de marca</span><span class="p">Desde $X</span><span class="d">Pieza audiovisual para una marca o emprendimiento.</span></div>
-      <div class="svc rv"><span class="t">Fotografía</span><span class="p">Desde $X</span><span class="d">Retrato, producto y editorial.</span></div>
-      <div class="svc rv"><span class="t">Videoclip</span><span class="p">Desde $X</span><span class="d">Dirección, rodaje y postproducción.</span></div>
-      <div class="svc rv"><span class="t">Cobertura de eventos</span><span class="p">Desde $X</span><span class="d">Registro en video y foto.</span></div>
+      <div class="svc rv">
+        <span class="t">Tomas profesionales</span><span class="p">Desde $X</span>
+        <span class="s">Sin postproducción</span>
+        <span class="d">Durante la jornada (2 días) paso a hacerte tomas profesionales para que puedas editar tu propio contenido. Serán alrededor de 20 clips: tomas del proceso, del stand, close ups y mucho más.</span>
+      </div>
+      <div class="svc rv">
+        <span class="t">Reel profesional</span><span class="p">Desde $X</span>
+        <span class="d">Me encargo de producir un reel profesional para ti. Te acompaño desde el inicio del proceso y también en el resultado. Será un video de 20 a 40 segundos, con música de fondo y efectos de sonido.</span>
+      </div>
     </div>
-    <p class="note rv">Cada proyecto se cotiza según duración, locaciones y entrega. Escríbeme con tu idea y te respondo con una propuesta.</p>
+    <p class="note rv">Cada proyecto se cotiza según locación y entrega. Escríbeme con tu idea y te respondo con una propuesta.</p>
   </section>
 
   <!-- CONTACTO -->
@@ -392,20 +383,12 @@ footer{
   </div>
 </footer>
 
-<div class="dock" id="dock">
-  <a href="https://wa.me/56937669973?text=Hola%20Geremy%2C%20quiero%20cotizar%20un%20proyecto%20de%20video" target="_blank" rel="noopener">
-    <span>Cotizar por WhatsApp</span>
-    <svg class="ar" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 24L24 8"/><path d="M12 8h12v12"/></svg>
-  </a>
-</div>
 
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nav = document.getElementById('nav');
-  var dock = document.getElementById('dock');
   var pct = document.getElementById('pct');
-  var contact = document.getElementById('contacto');
   var menu = document.getElementById('menu');
   var menuBtn = document.getElementById('menuBtn');
 
@@ -420,26 +403,20 @@ footer{
   menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') setMenu(false); });
 
-  /* Scroll: nav sólida, contador y dock de WhatsApp */
-  var contactVisible = false, ticking = false;
+  /* Scroll: nav sólida y contador */
+  var ticking = false;
   function onScroll(){
     ticking = false;
     var y = window.scrollY || window.pageYOffset;
     var max = document.documentElement.scrollHeight - window.innerHeight;
     nav.classList.toggle('solid', y > 30);
     if(pct) pct.textContent = 'Scroll (' + (max > 0 ? Math.min(100, Math.round(y / max * 100)) : 0) + '%)';
-    dock.classList.toggle('show', y > window.innerHeight * 0.7 && !contactVisible);
   }
   window.addEventListener('scroll', function(){
     if(!ticking){ ticking = true; requestAnimationFrame(onScroll); }
   }, {passive:true});
   window.addEventListener('resize', onScroll);
   onScroll();
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){
-      contactVisible = es[0].isIntersecting; onScroll();
-    },{threshold:.15}).observe(contact);
-  }
 
   /* Reveal */
   var rv = document.querySelectorAll('.rv');
@@ -498,6 +475,32 @@ footer{
     img.addEventListener('error', function(){ img.style.display = 'none'; });
     img.src = img.getAttribute('data-src');
   });
+
+  /* Carruseles en movimiento continuo (igual que la galería de xgeremy.work) */
+  if(!reduce){
+    document.querySelectorAll('[data-rail]').forEach(function(g){
+      var hold = false, t = null, x = 0, visible = false;
+      function tick(){
+        var max = g.scrollWidth - g.clientWidth;
+        if(visible){
+          if(!hold && max > 1){ x += 0.85; if(x >= max) x = 0; g.scrollLeft = x; }
+          else if(hold){ x = g.scrollLeft; }
+        }
+        requestAnimationFrame(tick);
+      }
+      function pause(){
+        hold = true; x = g.scrollLeft; clearTimeout(t);
+        t = setTimeout(function(){ hold = false; x = g.scrollLeft; }, 1800);
+      }
+      g.addEventListener('pointerdown', pause);
+      g.addEventListener('wheel', pause, {passive:true});
+      g.addEventListener('touchstart', pause, {passive:true});
+      if('IntersectionObserver' in window){
+        new IntersectionObserver(function(es){ visible = es[0].isIntersecting; },{threshold:0}).observe(g);
+      } else { visible = true; }
+      requestAnimationFrame(tick);
+    });
+  }
 
   /* Contador 01 / 05 de cada carrusel */
   function pad(n){ return (n < 10 ? '0' : '') + n; }
