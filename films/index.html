@@ -134,12 +134,13 @@ body.lock .hero-infobar{opacity:0}
 }
 .rail::-webkit-scrollbar{display:none}
 .card{flex:0 0 min(72vw,300px)}
-.card.photo{flex-basis:min(86vw,520px)}
+.card.photo,.card.hz{flex-basis:min(86vw,520px)}
 .reel{
   position:relative;aspect-ratio:9/16;background:var(--soft);overflow:hidden;cursor:pointer;
   -webkit-touch-callout:none;
 }
-.photo .reel{aspect-ratio:16/9;cursor:default}
+.photo .reel,.hz .reel{aspect-ratio:16/9}
+.photo .reel{cursor:default}
 .reel video,.reel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ph{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -246,6 +247,7 @@ footer{
   <a href="#top">Inicio</a>
   <a href="#sobre">Sobre mí</a>
   <a href="#trabajos">Trabajos</a>
+  <a href="#horizontal">Horizontal</a>
   <a href="#stills">Stills</a>
   <a href="#servicios">Servicios</a>
   <a href="#contacto">Contacto</a>
@@ -342,6 +344,29 @@ footer{
       </article>
     </div>
     <p class="rail-count" data-count>01 / 07</p>
+  </section>
+
+  <!-- CONTENIDO HORIZONTAL (16:9) -->
+  <section class="sec" id="horizontal">
+    <h2 class="section-headline rv">Contenido horizontal</h2>
+    <p class="section-sub rv">16:9 · Cinematic · Editorial</p>
+    <div class="rail rv" data-rail>
+      <article class="card hz">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir Valparaíso">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/horizontal-01.mp4"></video>
+          <div class="ph">Video 01</div><span class="snd">Sonido off</span>
+        </div>
+        <div class="cap"><b>Valparaíso</b><span>Cinematic · 2025</span></div>
+      </article>
+      <article class="card hz">
+        <div class="reel" role="button" tabindex="0" aria-label="Reproducir Identidad">
+          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/horizontal-02.mp4"></video>
+          <div class="ph">Video 02</div><span class="snd">Sonido off</span>
+        </div>
+        <div class="cap"><b>Identidad</b><span>Testimonial · 2025</span></div>
+      </article>
+    </div>
+    <p class="rail-count" data-count>01 / 02</p>
   </section>
 
   <!-- STILLS -->
