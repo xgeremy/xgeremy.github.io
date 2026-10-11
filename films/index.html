@@ -247,7 +247,6 @@ footer{
   <a href="#top">Inicio</a>
   <a href="#sobre">Sobre mí</a>
   <a href="#trabajos">Trabajos</a>
-  <a href="#horizontal">Horizontal</a>
   <a href="#stills">Stills</a>
   <a href="#servicios">Servicios</a>
   <a href="#contacto">Contacto</a>
@@ -337,29 +336,6 @@ footer{
       </article>
     </div>
     <p class="rail-count" data-count>01 / 06</p>
-  </section>
-
-  <!-- CONTENIDO HORIZONTAL (16:9) -->
-  <section class="sec" id="horizontal">
-    <h2 class="section-headline rv">Contenido horizontal</h2>
-    <p class="section-sub rv">16:9 · Cinematic · Editorial</p>
-    <div class="rail rv" data-rail>
-      <article class="card hz">
-        <div class="reel" role="button" tabindex="0" aria-label="Reproducir Valparaíso">
-          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/horizontal-01.mp4"></video>
-          <div class="ph">Video 01</div><span class="snd">Sonido off</span>
-        </div>
-        <div class="cap"><b>Valparaíso</b><span>Cinematic · 2025</span></div>
-      </article>
-      <article class="card hz">
-        <div class="reel" role="button" tabindex="0" aria-label="Reproducir Identidad">
-          <video muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture data-src="/films/media/horizontal-02.mp4"></video>
-          <div class="ph">Video 02</div><span class="snd">Sonido off</span>
-        </div>
-        <div class="cap"><b>Identidad</b><span>Testimonial · 2025</span></div>
-      </article>
-    </div>
-    <p class="rail-count" data-count>01 / 02</p>
   </section>
 
   <!-- STILLS -->
@@ -463,8 +439,12 @@ footer{
     var hp = hv.play(); if(hp && hp.catch) hp.catch(function(){});
   }
 
-  /* Videos verticales: cargan cerca de la pantalla, reproducen al ver ≥60% */
+  /* Videos: cargan cerca de la pantalla, reproducen al ver ≥60% */
   var reels = Array.prototype.slice.call(document.querySelectorAll('.reel video'));
+  var soundOn = false;
+  function anySoundOn(){
+    return reels.some(function(v){ return !v.muted; });
+  }
   function muteOthers(except){
     reels.forEach(function(v){
       if(v !== except){ v.muted = true; setChip(v); }
@@ -491,6 +471,7 @@ footer{
       if(v.paused){ var p = v.play(); if(p && p.catch) p.catch(function(){}); return; }
       v.muted = !v.muted; setChip(v);
       if(!v.muted) muteOthers(v);
+      soundOn = anySoundOn();
     }
     box.addEventListener('click', tap);
     box.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); tap(); } });
@@ -504,15 +485,15 @@ footer{
     img.src = img.getAttribute('data-src');
   });
 
-  /* Carruseles en movimiento continuo (igual que la galería de xgeremy.work) */
+  /* Carruseles en movimiento continuo — 30% más lento; se detiene si hay sonido ON */
   if(true){
     document.querySelectorAll('[data-rail]').forEach(function(g){
       var hold = false, t = null, x = 0, visible = false;
       function tick(){
         var max = g.scrollWidth - g.clientWidth;
         if(visible){
-          if(!hold && max > 1){ x += 0.85; if(x >= max) x = 0; g.scrollLeft = x; }
-          else if(hold){ x = g.scrollLeft; }
+          if(!hold && !soundOn && max > 1){ x += 0.595; if(x >= max) x = 0; g.scrollLeft = x; }
+          else if(hold || soundOn){ x = g.scrollLeft; }
         }
         requestAnimationFrame(tick);
       }
