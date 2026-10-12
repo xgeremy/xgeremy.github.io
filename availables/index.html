@@ -89,19 +89,20 @@ const BASE = [
   {x0: 457.5,x1: 473.5,tl: 54.9, tr: 58.9, bl: 241.1, br: 237.1, sh:[.18 ,.18 ,.14 ,.09 ,.08 ]},
 ];
 const BASE_L0 = 5;
-const EXT = 6;
+const EXT = 2;                           // menos hojas extremas = menos estiramiento
+const MIN_SLOT_W = 28;                   // oculta ranuras demasiado finas (evita alargar el dibujo)
 const leftExt = [], rightExt = [];
 {
   let o = BASE[0];
   for (let n = 1; n <= EXT; n++){
     const s = {x1: o.x0, x0: o.x0 - 13, tr: o.tl, tl: o.tl + 2.7, br: o.bl, bl: o.bl - 4.0,
-               sh: o.sh.map(a => Math.min(.5, a + .03)), op: Math.max(0, 1 - (n - 1) / EXT)};
+               sh: o.sh.map(a => Math.min(.5, a + .03)), op: Math.max(0, 1 - n / (EXT + 1))};
     leftExt.unshift(s); o = s;
   }
   o = BASE[BASE.length - 1];
   for (let n = 1; n <= EXT; n++){
     const s = {x0: o.x1, x1: o.x1 + 16, tl: o.tr, tr: o.tr + 4.0, bl: o.br, br: o.br - 4.0,
-               sh: o.sh.map(a => Math.min(.5, a + .03)), op: Math.max(0, 1 - (n - 1) / EXT)};
+               sh: o.sh.map(a => Math.min(.5, a + .03)), op: Math.max(0, 1 - n / (EXT + 1))};
     rightExt.push(s); o = s;
   }
 }
@@ -172,6 +173,9 @@ function render(c){
     if (s < 0 || s > last){ el.style.display = 'none'; continue; }
     const k = Math.min(Math.floor(s), last - 1), f = s - k;
     const A = ALL_Q[k], B = ALL_Q[k + 1];
+    /* ancho de la ranura en coords de referencia: si es muy fino, el dibujo se alarga */
+    const slotW = Math.abs(lerp(A[0], B[0], f) - lerp(A[2], B[2], f));
+    if (slotW < MIN_SLOT_W){ el.style.display = 'none'; continue; }
     const q = new Array(8);
     for (let j = 0; j < 8; j++){
       const v = lerp(A[j], B[j], f);
