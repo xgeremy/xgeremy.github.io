@@ -1,28 +1,258 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Diseños disponibles - XGEREMY™</title>
-<meta name="description" content="Diseños de tatuajes disponibles de XGEREMY. Blackwork, dotwork y fine line en Viña del Mar y Valparaíso.">
-<meta name="theme-color" content="#050505">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diseños disponibles — Sketchbook | XGEREMY™</title>
+<meta name="description" content="Sketchbook de diseños de tatuajes disponibles de XGEREMY. Blackwork, dotwork y fine line en Viña del Mar y Valparaíso.">
+<meta name="theme-color" content="#1a1c1f">
 <link rel="canonical" href="https://xgeremy.work/availables">
 <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
 <style>
-:root{--font:"Helvetica Neue",Helvetica,Arial,sans-serif;--bg:#050505;--text:#f5f5f7;--text-2:#86868b}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{font-family:var(--font);background:var(--bg);color:var(--text);height:100dvh;overflow:hidden;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
-a.back-link{position:fixed;top:20px;left:20px;z-index:9999;color:var(--text-2);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.01em;opacity:.55;transition:opacity .25s}
-a.back-link:hover{opacity:1}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 28px}
-.intro-title{font-family:var(--font);font-size:clamp(28px,7vw,46px);font-weight:700;letter-spacing:-.035em;line-height:1.12;text-transform:uppercase}
+  :root{
+    --bg:#1a1c1f;
+    --paper:#efe9db;   /* blanco ahuesado */
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg);
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+  a.back{
+    position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));
+    z-index:7000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;opacity:.55;transition:opacity .25s;
+    mix-blend-mode:difference;
+  }
+  a.back:hover{opacity:1}
+  .stage{
+    position:fixed;inset:0;overflow:hidden;
+    touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;
+    background:radial-gradient(ellipse at 50% 55%, #2a2d31 0%, var(--bg) 70%);
+  }
+  .stage.drag{cursor:grabbing}
+  .leaf{
+    position:absolute;left:0;top:0;width:900px;height:1440px;
+    transform-origin:0 0;will-change:transform;
+    overflow:hidden;isolation:isolate;backface-visibility:hidden;
+    background-color:var(--paper);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .38  0 0 0 0 .32  0 0 0 0 .2  0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .leaf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+    mix-blend-mode:multiply;pointer-events:none;-webkit-user-drag:none}
+  .leaf .sh{position:absolute;inset:0;pointer-events:none}
+  .leaf.empty{display:grid;place-items:center;font-size:220px;color:rgba(70,55,30,.22)}
+  .leaf.empty .sh{z-index:1}
+  .dbg .leaf{outline:10px solid rgba(255,40,40,.9);outline-offset:-10px}
+  .ref{position:absolute;left:0;top:0;pointer-events:none;z-index:5000;display:none}
+  .hint,.count{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));font-size:12px;z-index:6000;
+    mix-blend-mode:difference;color:#fff;pointer-events:none}
+  .hint{left:max(16px,env(safe-area-inset-left));opacity:.7;transition:opacity .6s}
+  .hint.off{opacity:0}
+  .count{right:max(16px,env(safe-area-inset-right));opacity:.7;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
-<a href="/" class="back-link">← Inicio</a>
-<section class="screen">
-  <h1 class="intro-title">PRÓXIMAMENTE</h1>
-</section>
+<a class="back" href="/">← Inicio</a>
+<div class="stage" id="stage"></div>
+<div class="hint" id="hint">Swipe</div>
+<div class="count" id="count"></div>
+<script>
+/* ================= CONFIG ================= */
+const TOTAL_PAGES = 16;
+const src   = n => `img/p${String(n).padStart(2,'0')}.jpg`;
+const START = 5;
+const SCALE = 1;
+const CENTER_BOOK = true;
+const PAGE_W = 900, PAGE_H = 1440;
+const RADIUS = 54;
+const SPRING_K = 90;
+const SPRING_C = 19;
+const FLICK_T  = 0.20;
+const MAX_JUMP = 3;
+/* ========================================== */
+const REF_W = 475, REF_H = 295, SPINE_X = 255.5, BOOK_CY = 148;
+const SH_POS = [0, .02, .5, .98, 1];
+const BASE = [
+  {x0: 26,   x1: 39.5, tl: 61.9, tr: 59.2, bl: 231.9, br: 235.9, sh:[.33 ,.33 ,.33 ,.33 ,.33 ]},
+  {x0: 39.5, x1: 61,   tl: 59.2, tr: 54.0, bl: 235.9, br: 242.1, sh:[.245,.24 ,.22 ,.205,.20 ]},
+  {x0: 61,   x1: 73,   tl: 52.7, tr: 51.4, bl: 243.5, br: 243.5, sh:[.10 ,.10 ,.10 ,.10 ,.10 ]},
+  {x0: 73,   x1: 89.5, tl: 49.8, tr: 47.3, bl: 245.0, br: 248.8, sh:[.10 ,.10 ,.11 ,.12 ,.12 ]},
+  {x0: 89.5, x1: 122.5,tl: 44.7, tr: 42.3, bl: 250.2, br: 253.7, sh:[.20 ,.20 ,.195,.185,.185]},
+  {x0: 122.5,x1: 255.5,tl: 34.3, tr: 41.8, bl: 262.5, br: 254.3, sh:[.094,.10 ,.125,.13 ,.30 ]},
+  {x0: 255.5,x1: 389.5,tl: 41.7, tr: 33.0, bl: 254.3, br: 263.1, sh:[.27 ,.07 ,.035,.02 ,.02 ]},
+  {x0: 389.5,x1: 425.5,tl: 42.3, tr: 45.8, bl: 253.7, br: 250.3, sh:[.126,.126,.055,.01 ,0   ]},
+  {x0: 425.5,x1: 441.5,tl: 46.9, tr: 50.9, bl: 249.3, br: 244.0, sh:[0   ,0   ,0   ,0   ,0   ]},
+  {x0: 441.5,x1: 457.5,tl: 50.9, tr: 54.9, bl: 244.1, br: 240.1, sh:[.04 ,.04 ,.03 ,.02 ,.02 ]},
+  {x0: 457.5,x1: 473.5,tl: 54.9, tr: 58.9, bl: 241.1, br: 237.1, sh:[.18 ,.18 ,.14 ,.09 ,.08 ]},
+];
+const BASE_L0 = 5;
+const EXT = 6;
+const leftExt = [], rightExt = [];
+{
+  let o = BASE[0];
+  for (let n = 1; n <= EXT; n++){
+    const s = {x1: o.x0, x0: o.x0 - 13, tr: o.tl, tl: o.tl + 2.7, br: o.bl, bl: o.bl - 4.0,
+               sh: o.sh.map(a => Math.min(.5, a + .03)), op: Math.max(0, 1 - (n - 1) / EXT)};
+    leftExt.unshift(s); o = s;
+  }
+  o = BASE[BASE.length - 1];
+  for (let n = 1; n <= EXT; n++){
+    const s = {x0: o.x1, x1: o.x1 + 16, tl: o.tr, tr: o.tr + 4.0, bl: o.br, br: o.br - 4.0,
+               sh: o.sh.map(a => Math.min(.5, a + .03)), op: Math.max(0, 1 - (n - 1) / EXT)};
+    rightExt.push(s); o = s;
+  }
+}
+const ALL = [...leftExt, ...BASE.map(b => ({...b, op: 1})), ...rightExt];
+const IDX_L0 = leftExt.length + BASE_L0;
+const ALL_Q  = ALL.map(s => [s.x0, s.tl, s.x1, s.tr, s.x1, s.br, s.x0, s.bl]);
+const stage = document.getElementById('stage');
+const hint  = document.getElementById('hint');
+const count = document.getElementById('count');
+const N = TOTAL_PAGES;
+const params = new URLSearchParams(location.search);
+const REF_MODE = params.has('ref');
+if (params.has('outline')) stage.classList.add('dbg');
+const leaves = [];
+for (let i = 0; i < N; i++){
+  const el = document.createElement('div');
+  el.className = 'leaf';
+  const img = new Image();
+  img.alt = 'Diseño ' + (i + 1); img.decoding = 'async'; img.draggable = false;
+  img.onerror = () => { img.remove(); el.classList.add('empty'); el.insertBefore(document.createTextNode(String(i + 1).padStart(2,'0')), el.firstChild); };
+  img.src = src(i + 1);
+  el.appendChild(img);
+  const sh = document.createElement('div'); sh.className = 'sh'; el.appendChild(sh);
+  el._sh = sh; el._i = i; el.style.display = 'none';
+  stage.appendChild(el); leaves.push(el);
+}
+let refEl = null;
+if (REF_MODE){
+  refEl = new Image(); refEl.className = 'ref';
+  refEl.src = params.get('ref') || 'img/ref.png';
+  refEl.onload = () => refEl.style.display = 'block';
+  refEl.style.opacity = params.get('o') || '.5';
+  stage.appendChild(refEl);
+}
+function matrix(q){
+  const [x0,y0,x1,y1,x2,y2,x3,y3] = q;
+  const dx1 = x1 - x2, dx2 = x3 - x2, sx = x0 - x1 + x2 - x3;
+  const dy1 = y1 - y2, dy2 = y3 - y2, sy = y0 - y1 + y2 - y3;
+  let a,b,c,d,e,f,g,h;
+  if (Math.abs(sx) < 1e-9 && Math.abs(sy) < 1e-9){
+    a = x1 - x0; b = x2 - x1; c = x0; d = y1 - y0; e = y2 - y1; f = y0; g = 0; h = 0;
+  } else {
+    const den = dx1 * dy2 - dx2 * dy1;
+    g = (sx * dy2 - dx2 * sy) / den;
+    h = (dx1 * sy - sx * dy1) / den;
+    a = x1 - x0 + g * x1; b = x3 - x0 + h * x3; c = x0;
+    d = y1 - y0 + g * y1; e = y3 - y0 + h * y3; f = y0;
+  }
+  return `matrix3d(${a/PAGE_W},${d/PAGE_W},0,${g/PAGE_W},${b/PAGE_H},${e/PAGE_H},0,${h/PAGE_H},0,0,1,0,${c},${f},0,1)`;
+}
+let K = 1, OX = 0, OY = 0;
+function layout(){
+  const vw = innerWidth, vh = innerHeight;
+  K = Math.min(vw / REF_W, vh / REF_H) * SCALE;
+  const cx = (CENTER_BOOK && !REF_MODE) ? SPINE_X : REF_W / 2;
+  const cy = (CENTER_BOOK && !REF_MODE) ? BOOK_CY : REF_H / 2;
+  OX = vw / 2 - cx * K;
+  OY = vh / 2 - cy * K;
+  if (refEl){ refEl.style.transform = `translate(${OX}px,${OY}px)`; refEl.style.width = REF_W * K + 'px'; refEl.style.height = REF_H * K + 'px'; }
+  perLeaf = Math.max(70, Math.min(220, innerWidth * 0.20));
+}
+const lerp  = (a, b, t) => a + (b - a) * t;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function render(c){
+  const last = ALL.length - 1;
+  for (const el of leaves){
+    const s = IDX_L0 + (el._i - c);
+    if (s < 0 || s > last){ el.style.display = 'none'; continue; }
+    const k = Math.min(Math.floor(s), last - 1), f = s - k;
+    const A = ALL_Q[k], B = ALL_Q[k + 1];
+    const q = new Array(8);
+    for (let j = 0; j < 8; j++){
+      const v = lerp(A[j], B[j], f);
+      q[j] = (j % 2 === 0) ? OX + v * K : OY + v * K;
+    }
+    const sa = ALL[k].sh, sb = ALL[k + 1].sh;
+    let g = 'linear-gradient(to right';
+    for (let j = 0; j < 5; j++) g += `,rgba(0,0,0,${lerp(sa[j], sb[j], f).toFixed(3)}) ${SH_POS[j] * 100}%`;
+    g += ')';
+    const lam = clamp(IDX_L0 + 1 - s, 0, 1);
+    const rl = (RADIUS * lam).toFixed(1) + 'px', rr = (RADIUS * (1 - lam)).toFixed(1) + 'px';
+    el.style.display = 'block';
+    el.style.transform = matrix(q);
+    el.style.borderRadius = `${rl} ${rr} ${rr} ${rl}`;
+    el._sh.style.background = g;
+    el.style.opacity = lerp(ALL[k].op, ALL[k + 1].op, f).toFixed(3);
+    el.style.zIndex = 1000 - Math.round(Math.abs(s - (IDX_L0 + .5)) * 10);
+  }
+  const L = clamp(Math.round(c), 0, N - 2);
+  count.textContent = String(L + 1).padStart(2,'0') + '–' + String(L + 2).padStart(2,'0') + ' / ' + String(N).padStart(2,'0');
+}
+const MIN = 0, MAX = N - 2;
+let pos = clamp(START, MIN, MAX), vel = 0, target = pos, dragging = false, running = false, lastT = 0, perLeaf = 120;
+function loop(t){
+  let dt = Math.min(0.05, (t - lastT) / 1000 || 0.016); lastT = t;
+  while (dt > 0){
+    const h = Math.min(dt, 1 / 120); dt -= h;
+    const a = (target - pos) * SPRING_K - vel * SPRING_C;
+    vel += a * h; pos += vel * h;
+  }
+  if (!dragging && Math.abs(target - pos) < 0.0004 && Math.abs(vel) < 0.002){ pos = target; vel = 0; }
+  render(pos);
+  if (dragging || pos !== target) requestAnimationFrame(loop); else running = false;
+}
+function wake(){ if (!running){ running = true; lastT = performance.now(); requestAnimationFrame(loop); } }
+function goTo(v){ target = clamp(Math.round(v), MIN, MAX); used(); wake(); }
+function used(){ hint.classList.add('off'); }
+const rubber = v => v < MIN ? MIN + (v - MIN) * .35 : v > MAX ? MAX + (v - MAX) * .35 : v;
+let startX = 0, startY = 0, startPos = 0, moved = 0, samples = [], downEl = null;
+stage.addEventListener('pointerdown', e => {
+  dragging = true; moved = 0; downEl = e.target.closest('.leaf');
+  startX = e.clientX; startY = e.clientY; startPos = target;
+  samples = [{x: e.clientX, t: e.timeStamp}];
+  stage.setPointerCapture(e.pointerId);
+  stage.classList.add('drag'); wake();
+});
+stage.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const dx = e.clientX - startX;
+  moved = Math.max(moved, Math.abs(dx), Math.abs(e.clientY - startY));
+  target = rubber(startPos - dx / perLeaf);
+  samples.push({x: e.clientX, t: e.timeStamp}); if (samples.length > 6) samples.shift();
+  if (moved > 6) used();
+});
+function endDrag(){
+  if (!dragging) return;
+  dragging = false; stage.classList.remove('drag');
+  if (moved < 6){
+    if (downEl){
+      const i = downEl._i, s = IDX_L0 + (i - Math.round(pos));
+      goTo(s > IDX_L0 ? i - 1 : i);
+    } else wake();
+    return;
+  }
+  const a = samples[0], b = samples[samples.length - 1];
+  const vx = (b.t - a.t) > 0 ? (b.x - a.x) / (b.t - a.t) : 0;
+  const projected = target - (vx * 1000 / perLeaf) * FLICK_T;
+  const from = Math.round(startPos);
+  goTo(clamp(Math.round(projected), from - MAX_JUMP, from + MAX_JUMP));
+}
+stage.addEventListener('pointerup', endDrag);
+stage.addEventListener('pointercancel', endDrag);
+let wheelT = 0;
+stage.addEventListener('wheel', e => {
+  if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+  e.preventDefault();
+  target = rubber(target + e.deltaX / (perLeaf * 1.4)); used(); wake();
+  clearTimeout(wheelT); wheelT = setTimeout(() => goTo(target), 140);
+}, {passive: false});
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(target + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(target - 1);
+});
+addEventListener('resize', () => { layout(); render(pos); });
+layout(); render(pos);
+</script>
 </body>
 </html>
