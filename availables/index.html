@@ -12,8 +12,8 @@
 <link rel="icon" type="image/png" href="https://i.imgur.com/cFOFY4I.png">
 <style>
   :root{
-    --bg:#1a1c1f;
-    --paper:#efe9db;   /* blanco ahuesado */
+    --bg:#12141a;
+    --paper:#f3efe6;   /* papel tipo moleskine, un tono más claro/neutro */
   }
   *{box-sizing:border-box;margin:0}
   html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none;background:var(--bg);
@@ -30,21 +30,43 @@
     position:fixed;inset:0;overflow:hidden;
     touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;
     -webkit-touch-callout:none;-webkit-user-drag:none;
-    background:radial-gradient(ellipse at 50% 55%, #2a2d31 0%, var(--bg) 70%);
+    /* ambiente: luz suave frontal + viñeta profunda como la foto */
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 42%, #2c3038 0%, transparent 62%),
+      radial-gradient(ellipse 90% 80% at 50% 100%, #0a0b0e 0%, var(--bg) 55%),
+      var(--bg);
   }
   .stage.drag{cursor:grabbing}
+  /* sombra de contacto del libro sobre el “suelo” */
+  .stage::after{
+    content:"";position:absolute;left:50%;top:58%;width:min(92vw,520px);height:18%;
+    transform:translate(-50%,0);pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse at 50% 30%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.18) 45%, transparent 72%);
+    filter:blur(8px);
+  }
   .leaf{
     position:absolute;left:0;top:0;width:900px;height:1440px;
     transform-origin:0 0;will-change:transform;
     overflow:hidden;isolation:isolate;backface-visibility:hidden;-webkit-backface-visibility:hidden;
     background-color:var(--paper);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .38  0 0 0 0 .32  0 0 0 0 .2  0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* grano de papel más fino + tono irregular */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.35) inset,
+      0 -1px 0 rgba(0,0,0,.06) inset;
   }
   .leaf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-    pointer-events:none;-webkit-user-drag:none;-webkit-touch-callout:none}
-  .leaf .sh{position:absolute;inset:0;pointer-events:none}
+    pointer-events:none;-webkit-user-drag:none;-webkit-touch-callout:none;z-index:1}
+  /* sombra volumétrica (gutter + pliegue) */
+  .leaf .sh{position:absolute;inset:0;pointer-events:none;z-index:2;mix-blend-mode:multiply}
+  /* luz ambiental: highlight suave arriba-izq + AO hacia el lomo */
+  .leaf .lit{position:absolute;inset:0;pointer-events:none;z-index:3;mix-blend-mode:soft-light}
+  /* borde de hoja (grosor de papel) */
+  .leaf .edge{position:absolute;inset:0;pointer-events:none;z-index:4;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), inset 0 0 0 2px rgba(0,0,0,.04)}
   .leaf.empty{display:grid;place-items:center;font-size:220px;color:rgba(70,55,30,.22)}
-  .leaf.empty .sh{z-index:1}
+  .leaf.empty .sh,.leaf.empty .lit,.leaf.empty .edge{z-index:1}
   .dbg .leaf{outline:10px solid rgba(255,40,40,.9);outline-offset:-10px}
   .ref{position:absolute;left:0;top:0;pointer-events:none;z-index:5000;display:none}
   .hint,.count{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));font-size:12px;z-index:6000;
@@ -111,9 +133,10 @@ const BASE = [
   {x0: 61,   x1: 73,   tl: 52.7, tr: 51.4, bl: 243.5, br: 243.5, sh:[.10 ,.10 ,.10 ,.10 ,.10 ]},
   {x0: 73,   x1: 89.5, tl: 49.8, tr: 47.3, bl: 245.0, br: 248.8, sh:[.10 ,.10 ,.11 ,.12 ,.12 ]},
   {x0: 89.5, x1: 122.5,tl: 44.7, tr: 42.3, bl: 250.2, br: 253.7, sh:[.20 ,.20 ,.195,.185,.185]},
-  {x0: 122.5,x1: 255.5,tl: 34.3, tr: 41.8, bl: 262.5, br: 254.3, sh:[.094,.10 ,.125,.13 ,.30 ]},
-  {x0: 255.5,x1: 389.5,tl: 41.7, tr: 33.0, bl: 254.3, br: 263.1, sh:[.27 ,.07 ,.035,.02 ,.02 ]},
-  {x0: 389.5,x1: 425.5,tl: 42.3, tr: 45.8, bl: 253.7, br: 250.3, sh:[.126,.126,.055,.01 ,0   ]},
+  /* L0 / R0: AO fuerte en el lomo (gutter) como en la foto real */
+  {x0: 122.5,x1: 255.5,tl: 34.3, tr: 41.8, bl: 262.5, br: 254.3, sh:[.06 ,.08 ,.14 ,.22 ,.42 ]},
+  {x0: 255.5,x1: 389.5,tl: 41.7, tr: 33.0, bl: 254.3, br: 263.1, sh:[.40 ,.18 ,.08 ,.04 ,.03 ]},
+  {x0: 389.5,x1: 425.5,tl: 42.3, tr: 45.8, bl: 253.7, br: 250.3, sh:[.14 ,.12 ,.06 ,.02 ,0   ]},
   {x0: 425.5,x1: 441.5,tl: 46.9, tr: 50.9, bl: 249.3, br: 244.0, sh:[0   ,0   ,0   ,0   ,0   ]},
   {x0: 441.5,x1: 457.5,tl: 50.9, tr: 54.9, bl: 244.1, br: 240.1, sh:[.04 ,.04 ,.03 ,.02 ,.02 ]},
   {x0: 457.5,x1: 473.5,tl: 54.9, tr: 58.9, bl: 241.1, br: 237.1, sh:[.18 ,.18 ,.14 ,.09 ,.08 ]},
@@ -156,7 +179,9 @@ for (let i = 0; i < N; i++){
   img.src = src(i + 1);
   el.appendChild(img);
   const sh = document.createElement('div'); sh.className = 'sh'; el.appendChild(sh);
-  el._sh = sh; el._i = i; el.style.display = 'none';
+  const lit = document.createElement('div'); lit.className = 'lit'; el.appendChild(lit);
+  const edge = document.createElement('div'); edge.className = 'edge'; el.appendChild(edge);
+  el._sh = sh; el._lit = lit; el._i = i; el.style.display = 'none';
   stage.appendChild(el); leaves.push(el);
 }
 let refEl = null;
@@ -215,14 +240,19 @@ function render(c){
     }
     const sa = ALL[k].sh, sb = ALL[k + 1].sh;
     let g = 'linear-gradient(to right';
-    for (let j = 0; j < 5; j++) g += `,rgba(0,0,0,${lerp(sa[j], sb[j], f).toFixed(3)}) ${SH_POS[j] * 100}%`;
+    for (let j = 0; j < 5; j++) g += `,rgba(0,0,0,${(lerp(sa[j], sb[j], f) * 1.15).toFixed(3)}) ${SH_POS[j] * 100}%`;
     g += ')';
-    const lam = clamp(IDX_L0 + 1 - s, 0, 1);
+    const lam = clamp(IDX_L0 + 1 - s, 0, 1); // 1 = izquierda del lomo
     const rl = (RADIUS * lam).toFixed(1) + 'px', rr = (RADIUS * (1 - lam)).toFixed(1) + 'px';
+    /* luz: más clara lejos del lomo, highlight superior suave (como foto con luz frontal) */
+    const litG = lam > .5
+      ? `linear-gradient(105deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,.06) 42%, rgba(0,0,0,.10) 100%)`
+      : `linear-gradient(255deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,.06) 42%, rgba(0,0,0,.10) 100%)`;
     el.style.display = 'block';
     el.style.transform = matrix(q);
     el.style.borderRadius = `${rl} ${rr} ${rr} ${rl}`;
     el._sh.style.background = g;
+    el._lit.style.background = litG;
     el.style.opacity = lerp(ALL[k].op, ALL[k + 1].op, f).toFixed(3);
     el.style.zIndex = 1000 - Math.round(Math.abs(s - (IDX_L0 + .5)) * 10);
   }
