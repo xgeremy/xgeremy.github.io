@@ -52,19 +52,49 @@
   .hint{left:max(16px,env(safe-area-inset-left));opacity:.7;transition:opacity .6s}
   .hint.off{opacity:0}
   .count{right:max(16px,env(safe-area-inset-right));opacity:.7;font-variant-numeric:tabular-nums}
+  /* lightbox — diseño a pantalla completa */
+  .lb{
+    position:fixed;inset:0;z-index:8000;display:flex;align-items:center;justify-content:center;
+    background:rgba(10,10,12,.92);padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
+    opacity:0;pointer-events:none;transition:opacity .28s ease;
+    -webkit-tap-highlight-color:transparent;touch-action:none;
+  }
+  .lb.on{opacity:1;pointer-events:auto}
+  .lb img{
+    max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+    border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.45);
+    background:var(--paper);user-select:none;-webkit-user-drag:none;
+  }
+  .lb-close{
+    position:absolute;top:max(14px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));
+    width:44px;height:44px;border:0;background:transparent;color:#fff;font-size:28px;line-height:1;
+    cursor:pointer;opacity:.7;font-family:inherit;-webkit-tap-highlight-color:transparent;
+  }
+  .lb-close:hover{opacity:1}
+  .lb-cap{
+    position:absolute;bottom:max(16px,env(safe-area-inset-bottom));left:0;right:0;
+    text-align:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(255,255,255,.55);pointer-events:none;
+  }
 </style>
 </head>
 <body>
 <a class="back" href="/">← Inicio</a>
 <div class="stage" id="stage"></div>
-<div class="hint" id="hint">Swipe</div>
+<div class="hint" id="hint">Swipe · Toca para ampliar</div>
 <div class="count" id="count"></div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Diseño ampliado" hidden>
+  <button type="button" class="lb-close" id="lbClose" aria-label="Cerrar">×</button>
+  <img id="lbImg" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+</div>
 <script>
 /* ================= CONFIG ================= */
 const TOTAL_PAGES = 13;
 const src   = n => `img/p${String(n).padStart(2,'0')}.jpg`;
 const START = 0;                         // abre en página 1
-const SCALE = 1;
+const SCALE_DESKTOP = 1;
+const SCALE_MOBILE = 1.55;               // más grande en teléfono
 const CENTER_BOOK = true;
 const PAGE_W = 900, PAGE_H = 1440;
 const RADIUS = 54;
@@ -156,7 +186,8 @@ function matrix(q){
 let K = 1, OX = 0, OY = 0;
 function layout(){
   const vw = innerWidth, vh = innerHeight;
-  K = Math.min(vw / REF_W, vh / REF_H) * SCALE;
+  const scale = vw < 700 ? SCALE_MOBILE : SCALE_DESKTOP;
+  K = Math.min(vw / REF_W, vh / REF_H) * scale;
   const cx = (CENTER_BOOK && !REF_MODE) ? SPINE_X : REF_W / 2;
   const cy = (CENTER_BOOK && !REF_MODE) ? BOOK_CY : REF_H / 2;
   OX = vw / 2 - cx * K;
@@ -233,10 +264,9 @@ stage.addEventListener('pointermove', e => {
 function endDrag(){
   if (!dragging) return;
   dragging = false; stage.classList.remove('drag');
-  if (moved < 6){
-    if (downEl){
-      const i = downEl._i, s = IDX_L0 + (i - Math.round(pos));
-      goTo(s > IDX_L0 ? i - 1 : i);
+  if (moved < 8){
+    if (downEl && !downEl.classList.contains('empty')){
+      openLb(downEl._i);
     } else wake();
     return;
   }
@@ -256,11 +286,35 @@ stage.addEventListener('wheel', e => {
   clearTimeout(wheelT); wheelT = setTimeout(() => goTo(target), 140);
 }, {passive: false});
 addEventListener('keydown', e => {
+  if (lb.classList.contains('on')){ if (e.key === 'Escape') closeLb(); return; }
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(target + 1);
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(target - 1);
 });
+/* lightbox */
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
+const lbClose = document.getElementById('lbClose');
+function openLb(i){
+  used();
+  lbImg.src = src(i + 1);
+  lbImg.alt = 'Diseño ' + (i + 1);
+  lbCap.textContent = String(i + 1).padStart(2,'0') + ' / ' + String(N).padStart(2,'0');
+  lb.hidden = false;
+  requestAnimationFrame(() => lb.classList.add('on'));
+}
+function closeLb(){
+  lb.classList.remove('on');
+  setTimeout(() => { if (!lb.classList.contains('on')){ lb.hidden = true; lbImg.removeAttribute('src'); } }, 300);
+}
+lbClose.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+lb.addEventListener('pointerdown', e => e.stopPropagation());
 /* iOS: bloquear bounce / rubber-band del documento */
-document.addEventListener('touchmove', e => { if (e.target.closest && e.target.closest('a.back')) return; e.preventDefault(); }, {passive: false});
+document.addEventListener('touchmove', e => {
+  if (e.target.closest && (e.target.closest('a.back') || e.target.closest('.lb'))) return;
+  e.preventDefault();
+}, {passive: false});
 addEventListener('resize', () => { layout(); render(pos); });
 if (window.visualViewport){
   visualViewport.addEventListener('resize', () => { layout(); render(pos); });
