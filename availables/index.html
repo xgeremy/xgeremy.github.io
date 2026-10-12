@@ -2,7 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Diseños disponibles — Sketchbook | XGEREMY™</title>
 <meta name="description" content="Sketchbook de diseños de tatuajes disponibles de XGEREMY. Blackwork, dotwork y fine line en Viña del Mar y Valparaíso.">
 <meta name="theme-color" content="#1a1c1f">
@@ -14,30 +16,32 @@
     --paper:#efe9db;   /* blanco ahuesado */
   }
   *{box-sizing:border-box;margin:0}
-  html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg);
-    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none;background:var(--bg);
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent;
+    -webkit-text-size-adjust:100%;touch-action:none}
   a.back{
     position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));
     z-index:7000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;
     letter-spacing:.04em;text-transform:uppercase;opacity:.55;transition:opacity .25s;
-    mix-blend-mode:difference;
+    mix-blend-mode:difference;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
   }
   a.back:hover{opacity:1}
   .stage{
     position:fixed;inset:0;overflow:hidden;
     touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;
+    -webkit-touch-callout:none;-webkit-user-drag:none;
     background:radial-gradient(ellipse at 50% 55%, #2a2d31 0%, var(--bg) 70%);
   }
   .stage.drag{cursor:grabbing}
   .leaf{
     position:absolute;left:0;top:0;width:900px;height:1440px;
     transform-origin:0 0;will-change:transform;
-    overflow:hidden;isolation:isolate;backface-visibility:hidden;
+    overflow:hidden;isolation:isolate;backface-visibility:hidden;-webkit-backface-visibility:hidden;
     background-color:var(--paper);
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .38  0 0 0 0 .32  0 0 0 0 .2  0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .leaf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-    mix-blend-mode:multiply;pointer-events:none;-webkit-user-drag:none}
+    mix-blend-mode:multiply;pointer-events:none;-webkit-user-drag:none;-webkit-touch-callout:none}
   .leaf .sh{position:absolute;inset:0;pointer-events:none}
   .leaf.empty{display:grid;place-items:center;font-size:220px;color:rgba(70,55,30,.22)}
   .leaf.empty .sh{z-index:1}
@@ -57,17 +61,17 @@
 <div class="count" id="count"></div>
 <script>
 /* ================= CONFIG ================= */
-const TOTAL_PAGES = 16;
+const TOTAL_PAGES = 13;
 const src   = n => `img/p${String(n).padStart(2,'0')}.jpg`;
-const START = 5;
+const START = 0;                         // abre en página 1
 const SCALE = 1;
 const CENTER_BOOK = true;
 const PAGE_W = 900, PAGE_H = 1440;
 const RADIUS = 54;
-const SPRING_K = 90;
-const SPRING_C = 19;
-const FLICK_T  = 0.20;
-const MAX_JUMP = 3;
+const SPRING_K = 110;                    // un poco más firme en touch
+const SPRING_C = 21;
+const FLICK_T  = 0.18;
+const MAX_JUMP = 2;                      // saltos más cortos en móvil
 /* ========================================== */
 const REF_W = 475, REF_H = 295, SPINE_X = 255.5, BOOK_CY = 148;
 const SH_POS = [0, .02, .5, .98, 1];
@@ -251,7 +255,12 @@ addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(target + 1);
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(target - 1);
 });
+/* iOS: bloquear bounce / rubber-band del documento */
+document.addEventListener('touchmove', e => { if (e.target.closest && e.target.closest('a.back')) return; e.preventDefault(); }, {passive: false});
 addEventListener('resize', () => { layout(); render(pos); });
+if (window.visualViewport){
+  visualViewport.addEventListener('resize', () => { layout(); render(pos); });
+}
 layout(); render(pos);
 </script>
 </body>
