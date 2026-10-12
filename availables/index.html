@@ -13,7 +13,7 @@
 <style>
   :root{
     --bg:#1a1c1f;
-    --paper:#efe9db;   /* blanco ahuesado */
+    --paper:#a7a298;   /* gris cálido de referencia */
   }
   *{box-sizing:border-box;margin:0}
   html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none;background:var(--bg);
@@ -98,10 +98,10 @@ const SCALE_MOBILE = 1.55;               // más grande en teléfono
 const CENTER_BOOK = true;
 const PAGE_W = 900, PAGE_H = 1440;
 const RADIUS = 54;
-const SPRING_K = 110;                    // un poco más firme en touch
-const SPRING_C = 21;
-const FLICK_T  = 0.18;
-const MAX_JUMP = 2;                      // saltos más cortos en móvil
+const SPRING_K = 200;                    // más rápido / snappy en iPhone
+const SPRING_C = 28;                     // amortiguación ~crítica (2√K≈28)
+const FLICK_T  = 0.12;
+const MAX_JUMP = 2;
 /* ========================================== */
 const REF_W = 475, REF_H = 295, SPINE_X = 255.5, BOOK_CY = 148;
 const SH_POS = [0, .02, .5, .98, 1];
@@ -193,7 +193,8 @@ function layout(){
   OX = vw / 2 - cx * K;
   OY = vh / 2 - cy * K;
   if (refEl){ refEl.style.transform = `translate(${OX}px,${OY}px)`; refEl.style.width = REF_W * K + 'px'; refEl.style.height = REF_H * K + 'px'; }
-  perLeaf = Math.max(70, Math.min(220, innerWidth * 0.20));
+  /* menor perLeaf = más recorrido por píxel de swipe (más sensible en móvil) */
+  perLeaf = Math.max(48, Math.min(160, innerWidth * 0.14));
 }
 const lerp  = (a, b, t) => a + (b - a) * t;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
